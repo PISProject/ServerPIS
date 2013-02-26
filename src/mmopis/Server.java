@@ -10,7 +10,7 @@ package mmopis;
  */
 public class Server {
     public Server(){
-        ComInterface comInterface = new ComInterface ();
+        ConnectionListener comInterface = new ConnectionListener ();
         
         
     }

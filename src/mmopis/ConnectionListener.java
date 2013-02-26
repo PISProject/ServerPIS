@@ -14,13 +14,13 @@ import java.util.logging.Logger;
  *
  * @author zenbook
  */
-public class ComInterface extends Thread {
+public class ConnectionListener extends Thread {
     public static final String IP = "localhost";
     public static final int PORT = 17594;
     public ServerSocket ss;
     public ThreadGroup threadGroup;
     
-    public ComInterface (){
+    public ConnectionListener (){
         try {
             ss = new ServerSocket(PORT);
         } catch (IOException ex) { // Catch IO Exception
@@ -45,7 +45,7 @@ public class ComInterface extends Thread {
             
             
         } catch (IOException ex) {
-            Logger.getLogger(ComInterface.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionListener.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
