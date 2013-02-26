@@ -6,13 +6,15 @@ package mmopis;
 
 /**
  *
- * @author kirtash
+ * @author zenbook
  */
-public class Protocol {
-    private Connection connection;
-    public Protocol(Connection con){
+public abstract class Protocol {
+    protected Connection connection;
+    
+    public Protocol(Connection con) {
         this.connection = con;
     }
+    
     public void parse(String s){
         // We assume that info was correctly sent.
         String[] splitted;
@@ -27,18 +29,7 @@ public class Protocol {
             getInfo(func,splitted);
         }
     }
-
-    private void getInfo(String func, String[] args) {
-            switch (func) {
-                case "1": //Case1 Join Game queue
-                    connection.joinQueue();
-                    break;
-                case "2": //Exit Queue
-                    connection.exitQueue();
-                    //connection.pushToClient("exit");
-                    //Hacer eso, para que el read que espera que le
-                default:
-                    //throw new AssertionError();
-            }
-    }
+    
+    public abstract void getInfo(String func, String[] args);
+    
 }

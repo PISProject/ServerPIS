@@ -18,7 +18,7 @@ public class Connection extends Thread{
     
     private DataInputStream in;
     private DataOutputStream out;
-    private Protocol protocol;
+    private ProtocolOutGame protocol;
     private ProtocolGame protocolGame;
     private ProtocolLogin protocolLogin;
     private Game game;
@@ -35,7 +35,7 @@ public class Connection extends Thread{
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
             this.protocolGame = new ProtocolGame(this);
-            this.protocol = new Protocol(this);
+            this.protocol = new ProtocolOutGame(this);
             this.protocolLogin = new ProtocolLogin(this);
             this.server = server;
             

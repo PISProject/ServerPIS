@@ -8,16 +8,16 @@ package mmopis;
  *
  * @author kirtash
  */
-public class ProtocolLogin {
+public class ProtocolLogin extends Protocol{
 
-    private Connection connection;
     
     public ProtocolLogin(Connection con) {
-        this.connection = con;
+        super(con);
     }
 
-    public void parse(String entrada) {
+    @Override
+    public void getInfo(String func, String[] args) {
         
     }
-    
+
 }
