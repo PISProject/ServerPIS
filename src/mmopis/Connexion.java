@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Connexion extends Thread{
     public DataInputStream in;
     public DataOutputStream out;
-    public Protocol protocol;
+    public ProtocolGame protocol;
     public Connexion(Socket client, ThreadGroup threads){
         super(threads,"threadConnection");
         try {
@@ -28,7 +28,7 @@ public class Connexion extends Thread{
         } catch (IOException ex) {
             Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        protocol = new Protocol(this);
+        protocol = new ProtocolGame(this);
         this.start();
     }
 
