@@ -26,6 +26,7 @@ public class ProtocolGame {
         }
     private void goTo(String idPlayer, float posX, float posY) {
         
+        
     }
 }
   

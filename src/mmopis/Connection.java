@@ -8,7 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-enum Status{INIT, OUT_GAME, IN_GAME, WAITING, LOADING,DISCONNECTED};
+enum Status{NOT_LOGGED, INIT, OUT_GAME, IN_GAME, WAITING, LOADING,DISCONNECTED};
 
 /**
  *
@@ -29,7 +29,7 @@ public class Connection extends Thread{
     public Connection(Socket client, ThreadGroup threads){
         super(threads,"threadConnection");
         try {
-            status = Status.INIT;
+            status = Status.NOT_LOGGED;
             in = new DataInputStream(client.getInputStream());
             out = new DataOutputStream(client.getOutputStream());
             protocol = new ProtocolGame(this);
@@ -51,6 +51,7 @@ public class Connection extends Thread{
                      System.err.println("I/O Error");
                  }
             }
+            else if(status == Status.NOT_LOGGED);
             else if(status == Status.LOADING){
                 
             }
