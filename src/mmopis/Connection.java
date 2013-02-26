@@ -20,18 +20,20 @@ public class Connection extends Thread{
     public DataOutputStream out;
     public ProtocolGame protocol;
     public Game game;
+    public Server server;
 
     public Status status;
     
     
     
-    public Connection(Socket client, ThreadGroup threads){
+    public Connection(Socket client, ThreadGroup threads, Server server){
         super(threads,"threadConnection");
         try {
-            status = Status.NOT_LOGGED;
-            in = new DataInputStream(client.getInputStream());
-            out = new DataOutputStream(client.getOutputStream());
-            protocol = new ProtocolGame(this);
+            this.status = Status.NOT_LOGGED;
+            this.in = new DataInputStream(client.getInputStream());
+            this.out = new DataOutputStream(client.getOutputStream());
+            this.protocol = new ProtocolGame(this);
+            this.server = server;
             
         } catch (IOException ex) {
             System.err.println("I/O Exception");
@@ -75,5 +77,10 @@ public class Connection extends Thread{
      */
     public void stateChange(Status s){
         this.status = s;
+    }
+    
+    public void joinQueue(){
+        stateChange(Status.WAITING_QUEUE);
+        server.joinQueue(this);
     }
 }

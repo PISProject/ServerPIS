@@ -9,10 +9,10 @@ package mmopis;
  * @author kirtash
  */
 public class Game {
-    private Player[] players;
+    private Connection[] players;
     
-    public Game(Player p1, Player p2){
-        players = new Player[2];
+    public Game(Connection p1, Connection p2){
+        players = new Connection[2];
         players[0] = p1;
         players[1] = p2;
     }

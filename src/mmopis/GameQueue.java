@@ -11,12 +11,12 @@ import java.util.ArrayList;
  * @author kirtash
  */
 public class GameQueue{
-    ArrayList <Player> waitingList;
+    ArrayList <Connection> waitingList;
     
-    public Player [] join(Player p){
+    public Connection [] join(Connection p){
         waitingList.add(p);
         if(waitingList.size()>=2){
-            Player [] a = new Player[2];
+            Connection [] a = new Connection[2];
             a[0] = waitingList.get(0);
             waitingList.remove(0);
             a[1] = waitingList.get(1);

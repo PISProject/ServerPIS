@@ -42,7 +42,7 @@ public class ConnectionListener extends Thread {
             
             while(true){
                 Socket socket = ss.accept();
-                Connection connection = new Connection(socket,threadGroup);
+                Connection connection = new Connection(socket,threadGroup,server);
                 server.addConnection(connection);
             }
             

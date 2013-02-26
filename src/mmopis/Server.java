@@ -44,14 +44,14 @@ public class Server {
         con_clients.add(connection);
     }
     
-    public void joinQueue(Player p){
-        Player [] a = queue.join(p);
+    public void joinQueue(Connection p){
+        Connection [] a = queue.join(p);
         if(a!= null){
             startGame(a);
         }
     }
 
-    private void startGame(Player [] a) {
+    private void startGame(Connection [] a) {
         Game game = new Game(a[0],a[1]);
         active_games.add(game);
     }
