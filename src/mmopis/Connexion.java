@@ -31,7 +31,7 @@ public class Connexion extends Thread{
             protocol = new ProtocolGame(this);
             this.start();
             
-            System.out.println("ASDASDASDASDASDASDASD");
+            System.out.println("PABLO");
         } catch (IOException ex) {
             System.err.println("I/O Exception");
         }
