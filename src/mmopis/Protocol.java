@@ -15,9 +15,8 @@ public class Protocol {
     }
     public void parse(String s){
         // We assume that info was correctly sent.
-        String a = "34";
         String[] splitted;
-        splitted = a.split("[|]");
+        splitted = s.split("[|]");
         String func = splitted[0];
         
         if(splitted.length==1) {
