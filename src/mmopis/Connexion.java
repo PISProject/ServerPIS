@@ -40,6 +40,7 @@ public class Connexion extends Thread{
 
     @Override
     public void run() {
+        System.out.println("XAVI");
         while(true){
             try {
                 String entrada = in.readUTF();
