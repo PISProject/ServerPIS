@@ -26,7 +26,7 @@ public class ComInterface extends Thread {
         } catch (IOException ex) { // Catch IO Exception
             System.err.println("Could not create server socket!");
         }
-        threadGroup = new ThreadGroup("threadsConnections");
+        threadGroup = new ThreadGroup("Connections");
         this.start();
     }
     
