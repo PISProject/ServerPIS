@@ -11,6 +11,9 @@ import java.util.ArrayList;
  * @author kirtash
  */
 public class GameQueue{
+    
+    public static final int PLAYERS_PER_MAP = 2;
+    
     ArrayList<Connection> waitingList;
     
     public GameQueue() {
@@ -19,8 +22,8 @@ public class GameQueue{
     
     public synchronized Connection [] join(Connection p){
         waitingList.add(p);
-        if(waitingList.size()>=2){
-            Connection [] a = new Connection[2];
+        if(waitingList.size()>=PLAYERS_PER_MAP){
+            Connection [] a = new Connection[PLAYERS_PER_MAP];
             for (int i = 0; i < a.length; i++) {
                 a[i] = waitingList.get(0);
                 waitingList.remove(0);

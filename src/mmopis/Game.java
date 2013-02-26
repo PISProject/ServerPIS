@@ -11,10 +11,8 @@ package mmopis;
 public class Game {
     private Connection[] players;
     
-    public Game(Connection p1, Connection p2){
-        players = new Connection[2];
-        players[0] = p1;
-        players[1] = p2;
+    public Game(Connection[] players){
+        this.players = players;
     }
     
     

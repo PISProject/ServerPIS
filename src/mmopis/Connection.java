@@ -102,6 +102,8 @@ public class Connection extends Thread{
     public void startGame(Game game) {
         try {
             stateChange(Status.IN_GAME);
+            this.game = game;
+            
             //stateChange(Status.LOADING); <- esto es lo correcto
             pushToClient("1"); //Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!

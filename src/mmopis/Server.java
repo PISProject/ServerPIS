@@ -57,12 +57,12 @@ public class Server {
         }
     }
 
-    private void startGame(Connection[] a) {
+    private void startGame(Connection[] players) {
         synchronized(active_games) {
-            Game game = new Game(a[0],a[1]);
+            Game game = new Game(players);
             active_games.add(game);
-            for (Connection i : a) {
-                i.startGame(game);
+            for (Connection player : players) {
+                player.startGame(game);
             }  
         }
     }
