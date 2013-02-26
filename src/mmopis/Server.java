@@ -11,6 +11,9 @@ import java.util.ArrayList;
  * @author zenbook
  */
 public class Server {
+    private static final String IP = "localhost"; // IP IN WICH WE ARE RUNNING
+    private static final int PORT = 5050; // PORT IN WICH WE ARE RUNNING
+    
     
     private ArrayList<Connection> con_clients;
     private ArrayList<Game> active_games;
@@ -25,7 +28,7 @@ public class Server {
         
         //INIT server listener
         System.out.print("Starting to listen connections...");
-        ConnectionListener listener = new ConnectionListener (this);
+        ConnectionListener listener = new ConnectionListener (this,IP,PORT);
         listener.start();
         System.out.println("[DONE]");
         
@@ -54,5 +57,12 @@ public class Server {
     private void startGame(Connection [] a) {
         Game game = new Game(a[0],a[1]);
         active_games.add(game);
+        for (Connection i : a) {
+            i.startGame(game);
+        }
+    }
+
+    void quitQueue(Connection aThis) {
+        queue.exit(aThis);
     }
 }

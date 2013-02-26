@@ -9,6 +9,7 @@ package mmopis;
  * @author kirtash
  */
 public class Protocol {
+    private Connection connection;
     public Protocol(Connection con){
         
     }
@@ -24,8 +25,10 @@ public class Protocol {
     private void getInfo(String func, String[] args) {
             switch (func) {
                 case "1": //Case1 Join Game queue
-                    
+                    connection.joinQueue();
                     break;
+                case "2": //Exit Queue
+                    connection.exitQueue();
                 default:
                     throw new AssertionError();
             }

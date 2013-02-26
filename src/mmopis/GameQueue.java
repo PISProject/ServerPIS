@@ -25,7 +25,7 @@ public class GameQueue{
         }
         return null;
     }
-    public void exit(Player p){
+    public void exit(Connection p){
         waitingList.remove(p);
     }
 
