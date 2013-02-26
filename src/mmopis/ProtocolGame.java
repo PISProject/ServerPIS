@@ -10,7 +10,7 @@ package mmopis;
  */
 public class ProtocolGame {
     
-    public ProtocolGame(Connexion aThis) {
+    public ProtocolGame(Connection aThis) {
     
     }
     

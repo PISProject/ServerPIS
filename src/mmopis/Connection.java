@@ -15,14 +15,14 @@ import java.util.logging.Logger;
  *
  * @author zenbook
  */
-public class Connexion extends Thread{
+public class Connection extends Thread{
     
     public DataInputStream in;
     public DataOutputStream out;
     public ProtocolGame protocol;
     
     
-    public Connexion(Socket client, ThreadGroup threads){
+    public Connection(Socket client, ThreadGroup threads){
         super(threads,"threadConnection");
         try {
             
@@ -44,7 +44,7 @@ public class Connexion extends Thread{
                 String entrada = in.readUTF();
                 
             } catch (IOException ex) {
-                Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -52,7 +52,7 @@ public class Connexion extends Thread{
         try {
             out.writeUTF(message);
         } catch (IOException ex) {
-            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
