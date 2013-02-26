@@ -40,7 +40,7 @@ public class ComInterface extends Thread {
             
             while(true){
                 Socket socket = ss.accept();
-                Connexion connection = new Connexion(socket,threadGroup);
+                Connection connection = new Connection(socket,threadGroup);
             }
             
             
