@@ -65,7 +65,9 @@ public class Connection extends Thread{
             else if(status == Status.IN_GAME){
                 protocolGame.parse(entrada);
             }
-            else if(status == Status.LOADING)
+            else if(status == Status.LOADING){
+                
+            }
         }
     }
     public void pushToClient(String message) throws IOException{
