@@ -101,9 +101,10 @@ public class Connection extends Thread{
 
     public void startGame(Game game) {
         try {
-            pushToClient("1");
             stateChange(Status.IN_GAME);
             //stateChange(Status.LOADING); <- esto es lo correcto
+            pushToClient("1"); //Siempre hay que hacer los cambios del server y después notificarselos al cliente.
+                                //NUNCA AL REVES!
         } catch (IOException ex) {
         }
     }
@@ -116,10 +117,10 @@ public class Connection extends Thread{
     
     public void close() {
         try {
-            stateChange(Status.DISCONNECTED);
             in.close();
             out.close();
             client.close();
+            stateChange(Status.DISCONNECTED);
         } catch (IOException ex) {
             System.err.println("Connection is already close.");
         }

@@ -29,7 +29,6 @@ public abstract class Protocol {
         
         if(splitted.length==1) {
             getInfo(func,null);
-            return;
         }else{
             splitted = splitted[1].split("[,]");
             getInfo(func,splitted);
