@@ -49,7 +49,7 @@ public class Cliente {
     public boolean startGame() {
         try {
             out.writeUTF("1"); //1 significa empezar partida
-            return in.readBoolean();
+            return in.readUTF().equals("1");
         } catch (IOException ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }
@@ -65,10 +65,15 @@ public class Cliente {
     }
     
     public void readyToStart() {
-        boolean res;
+        
         try {
+             boolean res;
              out.writeUTF("I'm ready to start the game");
-             res = in.readBoolean();
+             res = in.readUTF().equals("1");
+             if(res){
+                 ThreadGame threadGame = new ThreadGame(in);
+                 threadGame.start();
+             }
          } catch (IOException ex) {
              //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
          } 
