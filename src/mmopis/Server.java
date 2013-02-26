@@ -43,7 +43,9 @@ public class Server {
     }
 
     public void addConnection(Connection connection) {
-        con_clients.add(connection);
+        synchronized(con_clients) {
+            con_clients.add(connection);
+        }
     }
     
     public synchronized void joinQueue(Connection p){ //debe estar sincronizado, porque pueden llamarlos varios clientes a la vez desde Connetion

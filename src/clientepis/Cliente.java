@@ -92,8 +92,21 @@ public class Cliente {
         }
     }
     
+    public void close() {
+        try {
+            out.writeUTF("0"); //La función '0' cierra la conexión con el servidor de forma segura
+        } catch (IOException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     public static void main(String[] args) {
-    
+        Cliente c = new Cliente();
+        boolean a = c.startGame();
+        if(a) {
+            System.out.println("Ya puedo empezar la partida");
+        }
+        c.close(); //Hay que hacer siempre el close por parte del cliente.
     }
 }

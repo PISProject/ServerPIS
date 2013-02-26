@@ -13,7 +13,11 @@ import java.util.ArrayList;
 public class GameQueue{
     ArrayList<Connection> waitingList;
     
-    public Connection [] join(Connection p){
+    public GameQueue() {
+        waitingList = new ArrayList<>();
+    }
+    
+    public synchronized Connection [] join(Connection p){
         waitingList.add(p);
         if(waitingList.size()>=2){
             Connection [] a = new Connection[2];

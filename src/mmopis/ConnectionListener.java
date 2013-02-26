@@ -38,6 +38,7 @@ public class ConnectionListener extends Thread {
             while(true){
                 Socket socket = ss.accept();
                 Connection connection = new Connection(socket,threadGroup,server);
+                connection.start();
                 server.addConnection(connection);
             }
         } catch (IOException ex) {

@@ -5,7 +5,8 @@
 package mmopis;
 
 /**
- *
+ * 
+ * 
  * @author zenbook
  */
 public abstract class Protocol {
@@ -20,6 +21,11 @@ public abstract class Protocol {
         String[] splitted;
         splitted = s.split("[|]");
         String func = splitted[0];
+        if(func.equals("0")) { //La función '0' está definida para cualquier tipo de protocolo.
+                                //Es la función que permite cerrar la conexión.
+             close();
+             return;
+        }
         
         if(splitted.length==1) {
             getInfo(func,null);
@@ -28,6 +34,10 @@ public abstract class Protocol {
             splitted = splitted[1].split("[,]");
             getInfo(func,splitted);
         }
+    }
+    
+    public void close() {
+        connection.close();
     }
     
     public abstract void getInfo(String func, String[] args);
