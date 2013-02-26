@@ -53,7 +53,7 @@ public class Connection extends Thread{
         while(status != Status.DISCONNECTED){
             try {
                 String entrada = in.readUTF();
-                if (status == Status.OUT_GAME){
+                if (status == Status.OUT_GAME || status == Status.WAITING_QUEUE){
                     protocolOutGame.parse(entrada);
                 }else if(status == Status.NOT_LOGGED){
                     protocolLogin.parse(entrada);
@@ -91,12 +91,12 @@ public class Connection extends Thread{
 
     public void exitQueue() {
         stateChange(Status.OUT_GAME);
+        server.quitQueue(this);
         try {
             pushToClient("0");
         } catch (IOException ex) {
             System.err.println("IO Exception");
         }
-        server.quitQueue(this);
     }
 
     public void startGame(Game game) {

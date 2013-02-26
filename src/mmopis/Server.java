@@ -67,9 +67,9 @@ public class Server {
         }
     }
 
-    public synchronized void quitQueue(Connection aThis) {
+    public void quitQueue(Connection con) {
         synchronized(queue) {
-            queue.exit(aThis);
+            queue.exit(con);
         }
     }
 }

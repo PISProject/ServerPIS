@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,11 +103,21 @@ public class Cliente {
     
     
     public static void main(String[] args) {
-        Cliente c = new Cliente();
-        boolean a = c.startGame();
-        if(a) {
-            System.out.println("Ya puedo empezar la partida");
-        }
+        final Cliente c = new Cliente();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                 boolean a = c.startGame();
+                if(a) {
+                    System.out.println("Ya puedo empezar la partida");
+                }
+            }
+        });
+        t.start();
+        Scanner sc = new Scanner(System.in);
+        sc.next();
+        //c.stopWaiting();
+        
         c.close(); //Hay que hacer siempre el close por parte del cliente.
     }
 }

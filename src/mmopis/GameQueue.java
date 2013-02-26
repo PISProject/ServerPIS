@@ -24,6 +24,9 @@ public class GameQueue{
             for (int i = 0; i < a.length; i++) {
                 a[i] = waitingList.get(0);
                 waitingList.remove(0);
+                if(!a[i].isAlive()) { //En caso que uno de los threads esté muerto, no se considera que puede empezarse la partida.
+                    return null;
+                }
             }
             return a;
         }
