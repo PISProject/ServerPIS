@@ -11,16 +11,16 @@ import java.util.ArrayList;
  * @author kirtash
  */
 public class GameQueue{
-    ArrayList <Connection> waitingList;
+    ArrayList<Connection> waitingList;
     
     public Connection [] join(Connection p){
         waitingList.add(p);
         if(waitingList.size()>=2){
             Connection [] a = new Connection[2];
-            a[0] = waitingList.get(0);
-            waitingList.remove(0);
-            a[1] = waitingList.get(1);
-            waitingList.remove(2);
+            for (int i = 0; i < a.length; i++) {
+                a[i] = waitingList.get(0);
+                waitingList.remove(0);
+            }
             return a;
         }
         return null;

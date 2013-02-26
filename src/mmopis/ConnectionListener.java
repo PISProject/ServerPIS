@@ -15,17 +15,15 @@ import java.util.logging.Logger;
  * @author zenbook
  */
 public class ConnectionListener extends Thread {
-    public String IP;
     public int PORT;
     public ServerSocket ss;
     public Server server;
     public ThreadGroup threadGroup;
     
-    public ConnectionListener (Server server, String ip,int port){
+    public ConnectionListener (Server server, int port){
         try {
-            ss = new ServerSocket(PORT);
+            ss = new ServerSocket(port);
             this.server = server;
-            this.IP = ip;
             this.PORT = port;
         } catch (IOException ex) { // Catch IO Exception
             System.err.println("Could not create server socket!");
@@ -34,23 +32,16 @@ public class ConnectionListener extends Thread {
         threadGroup = new ThreadGroup("Connections");
     }
     
-    
-    
-
-    
     @Override
     public void run() {
         try {
-            
             while(true){
                 Socket socket = ss.accept();
                 Connection connection = new Connection(socket,threadGroup,server);
                 server.addConnection(connection);
             }
-            
-            
         } catch (IOException ex) {
-            Logger.getLogger(ConnectionListener.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ConnectionListener.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
