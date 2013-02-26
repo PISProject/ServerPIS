@@ -8,7 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-enum Status{NOT_LOGGED, INIT, OUT_GAME, IN_GAME, WAITING, LOADING,DISCONNECTED};
+enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED};
 
 /**
  *
@@ -19,9 +19,8 @@ public class Connection extends Thread{
     public DataInputStream in;
     public DataOutputStream out;
     public ProtocolGame protocol;
-    /**
-     * Estado del cliente.
-     */
+    public Game game;
+
     public Status status;
     
     
@@ -43,7 +42,7 @@ public class Connection extends Thread{
     @Override
     public void run() {
         while(!(status == Status.DISCONNECTED)){
-            if (status == Status.INIT){
+            if (status == Status.OUT_GAME){
                 try {
                     String entrada = in.readUTF();
                     
@@ -52,9 +51,7 @@ public class Connection extends Thread{
                  }
             }
             else if(status == Status.NOT_LOGGED);
-            else if(status == Status.LOADING){
-                
-            }
+            
             else if(status == Status.IN_GAME){
                 
             }

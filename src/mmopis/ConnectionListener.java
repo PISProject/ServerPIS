@@ -24,6 +24,7 @@ public class ConnectionListener extends Thread {
     public ConnectionListener (Server server){
         try {
             ss = new ServerSocket(PORT);
+            this.server = server;
         } catch (IOException ex) { // Catch IO Exception
             System.err.println("Could not create server socket!");
             System.exit(1);
