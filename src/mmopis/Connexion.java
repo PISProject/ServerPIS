@@ -16,20 +16,26 @@ import java.util.logging.Logger;
  * @author zenbook
  */
 public class Connexion extends Thread{
+    
     public DataInputStream in;
     public DataOutputStream out;
     public ProtocolGame protocol;
+    
+    
     public Connexion(Socket client, ThreadGroup threads){
         super(threads,"threadConnection");
         try {
             
             in = new DataInputStream(client.getInputStream());
             out = new DataOutputStream(client.getOutputStream());
+            protocol = new ProtocolGame(this);
+            this.start();
+            
+            System.out.println("ASDASDASDASDASDASDASD");
         } catch (IOException ex) {
-            Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("I/O Exception");
         }
-        protocol = new ProtocolGame(this);
-        this.start();
+        
     }
 
     @Override

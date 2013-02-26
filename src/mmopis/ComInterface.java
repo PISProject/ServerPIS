@@ -21,7 +21,11 @@ public class ComInterface extends Thread {
     public ThreadGroup threadGroup;
     
     public ComInterface (){
-        
+        try {
+            ss = new ServerSocket(PORT);
+        } catch (IOException ex) { // Catch IO Exception
+            System.err.println("Could not create server socket!");
+        }
         threadGroup = new ThreadGroup("threadsConnections");
         this.start();
     }
