@@ -31,7 +31,6 @@ public class Connexion extends Thread{
             protocol = new ProtocolGame(this);
             this.start();
             
-            System.out.println("PABLO");
         } catch (IOException ex) {
             System.err.println("I/O Exception");
         }
@@ -40,7 +39,6 @@ public class Connexion extends Thread{
 
     @Override
     public void run() {
-        System.out.println("XAVI");
         while(true){
             try {
                 String entrada = in.readUTF();
