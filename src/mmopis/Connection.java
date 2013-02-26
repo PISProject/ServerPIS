@@ -31,7 +31,7 @@ public class Connection extends Thread{
     public Connection(Socket client, ThreadGroup threads, Server server){
         super(threads,"threadConnection");
         try {
-            this.status = Status.NOT_LOGGED;
+            this.status = Status.OUT_GAME; //Status.NOT_LOGGED; -> Lo dejo como OUT_GAME para hacer pruebas sin logar-se.
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
             this.protocolGame = new ProtocolGame(this);

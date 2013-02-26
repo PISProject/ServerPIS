@@ -10,11 +10,14 @@ package mmopis;
  */
 public class ProtocolLogin {
 
-    public ProtocolLogin(Connection aThis) {
+    private Connection connection;
+    
+    public ProtocolLogin(Connection con) {
+        this.connection = con;
     }
 
-    void parse(String entrada) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void parse(String entrada) {
+        
     }
     
 }

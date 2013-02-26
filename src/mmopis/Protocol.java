@@ -11,15 +11,22 @@ package mmopis;
 public class Protocol {
     private Connection connection;
     public Protocol(Connection con){
-        
+        this.connection = con;
     }
     public void parse(String s){
         // We assume that info was correctly sent.
-        String [] splitted;
-        splitted = s.split("|");
+        String a = "34";
+        String[] splitted;
+        splitted = a.split("[|]");
         String func = splitted[0];
-        splitted = splitted[1].split(",");
-        getInfo(func,splitted);
+        
+        if(splitted.length==1) {
+            getInfo(func,null);
+            return;
+        }else{
+            splitted = splitted[1].split("[,]");
+            getInfo(func,splitted);
+        }
     }
 
     private void getInfo(String func, String[] args) {
@@ -32,7 +39,7 @@ public class Protocol {
                     //connection.pushToClient("exit");
                     //Hacer eso, para que el read que espera que le
                 default:
-                    throw new AssertionError();
+                    //throw new AssertionError();
             }
     }
 }
