@@ -16,18 +16,19 @@ import java.util.logging.Logger;
  */
 public class ConnectionListener extends Thread {
     public static final String IP = "localhost";
-    public static final int PORT = 17594;
+    public static final int PORT = 5050;
     public ServerSocket ss;
+    public Server server;
     public ThreadGroup threadGroup;
     
-    public ConnectionListener (){
+    public ConnectionListener (Server server){
         try {
             ss = new ServerSocket(PORT);
         } catch (IOException ex) { // Catch IO Exception
             System.err.println("Could not create server socket!");
+            System.exit(1);
         }
         threadGroup = new ThreadGroup("Connections");
-        this.start();
     }
     
     
@@ -41,6 +42,7 @@ public class ConnectionListener extends Thread {
             while(true){
                 Socket socket = ss.accept();
                 Connection connection = new Connection(socket,threadGroup);
+                server.addConnection(connection);
             }
             
             

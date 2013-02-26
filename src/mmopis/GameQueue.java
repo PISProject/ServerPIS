@@ -10,20 +10,23 @@ import java.util.ArrayList;
  *
  * @author kirtash
  */
-public class GameQueue implements Runnable{
-    ArrayList <Player> lista;
-    public void join(Player p){
-        lista.add(p);
+public class GameQueue{
+    ArrayList <Player> waitingList;
+    
+    public Player [] join(Player p){
+        waitingList.add(p);
+        if(waitingList.size()>=2){
+            Player [] a = new Player[2];
+            a[0] = waitingList.get(0);
+            waitingList.remove(0);
+            a[1] = waitingList.get(1);
+            waitingList.remove(2);
+            return a;
+        }
+        return null;
     }
     public void exit(Player p){
-        lista.remove(p);
-    }
-
-    @Override
-    public void run() {
-        if (lista.size()>2){
-            
-        }
+        waitingList.remove(p);
     }
 
 }

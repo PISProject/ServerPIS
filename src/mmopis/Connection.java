@@ -33,7 +33,6 @@ public class Connection extends Thread{
             in = new DataInputStream(client.getInputStream());
             out = new DataOutputStream(client.getOutputStream());
             protocol = new ProtocolGame(this);
-            this.start();
             
         } catch (IOException ex) {
             System.err.println("I/O Exception");
