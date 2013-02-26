@@ -29,6 +29,8 @@ public class Protocol {
                     break;
                 case "2": //Exit Queue
                     connection.exitQueue();
+                    //connection.pushToClient("exit");
+                    //Hacer eso, para que el read que espera que le
                 default:
                     throw new AssertionError();
             }

@@ -25,6 +25,7 @@ public class ProtocolGame {
     public void getInfo(String command, String[] args){
             switch (command) {
                 case "1": //Caso goTo(float x, float y), recibe 2 argumentos de tipo float.
+                            //Example: 1|4.67,356.4
                     goTo(args[0],Float.parseFloat(args[1]),Float.parseFloat(args[2]));
                     break;
                 default:

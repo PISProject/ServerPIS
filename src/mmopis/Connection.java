@@ -8,8 +8,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED, LOADING};
 
 /**
@@ -44,7 +42,6 @@ public class Connection extends Thread{
         } catch (IOException ex) {
             System.err.println("I/O Exception");
         }
-        
     }
 
     @Override
