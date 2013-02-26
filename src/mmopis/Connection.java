@@ -8,8 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+enum Status{INIT, OUT_GAME, IN_GAME, WAITING, LOADING,DISCONNECTED};
 
 /**
  *
@@ -20,12 +19,17 @@ public class Connection extends Thread{
     public DataInputStream in;
     public DataOutputStream out;
     public ProtocolGame protocol;
+    /**
+     * Estado del cliente.
+     */
+    public Status status;
+    
     
     
     public Connection(Socket client, ThreadGroup threads){
         super(threads,"threadConnection");
         try {
-            
+            status = Status.INIT;
             in = new DataInputStream(client.getInputStream());
             out = new DataOutputStream(client.getOutputStream());
             protocol = new ProtocolGame(this);
@@ -39,12 +43,23 @@ public class Connection extends Thread{
 
     @Override
     public void run() {
-        while(true){
-            try {
-                String entrada = in.readUTF();
+        while(!(status == Status.DISCONNECTED)){
+            if (status == Status.INIT){
+                try {
+                    String entrada = in.readUTF();
+                    
+                 } catch (IOException ex) {
+                     System.err.println("I/O Error");
+                 }
+            }
+            else if(status == Status.LOADING){
                 
-            } catch (IOException ex) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            else if(status == Status.IN_GAME){
+                
+            }
+            else if(status == Status.OUT_GAME){
+                
             }
         }
     }
@@ -52,9 +67,16 @@ public class Connection extends Thread{
         try {
             out.writeUTF(message);
         } catch (IOException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("HHAHHAHAH");
         }
         
     }
     
+    /**
+     * Cambia de estado el hilo.
+     * @param s
+     */
+    public void stateChange(Status s){
+        this.status = s;
+    }
 }
