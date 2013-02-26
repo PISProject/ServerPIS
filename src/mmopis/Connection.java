@@ -8,8 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED, LOADING};
 
 /**
  *
@@ -17,44 +16,95 @@ import java.util.logging.Logger;
  */
 public class Connection extends Thread{
     
-    public DataInputStream in;
-    public DataOutputStream out;
-    public ProtocolGame protocol;
+    private DataInputStream in;
+    private DataOutputStream out;
+    private Protocol protocol;
+    private ProtocolGame protocolGame;
+    private ProtocolLogin protocolLogin;
+    private Game game;
+    private Server server;
+
+    public Status status;
     
     
-    public Connection(Socket client, ThreadGroup threads){
+    
+    public Connection(Socket client, ThreadGroup threads, Server server){
         super(threads,"threadConnection");
         try {
+            this.status = Status.NOT_LOGGED;
+            this.in = new DataInputStream(client.getInputStream());
+            this.out = new DataOutputStream(client.getOutputStream());
+            this.protocolGame = new ProtocolGame(this);
+            this.protocol = new Protocol(this);
+            this.protocolLogin = new ProtocolLogin(this);
+            this.server = server;
             
-            in = new DataInputStream(client.getInputStream());
-            out = new DataOutputStream(client.getOutputStream());
-            protocol = new ProtocolGame(this);
-            this.start();
-            
+        } catch (IOException ex) {
+            System.err.println("I/O Exception");
+        }
+    }
+
+    @Override
+    public void run() {
+        while(!(status == Status.DISCONNECTED)){
+            String entrada = null;
+            try {
+                entrada = in.readUTF();
+            } catch (IOException ex) {
+                System.err.println("IO Exception");
+            }
+            if (status == Status.OUT_GAME){
+                protocol.parse(entrada);
+            }
+            else if(status == Status.NOT_LOGGED){
+                protocolLogin.parse(entrada);
+            }
+            else if(status == Status.IN_GAME){
+                protocolGame.parse(entrada);
+            }
+            else if(status == Status.LOADING){
+                
+            }
+        }
+    }
+    public void pushToClient(String message) throws IOException{
+        try {
+            out.writeUTF(message);
         } catch (IOException ex) {
             System.err.println("I/O Exception");
         }
         
     }
-
-    @Override
-    public void run() {
-        while(true){
-            try {
-                String entrada = in.readUTF();
-                
-            } catch (IOException ex) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    
+    /**
+     * Cambia de estado el hilo.
+     * @param s
+     */
+    public void stateChange(Status s){
+        this.status = s;
     }
-    public void pushToClient(String message){
+    
+    public void joinQueue(){
+        stateChange(Status.WAITING_QUEUE);
+        server.joinQueue(this);
+    }
+
+    public void exitQueue() {
+        stateChange(Status.OUT_GAME);
         try {
-            out.writeUTF(message);
+            pushToClient("0");
         } catch (IOException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("IO Exception");
+        }
+        server.quitQueue(this);
+    }
+
+    public void startGame(Game game) {
+        try {
+            pushToClient("1");
+            stateChange(Status.LOADING);
+        } catch (IOException ex) {
         }
         
     }
-    
 }
