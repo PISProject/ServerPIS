@@ -4,6 +4,7 @@
  */
 package mmopis;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +20,28 @@ public class GameThread extends Thread{
     private GameStat gameStat;
     public static int ready;
     
+    
+    /// THREAD para update
+    private class GameUpdate extends Thread{
+        private Connection c;
+        private Scenario s;
+        
+        public GameUpdate(Connection c, Scenario s){
+            this.c = c;
+            this.s = s;
+        }
+
+        @Override
+        public void run() {
+            try {
+                c.pushToClient(s.getMap());
+            } catch (IOException ex) {
+                //TODO
+                System.err.println("IO Exception::GameUpdate");
+            }
+        }
+        
+    }
     public GameThread(Connection[] players){
         this.connections = players;
         Summoner [] summoners = new Summoner[players.length];
@@ -59,22 +82,24 @@ public class GameThread extends Thread{
                 }
             }
             else if (gameStat == GameStat.RUNNING){
-                String map = scenario.getMap();
+                GameUpdate [] g = new GameUpdate[2]; // el 2 es provisional
+                int tmp = 0;
                 for(Connection i : connections){
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //i.send(game.getMap());
-                        }
-                    }).start();
-                    
+                       g[tmp] = new GameUpdate(i, scenario);
+                       tmp++;
+                    }
+                while(gameStat == GameStat.RUNNING){
+                    for (GameUpdate i: g){
+                        i.start();
+                    }
+
                 }
             }
         }
     }
-    
-    
-    
-    
-    
 }
+    
+    
+    
+    
+    
