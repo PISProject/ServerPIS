@@ -21,10 +21,11 @@ public class Connection extends Thread{
     private Socket client;
     private DataInputStream in;
     private DataOutputStream out;
-    private ProtocolOutGame protocolOutGame;
+    private Protocol protocolOutGame;
     private ProtocolGame protocolGame;
     private ProtocolLogin protocolLogin;
-    private Game game;
+    private Player player;
+    private GameThread game;
     private Server server;
 
     public Status status;
@@ -39,7 +40,7 @@ public class Connection extends Thread{
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
             this.protocolGame = new ProtocolGame(this);
-            this.protocolOutGame = new ProtocolOutGame(this);
+            this.protocolOutGame = new Protocol(this);
             this.protocolLogin = new ProtocolLogin(this);
             this.server = server;
             
@@ -60,7 +61,7 @@ public class Connection extends Thread{
                 }else if(status == Status.IN_GAME){
                     protocolGame.parse(entrada);
                 }else if(status == Status.LOADING){
-
+                    
                 }
             } catch (IOException ex) {
                 System.err.println("IO Exception");
@@ -99,12 +100,10 @@ public class Connection extends Thread{
         }
     }
 
-    public void startGame(Game game) {
+    public void startGame(GameThread game) {
         try {
-            stateChange(Status.IN_GAME);
             this.game = game;
-            
-            //stateChange(Status.LOADING); <- esto es lo correcto
+            stateChange(Status.IN_GAME);
             pushToClient("1"); //Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!
         } catch (IOException ex) {
@@ -125,6 +124,21 @@ public class Connection extends Thread{
             stateChange(Status.DISCONNECTED);
         } catch (IOException ex) {
             System.err.println("Connection is already close.");
+        }
+    }
+
+    void imRady() {
+        synchronized(game){
+            game.setReady(player.palyerid);
+        }
+    }
+
+    void notifyGameStarting() {
+        stateChange(Status.IN_GAME);
+        try {
+            pushToClient("1");
+        } catch (IOException ex) {
+            //TODO
         }
     }
 }
