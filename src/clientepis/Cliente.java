@@ -22,10 +22,12 @@ public class Cliente {
     public static final String IP = "localhost";
     public static final int PORT = 5050;
     
-    public DataInputStream in;
-    public DataOutputStream out;
+    private DataInputStream in;
+    private DataOutputStream out;
     
-    public Cliente() { //En android: public Cliente(Activity a);
+    private Game game;
+    
+    public Cliente() { //En android: public Cliente(Context context);
                         //para poder utilizar: Toast.makeText(a.getBaseContext(),"No se ha podido empezar la partida", Toast.LENGTH_SHORT); 
         try {
             Socket socket = new Socket(IP, PORT);
@@ -51,7 +53,7 @@ public class Cliente {
         try {
             out.writeUTF("1"); //1 significa empezar partida
             return in.readUTF().equals("1");
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }
         return false;
@@ -60,7 +62,7 @@ public class Cliente {
     public void stopWaiting() {
         try {
             out.writeUTF("2"); //2 significa dejar de esperar en la lista de espera
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }
     }
@@ -75,7 +77,7 @@ public class Cliente {
                  ThreadGame threadGame = new ThreadGame(in);
                  threadGame.start();
              }
-         } catch (IOException ex) {
+         } catch (Exception ex) {
              //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
          } 
     }
@@ -88,16 +90,14 @@ public class Cliente {
                 res+=pos[i]+(i < pos.length-1?",":"");
             }
             out.writeUTF(res);
-        } catch (IOException ex) {
-            //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
+        } catch (Exception ex) {
         }
     }
     
     public void close() {
         try {
             out.writeUTF("0"); //La función '0' cierra la conexión con el servidor de forma segura
-        } catch (IOException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
         }
     }
     
@@ -116,7 +116,7 @@ public class Cliente {
         t.start();
         Scanner sc = new Scanner(System.in);
         sc.next();
-        //c.stopWaiting();
+        c.stopWaiting();
         
         c.close(); //Hay que hacer siempre el close por parte del cliente.
     }
