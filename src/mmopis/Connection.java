@@ -127,13 +127,14 @@ public class Connection extends Thread{
         }
     }
 
-    void imRady() {
+    public void imReady() {
         synchronized(game){
+            player.palyerid = GameThread.ready;
             game.setReady(player.palyerid);
         }
     }
 
-    void notifyGameStarting() {
+    public void notifyGameStarting() {
         stateChange(Status.IN_GAME);
         try {
             pushToClient("1");

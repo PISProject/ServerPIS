@@ -54,7 +54,7 @@ public class ProtocolGame{
     }
 
     private void imReady() {
-        connection.imRady();
+        connection.imReady();
     }
 
     private void close() {
