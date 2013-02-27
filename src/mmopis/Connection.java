@@ -141,4 +141,11 @@ public class Connection extends Thread{
             //TODO
         }
     }
+    void sendInit(String s){
+        try {
+            pushToClient(s);
+        } catch (IOException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

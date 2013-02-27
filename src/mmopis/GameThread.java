@@ -15,11 +15,13 @@ enum GameStat{WAITING_CONNECTIONS,INIT,RUNNING,FINISHED};
 
 public class GameThread extends Thread{
     private Connection[] players;
+    private Scenario scenario;
     private GameStat gameStat;
     private int ready;
     
     public GameThread(Connection[] players){
         this.players = players;
+        this.scenario = new Scenario();
         this.gameStat = GameStat.WAITING_CONNECTIONS;
         this.ready=0;
         this.start();
@@ -31,6 +33,9 @@ public class GameThread extends Thread{
 
     @Override
     public void run() {
+        for (Connection i:players){
+            i.sendInit(scenario.getInit());
+        }
         while(gameStat != GameStat.FINISHED){
             if (gameStat == GameStat.WAITING_CONNECTIONS){
                 if  (this.ready==players.length){

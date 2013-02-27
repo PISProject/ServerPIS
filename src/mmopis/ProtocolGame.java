@@ -4,11 +4,19 @@
  */
 package mmopis;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+
 /**
  *
  * @author zenbook
  */
 public class ProtocolGame{
+    // Funciones de estado 0x00 - 0x0F
+    private static final String READY= "0x01";
+    
+    // Funciones de interaccion del jugador 0x10-0x5F
+    private static final String MOVE_TO= "0x10";
+            
     private Connection connection;
     public ProtocolGame(Connection con) {
         this.connection = con;
@@ -37,9 +45,9 @@ public class ProtocolGame{
     
     public void getInfo(String command, String[] args){
         switch (command) {
-            case "1":
+            case READY:
                 imReady();
-            case "2": //Caso goTo(float x, float y), recibe 2 argumentos de tipo float.
+            case MOVE_TO: //Caso goTo(float x, float y), recibe 2 argumentos de tipo float.
                         //Example: 1|4.67,356.4
                 goTo(Float.parseFloat(args[0]),Float.parseFloat(args[1]));
                 break;

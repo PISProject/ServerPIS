@@ -8,6 +8,8 @@ package mmopis;
  *
  * @author kirtash
  */
-public class GameData {
-    
+public class Scenario {
+    public String getInit(){
+        return "";
+    }
 }
