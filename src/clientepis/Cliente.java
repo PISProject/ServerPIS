@@ -54,14 +54,16 @@ public class Cliente {
     
     public Game startGame() {
         try {
-            game = new Game();
             out.writeUTF(Protocol.JOIN_QUEUE);
-            String en = in.readUTF(); //Por aquí recibiré algo así: 0x01|2&1,10.0,10.0*2,10.0,10.0
+            String en = in.readUTF(); //Por aquí recibiré algo así: 0x01|<id>&1,10.0,10.0*2,10.0,10.0
             String[] func = protocol.parserInstruction(en);
             switch (func[0]) {
                 case Protocol.APPROVED:
                     return null;
                 case Protocol.READY_TO_START_GAME:
+                    func = func[1].split("[&]");
+                    int id = Integer.parseInt(func[0]);
+                    game = new Game(id);
                     protocol.parserGame(func[1], game); //Cambia el valor de game
                     return game;
             }

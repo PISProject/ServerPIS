@@ -6,18 +6,19 @@ package game;
 
 import clientepis.Cliente;
 import clientepis.Game;
+import clientepis.Player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
-public class Board extends JPanel implements MouseListener {
+public class Board extends JPanel implements KeyListener{
     private int posX, posY;
     private Hero hero;
     private Villain villain;
@@ -32,9 +33,9 @@ public class Board extends JPanel implements MouseListener {
         this.c = c;
         this.game = game;
 
-        addMouseListener(this);
+        addKeyListener(this);
         setBackground(Color.BLACK);
-        setDoubleBuffered(true);
+        //setDoubleBuffered(true);
     }
 
     @Override
@@ -71,30 +72,34 @@ public class Board extends JPanel implements MouseListener {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if(e.getButton() == 1){
-            float[] pos = {e.getX(), e.getY()};
+    public void keyTyped(KeyEvent ke) {
+        
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        System.out.println("HOLA");
+        Player p = game.getMyPlayer();
+        if(ke.getKeyCode() == KeyEvent.VK_DOWN) {
+            float[] pos = {p.pos[0], p.pos[1]+1};
+            c.goTo(pos);
+        }
+        if(ke.getKeyCode() == KeyEvent.VK_UP) {
+            float[] pos = {p.pos[0], p.pos[1]-1};
+            c.goTo(pos);
+        }
+        if(ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            float[] pos = {p.pos[0]-1, p.pos[1]};
+            c.goTo(pos);
+        }
+        if(ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            float[] pos = {p.pos[0]+1, p.pos[1]};
             c.goTo(pos);
         }
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
+    public void keyReleased(KeyEvent ke) {
         
     }
 }

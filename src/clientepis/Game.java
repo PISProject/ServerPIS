@@ -10,6 +10,24 @@ package clientepis;
  */
 public class Game {
     private Player[] players;
+    private int myId;
+    
+    public Game(int id) {
+        this.myId = id;
+    }
+    
+    public Player getMyPlayer() {
+        boolean trobat = false;
+        int i = 0;
+        Player p = null;
+        while(!trobat && i<players.length) {
+            if(players[i].id == myId) {
+                p = players[i];
+                trobat = true;
+            }
+        }
+        return p;
+    }
     
     public Player[] getPlayers() {
         return players;

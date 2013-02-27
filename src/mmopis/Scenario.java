@@ -21,7 +21,12 @@ public class Scenario {
         }
     }
     public String getInit(){
-        return getMap(); //Por ahora e un getMap, pero si implementamos diferentes players, habrá que hacer un parser diferente.
+        String map = "";
+        for (int i = 0; i < actors.length; i++) {
+            Summoner s = actors[i];
+            map+=s.summonerId+","+s.pos[0]+","+s.pos[1]+((i<actors.length-1)?"*":"");
+        }
+        return map;
     }
 
     public String getMap() {
