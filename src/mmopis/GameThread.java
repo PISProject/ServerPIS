@@ -63,7 +63,7 @@ public class GameThread extends Thread{
     @Override
     public void run() {
         for (Connection i:connections){
-            i.startGame(this,scenario.getMap());
+            i.startGame(this,scenario.getInit());
         }
         while(gameStat != GameStat.FINISHED){
             if (gameStat == GameStat.WAITING_CONNECTIONS){

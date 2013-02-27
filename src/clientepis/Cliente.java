@@ -23,6 +23,8 @@ public class Cliente {
     private DataInputStream in;
     private DataOutputStream out;
     
+    private ProtocoloCliente protocol;
+    
     private Game game;
     
     public Cliente() { //En android: public Cliente(Context context);
@@ -32,6 +34,8 @@ public class Cliente {
             
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
+            
+            protocol = new ProtocoloCliente(this);
             
         } catch (UnknownHostException ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
@@ -50,7 +54,8 @@ public class Cliente {
     public boolean startGame() {
         try {
             out.writeUTF(Protocol.JOIN_QUEUE);
-            return in.readUTF().equals(Protocol.APPROVED);
+            String en = in.readUTF();
+            protocol.parse(en);
         } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }
