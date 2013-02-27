@@ -55,9 +55,10 @@ public class ProtocolGame{
         System.out.println("x: "+posX);
         System.out.println("y: "+posY);
         System.out.println("");
-        connection.summoner.pos[0] = posX;
-        connection.summoner.pos[1] = posY;
-        
+        synchronized(connection.summoner.pos) {
+            connection.summoner.pos[0] = posX;
+            connection.summoner.pos[1] = posY;
+        }
     }
 
     private void imReady() {

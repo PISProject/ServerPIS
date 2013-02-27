@@ -34,7 +34,9 @@ public class GameThread extends Thread{
         @Override
         public void run() {
             try {
-                c.pushToClient(s.getMap());
+                synchronized(s) {
+                    c.pushToClient(s.getMap());
+                }
             } catch (IOException ex) {
                 //TODO
                 System.err.println("IO Exception::GameUpdate");

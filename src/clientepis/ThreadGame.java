@@ -27,9 +27,7 @@ public class ThreadGame extends Thread{
         while(true){
             try {
                 String res = in.readUTF();
-                synchronized(game) {
-                    p.parserGame(res, game);
-                }
+                p.parserGame(res, game);
             } catch (IOException ex) {
                 
             }
