@@ -22,8 +22,7 @@ public class GameMain {
         hero.setPosition((int)game.getPlayers()[0].pos[0],(int)game.getPlayers()[0].pos[1]);
         Villain villain = new Villain();
         villain.setPosition((int)game.getPlayers()[1].pos[0],(int)game.getPlayers()[1].pos[1]);
-        Map map = new Map(10, 10);
-        Board board = new Board(hero, villain, map, c, game);
+        Board board = new Board(hero, villain, c, game);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(board);
         frame.setSize(800, 600);

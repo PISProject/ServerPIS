@@ -13,29 +13,29 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
-public class Board extends JPanel implements KeyListener{
-    private int posX, posY;
+public class Board extends JPanel implements MouseListener, KeyListener {
     private Hero hero;
     private Villain villain;
-    private Map map;
     private Cliente c;
     private Game game;
 
-    public Board(Hero hero, Villain villain, Map map, Cliente c, Game game) {
+    public Board(Hero hero, Villain villain, Cliente c, Game game) {
         this.hero = hero;
         this.villain = villain;
-        this.map = map;
         this.c = c;
         this.game = game;
 
         addKeyListener(this);
+        addMouseListener(this);
         setBackground(Color.BLACK);
-        //setDoubleBuffered(true);
+        setDoubleBuffered(true);
     }
 
     @Override
@@ -67,13 +67,13 @@ public class Board extends JPanel implements KeyListener{
         
         g2d.drawImage(villain.getImage(), villain.getX(), villain.getY(), this);
 
-        Toolkit.getDefaultToolkit().sync();
-        g.dispose();
+//        Toolkit.getDefaultToolkit().sync();
+//        g.dispose();
     }
 
     @Override
     public void keyTyped(KeyEvent ke) {
-        
+        System.out.println("ADEUUU!");
     }
 
     @Override
@@ -100,6 +100,34 @@ public class Board extends JPanel implements KeyListener{
 
     @Override
     public void keyReleased(KeyEvent ke) {
+        System.out.println("HOLAAAFWE");
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        if(me.getButton() == MouseEvent.BUTTON1) {
+            float[] pos = {me.getX(),me.getY()};
+            c.goTo(pos);
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
         
     }
 }
