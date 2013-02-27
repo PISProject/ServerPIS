@@ -32,10 +32,6 @@ public abstract class Protocol {
         }
     }
     
-    public void close() {
-        connection.close();
-    }
-    
     public abstract void getInfo(String func, String[] args);
     
 }

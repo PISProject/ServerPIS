@@ -11,10 +11,13 @@ package clientepis;
 public class ProtocoloCliente extends Protocol{
 
     
+    public ProtocoloCliente(Cliente c) {
+        super(c);
+    }
     
     @Override
     public void getInfo(String func, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }
