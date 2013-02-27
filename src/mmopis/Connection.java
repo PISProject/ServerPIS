@@ -23,7 +23,7 @@ public class Connection extends Thread{
     private Protocol protocolOutGame;
     private ProtocolGame protocolGame;
     private ProtocolLogin protocolLogin;
-    private Player player;
+    public Summoner summoner;
     private GameThread game;
     private Server server;
 
@@ -126,10 +126,11 @@ public class Connection extends Thread{
         }
     }
 
-    public void imReady() {
+    
+    public void imReadyToStartGame() {
         synchronized(game){
-            player.palyerid = GameThread.ready;
-            game.setReady(player.palyerid);
+            summoner.summonerId = GameThread.ready;
+            game.setReady(summoner.summonerId);
         }
     }
 

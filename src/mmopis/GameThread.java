@@ -14,14 +14,20 @@ import java.util.logging.Logger;
 enum GameStat{WAITING_CONNECTIONS,INIT,RUNNING,FINISHED};
 
 public class GameThread extends Thread{
-    private Connection[] players;
+    private Connection[] connections;
     private Scenario scenario;
     private GameStat gameStat;
     public static int ready;
     
     public GameThread(Connection[] players){
-        this.players = players;
-        this.scenario = new Scenario();
+        this.connections = players;
+        Summoner [] summoners = new Summoner[players.length];
+        int i = 0;
+        for (Connection c: players){
+            summoners[i] = c.summoner;
+            i++;
+        }
+        this.scenario = new Scenario(summoners);
         this.gameStat = GameStat.WAITING_CONNECTIONS;
         this.ready=0;
         this.start();
@@ -33,15 +39,15 @@ public class GameThread extends Thread{
 
     @Override
     public void run() {
-        for (Connection i:players){
+        for (Connection i:connections){
             i.startGame(this,scenario.getInit());
         }
         while(gameStat != GameStat.FINISHED){
             if (gameStat == GameStat.WAITING_CONNECTIONS){
-                if  (this.ready==players.length){
+                if  (this.ready==connections.length){
                     
                     this.gameStat = GameStat.RUNNING;
-                    for ( Connection i : players){
+                    for ( Connection i : connections){
                         i.notifyGameStarting();
                     }
                 }
@@ -54,7 +60,8 @@ public class GameThread extends Thread{
                 }
             }
             else if (gameStat == GameStat.RUNNING){
-                for(Connection i : players){
+                String map = scenario.getMap();
+                for(Connection i : connections){
                     //i.send(game.getMap());
                 }
             }

@@ -56,7 +56,7 @@ public class ProtocolGame{
     }
 
     private void imReady() {
-        connection.imReady();
+        connection.imReadyToStartGame();
     }
 
     private void close() {
