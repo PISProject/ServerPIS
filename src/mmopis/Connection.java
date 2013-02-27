@@ -42,6 +42,7 @@ public class Connection extends Thread{
             this.protocolOutGame = new Protocol(this);
             this.protocolLogin = new ProtocolLogin(this);
             this.server = server;
+            this.summoner = new Summoner(Summoner.getNextId());
             
         } catch (IOException ex) {
             System.err.println("I/O Exception");
@@ -103,6 +104,7 @@ public class Connection extends Thread{
         try {
             this.game = game;
             stateChange(Status.IN_GAME);
+            System.out.println(Protocol.READY_TO_START_GAME+"|"+status);
             pushToClient(Protocol.READY_TO_START_GAME+"|"+status);//Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!
         } catch (IOException ex) {
@@ -129,7 +131,6 @@ public class Connection extends Thread{
     
     public void imReadyToStartGame() {
         synchronized(game){
-            summoner.summonerId = GameThread.ready;
             game.setReady(summoner.summonerId);
         }
     }

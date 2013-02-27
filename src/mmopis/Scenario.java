@@ -17,10 +17,10 @@ public class Scenario {
         return "";
     }
 
-    String getMap() {
+    public String getMap() {
         String map = "["+actors.length+"]";
         for (Summoner i : actors){
-            map+=i.summonerId+","+i.posX+","+i.posY+"|";
+            map+=i.summonerId+","+i.pos[0]+","+i.pos[1]+"|";
         }
         return map;
     }

@@ -40,12 +40,11 @@ public class GameThread extends Thread{
     @Override
     public void run() {
         for (Connection i:connections){
-            i.startGame(this,scenario.getInit());
+            i.startGame(this,scenario.getMap());
         }
         while(gameStat != GameStat.FINISHED){
             if (gameStat == GameStat.WAITING_CONNECTIONS){
                 if  (this.ready==connections.length){
-                    
                     this.gameStat = GameStat.RUNNING;
                     for ( Connection i : connections){
                         i.notifyGameStarting();
@@ -62,7 +61,13 @@ public class GameThread extends Thread{
             else if (gameStat == GameStat.RUNNING){
                 String map = scenario.getMap();
                 for(Connection i : connections){
-                    //i.send(game.getMap());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //i.send(game.getMap());
+                        }
+                    }).start();
+                    
                 }
             }
         }

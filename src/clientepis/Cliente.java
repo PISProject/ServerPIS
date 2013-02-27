@@ -49,7 +49,7 @@ public class Cliente {
     
     public boolean startGame() {
         try {
-            out.writeUTF("1"); //1 significa empezar partida
+            out.writeUTF(Protocol.JOIN_QUEUE); //1 significa empezar partida
             return in.readUTF().equals("1");
         } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
@@ -59,7 +59,7 @@ public class Cliente {
     
     public void stopWaiting() {
         try {
-            out.writeUTF("2"); //2 significa dejar de esperar en la lista de espera
+            out.writeUTF(Protocol.QUIT_QUEUE); //2 significa dejar de esperar en la lista de espera
         } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }
@@ -69,7 +69,7 @@ public class Cliente {
         
         try {
              boolean res;
-             out.writeUTF("I'm ready to start the game");
+             out.writeUTF(Protocol.READY_TO_START_GAME);
              res = in.readUTF().equals("1");
              if(res){
                  ThreadGame threadGame = new ThreadGame(in);
@@ -83,7 +83,7 @@ public class Cliente {
     public void goTo(float[] pos){
         try {
             String res = "";
-            res += "1|"; //Comanda para ProtocolGame (significa ir a una posicion)
+            res += Protocol.INGAME_MOVE_TO+"|"; //Comanda para ProtocolGame (significa ir a una posicion)
             for (int i = 0; i < pos.length; i++) {
                 res+=pos[i]+(i < pos.length-1?",":"");
             }
@@ -94,7 +94,7 @@ public class Cliente {
     
     public void close() {
         try {
-            out.writeUTF("0"); //La función '0' cierra la conexión con el servidor de forma segura
+            out.writeUTF(Protocol.CLOSE); //La función '0' cierra la conexión con el servidor de forma segura
         } catch (Exception ex) {
         }
     }
