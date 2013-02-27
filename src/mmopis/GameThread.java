@@ -50,7 +50,7 @@ public class GameThread extends Thread{
             }
             else if (gameStat == GameStat.RUNNING){
                 for(Connection i : players){
-                    i.send(game.getMap());
+                    //i.send(game.getMap());
                 }
             }
         }
