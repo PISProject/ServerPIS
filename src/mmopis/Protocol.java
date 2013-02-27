@@ -9,6 +9,26 @@ package mmopis;
  * @author zenbook
  */
 public class Protocol {
+    //////////////////
+    // INPUT
+    //////////////////
+    // Funciones de estado 0x00 - 0x0F
+    public static final String CLOSE = "0x00";
+    public static final String READY_TO_START_GAME = "0x01";
+    public static final String JOIN_QUEUE = "0x02";
+    public static final String QUIT_QUEUE = "0x03";
+    
+    
+    // Funciones de interaccion del jugador 0x10-0x5F
+    public static final String INGAME_MOVE_TO = "0x10";
+
+    //////////////////
+    //OUTPUT
+    //////////////////
+    // Notificaciones de estado 
+    public static final String NOTIFY_GAME_STARTING = "0x60";
+    
+    
     private Connection connection;
     
     public Protocol(Connection con) {
@@ -40,11 +60,11 @@ public class Protocol {
     
     public void getInfo(String func, String[] args) {
             switch (func) {
-                case "1": //Case1 Join Game queue
+                case JOIN_QUEUE: //Case1 Join Game queue
                     connection.joinQueue();
                     break;
-                case "2": //Exit Queue
-                    connection.exitQueue();
+                case QUIT_QUEUE: //Exit Queue
+                    connection.quitQueue();
                     //connection.pushToClient("exit");
                     //Hacer eso, para que el read que espera que le
                 default:

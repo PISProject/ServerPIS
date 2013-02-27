@@ -34,11 +34,12 @@ public class GameThread extends Thread{
     @Override
     public void run() {
         for (Connection i:players){
-            i.sendInit(scenario.getInit());
+            i.startGame(this,scenario.getInit());
         }
         while(gameStat != GameStat.FINISHED){
             if (gameStat == GameStat.WAITING_CONNECTIONS){
                 if  (this.ready==players.length){
+                    
                     this.gameStat = GameStat.RUNNING;
                     for ( Connection i : players){
                         i.notifyGameStarting();
@@ -48,7 +49,7 @@ public class GameThread extends Thread{
                     try {
                         this.sleep(1000);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(GameThread.class.getName()).log(Level.SEVERE, null, ex);
+                        //TODO
                     }
                 }
             }

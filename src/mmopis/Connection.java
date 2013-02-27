@@ -8,8 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED, LOADING};
 
 /**
@@ -90,7 +89,7 @@ public class Connection extends Thread{
         server.joinQueue(this);
     }
 
-    public void exitQueue() {
+    public void quitQueue() {
         stateChange(Status.OUT_GAME);
         server.quitQueue(this);
         try {
@@ -100,11 +99,11 @@ public class Connection extends Thread{
         }
     }
 
-    public void startGame(GameThread game) {
+    public void startGame(GameThread game, String status) {
         try {
             this.game = game;
             stateChange(Status.IN_GAME);
-            pushToClient("1"); //Siempre hay que hacer los cambios del server y después notificarselos al cliente.
+            pushToClient(Protocol.READY_TO_START_GAME+"|"+status);//Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!
         } catch (IOException ex) {
         }
@@ -134,19 +133,13 @@ public class Connection extends Thread{
         }
     }
 
+    // OUTPUT FUNCTIONS
     public void notifyGameStarting() {
         stateChange(Status.IN_GAME);
         try {
-            pushToClient("1");
+            pushToClient(Protocol.NOTIFY_GAME_STARTING);
         } catch (IOException ex) {
             //TODO
-        }
-    }
-    void sendInit(String s){
-        try {
-            pushToClient(s);
-        } catch (IOException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

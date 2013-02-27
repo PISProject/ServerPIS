@@ -61,9 +61,7 @@ public class Server {
         synchronized(active_games) {
             GameThread game = new GameThread(players);
             active_games.add(game);
-            for (Connection player : players) {
-                player.startGame(game);
-            }  
+
         }
     }
 
