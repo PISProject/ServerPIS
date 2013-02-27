@@ -24,6 +24,7 @@ public class GameMain {
         villain.setPosition((int)game.getPlayers()[1].pos[0],(int)game.getPlayers()[1].pos[1]);
         Board board = new Board(hero, villain, c, game);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addKeyListener(board);
         frame.add(board);
         frame.setSize(800, 600);
         frame.setVisible(true);
