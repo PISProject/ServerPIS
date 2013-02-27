@@ -69,7 +69,7 @@ public class GameThread extends Thread{
             if (gameStat == GameStat.WAITING_CONNECTIONS){
                 if  (this.ready==connections.length){
                     this.gameStat = GameStat.RUNNING;
-                    for ( Connection i : connections){
+                    for (Connection i : connections){
                         i.notifyGameStarting();
                     }
                 }
@@ -82,17 +82,13 @@ public class GameThread extends Thread{
                 }
             }
             else if (gameStat == GameStat.RUNNING){
-                GameUpdate [] g = new GameUpdate[2]; // el 2 es provisional
-                int tmp = 0;
-                for(Connection i : connections){
-                       g[tmp] = new GameUpdate(i, scenario);
-                       tmp++;
+                GameUpdate [] g = new GameUpdate[GameQueue.PLAYERS_PER_MAP];
+                while(gameStat == GameStat.RUNNING) {
+                    for (int i = 0; i < g.length; i++) {
+                        //Solo se puede hacer un .start() una vez por hilo, hay que hacerlo así.
+                        new GameUpdate(connections[i], scenario).start();
                     }
-                while(gameStat == GameStat.RUNNING){
-                    for (GameUpdate i: g){
-                        i.start();
-                    }
-
+                    System.gc();
                 }
             }
         }

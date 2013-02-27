@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED, LOADING};
+enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED};
 
 /**
  *
@@ -60,8 +60,6 @@ public class Connection extends Thread{
                     protocolLogin.parse(entrada);
                 }else if(status == Status.IN_GAME){
                     protocolGame.parse(entrada);
-                }else if(status == Status.LOADING){
-                    
                 }
             } catch (IOException ex) {
                 System.err.println("IO Exception");
@@ -70,6 +68,7 @@ public class Connection extends Thread{
     }
     
     public void pushToClient(String message) throws IOException{
+        //System.out.println("x: "+summoner.pos[0]+";"+"y: "+summoner.pos[1]+" :: Connection.java");
         try {
             out.writeUTF(message);
         } catch (IOException ex) {

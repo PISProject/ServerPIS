@@ -41,6 +41,7 @@ public class ProtocolGame{
         switch (command) {
             case Protocol.READY_TO_START_GAME:
                 imReady();
+                break;
             case Protocol.INGAME_MOVE_TO: //Caso goTo(float x, float y), recibe 2 argumentos de tipo float.
                         //Example: 1|4.67,356.4
                 goTo(Float.parseFloat(args[0]),Float.parseFloat(args[1]));
@@ -51,7 +52,11 @@ public class ProtocolGame{
     }
     
     private void goTo(float posX, float posY) { //no hace falta pasar una idPlayer, ya tenemos una instancia de la conexión del cliente.
-        
+        System.out.println("x: "+posX);
+        System.out.println("y: "+posY);
+        System.out.println("");
+        connection.summoner.pos[0] = posX;
+        connection.summoner.pos[1] = posY;
         
     }
 

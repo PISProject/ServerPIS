@@ -9,11 +9,19 @@ package clientepis;
  * @author zenbook
  */
 public class Player {
-    private float[] pos;
-    private float rot;
-    private int vida;
+    public float[] pos;
+    //private float rot;
+    public int vida;
+    public int id;
     
-    public Player() {
-        
+    public Player(int id, float[] pos) {
+        this.id = id;
+        this.pos = pos;
     }
+
+    @Override
+    public String toString() {
+        return "Player{" + "pos={" + pos[0] + ","+pos[1]+"}, vida=" + vida + ", id=" + id + '}';
+    }
+    
 }

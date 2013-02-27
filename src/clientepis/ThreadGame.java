@@ -6,8 +6,6 @@ package clientepis;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -15,16 +13,23 @@ import java.util.logging.Logger;
  */
 public class ThreadGame extends Thread{
     private DataInputStream in;
-    public ThreadGame (DataInputStream in){
+    private Game game;
+    private ProtocoloCliente p;
+    
+    public ThreadGame (DataInputStream in, Game game){
         this.in = in;
+        this.game = game;
+        p = new ProtocoloCliente();
     }
     
     @Override
     public void run() {
         while(true){
             try {
-                
-                System.out.println(in.readUTF());
+                String res = in.readUTF();
+                synchronized(game) {
+                    p.parserGame(res, game);
+                }
             } catch (IOException ex) {
                 
             }

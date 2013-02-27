@@ -22,6 +22,7 @@ public class Cliente {
     
     private DataInputStream in;
     private DataOutputStream out;
+    private Socket socket;
     
     private ProtocoloCliente protocol;
     
@@ -30,12 +31,12 @@ public class Cliente {
     public Cliente() { //En android: public Cliente(Context context);
                         //para poder utilizar: Toast.makeText(a.getBaseContext(),"No se ha podido empezar la partida", Toast.LENGTH_SHORT); 
         try {
-            Socket socket = new Socket(IP, PORT);
+            socket = new Socket(IP, PORT);
             
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
             
-            protocol = new ProtocoloCliente(this);
+            protocol = new ProtocoloCliente();
             
         } catch (UnknownHostException ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
@@ -51,15 +52,23 @@ public class Cliente {
      * @return boolean
      */
     
-    public boolean startGame() {
+    public Game startGame() {
         try {
+            game = new Game();
             out.writeUTF(Protocol.JOIN_QUEUE);
-            String en = in.readUTF();
-            protocol.parse(en);
+            String en = in.readUTF(); //Por aquí recibiré algo así: 0x01|2&1,10.0,10.0*2,10.0,10.0
+            String[] func = protocol.parserInstruction(en);
+            switch (func[0]) {
+                case Protocol.APPROVED:
+                    return null;
+                case Protocol.READY_TO_START_GAME:
+                    protocol.parserGame(func[1], game); //Cambia el valor de game
+                    return game;
+            }
         } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }
-        return false;
+        return null;
     }
     
     public void stopWaiting() {
@@ -75,9 +84,10 @@ public class Cliente {
         try {
              boolean res;
              out.writeUTF(Protocol.READY_TO_START_GAME);
-             res = in.readUTF().equals("1");
+             res = in.readUTF().equals(Protocol.NOTIFY_GAME_STARTING);
              if(res){
-                 ThreadGame threadGame = new ThreadGame(in);
+                 System.out.println("Ahora si que empieza la partida");
+                 ThreadGame threadGame = new ThreadGame(in, game);
                  threadGame.start();
              }
          } catch (Exception ex) {
@@ -100,6 +110,10 @@ public class Cliente {
     public void close() {
         try {
             out.writeUTF(Protocol.CLOSE); //La función '0' cierra la conexión con el servidor de forma segura
+            out.close();
+            in.close();
+            socket.close();
+            
         } catch (Exception ex) {
         }
     }
@@ -110,14 +124,20 @@ public class Cliente {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                 boolean a = c.startGame();
-                if(a) {
+                Game game = c.startGame();
+                if(game!=null) {
                     System.out.println("Ya puedo empezar la partida");
+                    System.out.println("Cargando: "+game);
                 }
             }
         });
         t.start();
         Scanner sc = new Scanner(System.in);
+        sc.next();
+        c.readyToStart();
+        sc.next();
+        float[] a = {45.67f,32.5f};
+        c.goTo(a);
         sc.next();
         c.stopWaiting();
         

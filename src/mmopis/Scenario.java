@@ -25,9 +25,10 @@ public class Scenario {
     }
 
     public String getMap() {
-        String map = actors.length+"&";
-        for (Summoner i : actors){
-            map+=i.summonerId+","+i.pos[0]+","+i.pos[1]+"*";
+        String map = "";
+        for (int i = 0; i < actors.length; i++) {
+            Summoner s = actors[i];
+            map+=s.summonerId+","+s.pos[0]+","+s.pos[1]+((i<actors.length-1)?"*":"");
         }
         return map;
     }

@@ -8,16 +8,35 @@ package clientepis;
  *
  * @author zenbook
  */
-public class ProtocoloCliente extends Protocol{
+public class ProtocoloCliente{
 
     
-    public ProtocoloCliente(Cliente c) {
-        super(c);
+    public ProtocoloCliente() {
     }
     
-    @Override
-    public void getInfo(String func, String[] args) {
-        
+    public String[] parserInstruction(String s){
+        // We assume that info was correctly sent.
+        return s.split("[|]");
+    }
+    
+    public void parserGame(String string, Game game) { //1,10.0,10.0*2,10.0,10.0
+        String[] splitted = string.split("[*]");
+        String s;
+        String[] player;
+        Player p;
+        int id;
+        float[] pos = new float[2];
+        Player[] players = new Player[splitted.length];
+        for (int i = 0; i < splitted.length; i++) {
+            s = splitted[i];
+            player = s.split("[,]");
+            id = Integer.parseInt(player[0]);
+            pos[0] = Float.parseFloat(player[1]);
+            pos[1] = Float.parseFloat(player[2]);
+            p = new Player(id, pos);
+            players[i] = p;
+        }
+        game.setPlayers(players);
     }
     
 }
