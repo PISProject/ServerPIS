@@ -49,8 +49,8 @@ public class Cliente {
     
     public boolean startGame() {
         try {
-            out.writeUTF(Protocol.JOIN_QUEUE); //1 significa empezar partida
-            return in.readUTF().equals("1");
+            out.writeUTF(Protocol.JOIN_QUEUE);
+            return in.readUTF().equals(Protocol.APPROVED);
         } catch (Exception ex) {
             //Toast.makeText(a.getBaseContext(),<message>, Toast.LENGTH_SHORT);
         }

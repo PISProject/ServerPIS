@@ -4,11 +4,6 @@
  */
 package clientepis;
 
-import mmopis.*;
-
-
-
-
 
 /**
  * 
@@ -35,7 +30,8 @@ public abstract class Protocol {
     //////////////////
     // Notificaciones de estado 
     public static final String NOTIFY_GAME_STARTING = "0x60";
-    
+    public static final String APPROVED = "0x04";
+    public static final String DENIED = "0x05";    
     
     protected Cliente cliente;
     

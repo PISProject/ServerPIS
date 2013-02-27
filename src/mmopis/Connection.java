@@ -94,7 +94,7 @@ public class Connection extends Thread{
         stateChange(Status.OUT_GAME);
         server.quitQueue(this);
         try {
-            pushToClient("0");
+            pushToClient(Protocol.APPROVED);
         } catch (IOException ex) {
             System.err.println("IO Exception");
         }

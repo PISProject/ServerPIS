@@ -17,6 +17,7 @@ public class Protocol {
     public static final String READY_TO_START_GAME = "0x01";
     public static final String JOIN_QUEUE = "0x02";
     public static final String QUIT_QUEUE = "0x03";
+ 
     
     
     // Funciones de interaccion del jugador 0x10-0x5F
@@ -27,7 +28,8 @@ public class Protocol {
     //////////////////
     // Notificaciones de estado 
     public static final String NOTIFY_GAME_STARTING = "0x60";
-    
+    public static final String APPROVED = "0x04";
+    public static final String DENIED = "0x05";    
     
     private Connection connection;
     
