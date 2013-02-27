@@ -14,7 +14,7 @@ public class Server {
     private static final int PORT = 5050; // PORT IN WICH WE ARE RUNNING
     
     private ArrayList<Connection> con_clients;
-    private ArrayList<Game> active_games;
+    private ArrayList<GameThread> active_games;
     private GameQueue queue;
     
     
@@ -59,7 +59,7 @@ public class Server {
 
     private void startGame(Connection[] players) {
         synchronized(active_games) {
-            Game game = new Game(players);
+            GameThread game = new GameThread(players);
             active_games.add(game);
             for (Connection player : players) {
                 player.startGame(game);

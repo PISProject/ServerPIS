@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * This class contains the protocol of communication betwen the Client and the Server when it's logged.
  */
 package mmopis;
 
@@ -9,8 +8,8 @@ package mmopis;
  * 
  * @author zenbook
  */
-public abstract class Protocol {
-    protected Connection connection;
+public class Protocol {
+    private Connection connection;
     
     public Protocol(Connection con) {
         this.connection = con;
@@ -39,6 +38,18 @@ public abstract class Protocol {
         connection.close();
     }
     
-    public abstract void getInfo(String func, String[] args);
+    public void getInfo(String func, String[] args) {
+            switch (func) {
+                case "1": //Case1 Join Game queue
+                    connection.joinQueue();
+                    break;
+                case "2": //Exit Queue
+                    connection.exitQueue();
+                    //connection.pushToClient("exit");
+                    //Hacer eso, para que el read que espera que le
+                default:
+                    //throw new AssertionError();
+            }
+    }
     
 }

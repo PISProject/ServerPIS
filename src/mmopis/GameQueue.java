@@ -14,7 +14,7 @@ public class GameQueue{
     
     public static final int PLAYERS_PER_MAP = 2;
     
-    ArrayList<Connection> waitingList;
+    private ArrayList<Connection> waitingList;
     
     public GameQueue() {
         waitingList = new ArrayList<>();
