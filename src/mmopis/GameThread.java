@@ -17,7 +17,7 @@ public class GameThread extends Thread{
     private Connection[] players;
     private Scenario scenario;
     private GameStat gameStat;
-    private int ready;
+    public static int ready;
     
     public GameThread(Connection[] players){
         this.players = players;
@@ -27,7 +27,7 @@ public class GameThread extends Thread{
         this.start();
     }
 
-    void setReady(int palyerid) {
+    public void setReady(int palyerid) {
        this.ready+=1;
     }
 
@@ -43,7 +43,6 @@ public class GameThread extends Thread{
                     for ( Connection i : players){
                         i.notifyGameStarting();
                     }
-                
                 }
                 else{
                     try {

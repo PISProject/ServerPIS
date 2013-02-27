@@ -21,12 +21,12 @@ public class ThreadGame extends Thread{
     
     @Override
     public void run() {
-        
         while(true){
             try {
-                System.out.println( in.readUTF());
+                
+                System.out.println(in.readUTF());
             } catch (IOException ex) {
-                Logger.getLogger(ThreadGame.class.getName()).log(Level.SEVERE, null, ex);
+                
             }
         }
         
