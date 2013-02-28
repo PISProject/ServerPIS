@@ -10,30 +10,24 @@ import clientepis.Player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
 public class Board extends JPanel implements KeyListener {
-    private Hero hero;
-    private Villain villain;
+    private Actor[] actors;
     private Cliente c;
     private Game game;
 
-    public Board(Hero hero, Villain villain, Cliente c, Game game) {
-        this.hero = hero;
-        this.villain = villain;
+    public Board(Actor[] actors, Cliente c, Game game) {
+        this.actors = actors;
         this.c = c;
         this.game = game;
 
         setBackground(Color.BLACK);
-        //setDoubleBuffered(true);
     }
 
     @Override
@@ -44,8 +38,9 @@ public class Board extends JPanel implements KeyListener {
             public void run() {
                 synchronized(game){
                     //System.out.println(game);
-                    hero.setPosition((int)game.getPlayers()[0].pos[0],(int)game.getPlayers()[0].pos[1]);
-                    villain.setPosition((int)game.getPlayers()[1].pos[0],(int)game.getPlayers()[1].pos[1]);
+                    for (int i = 0; i < actors.length; i++) {
+                        actors[i].setPosition((int)game.getPlayers()[i].pos[0],(int)game.getPlayers()[i].pos[1]);
+                    }
                     repaint();
                 }
             }
@@ -54,25 +49,20 @@ public class Board extends JPanel implements KeyListener {
         t.schedule(task, 0, 100);
     }
 
+    @Override
     public void paint(Graphics g){
         super.paint(g);
-
         Graphics2D g2d = (Graphics2D)g;
 
-
-        // DRAW HERO
-        g2d.drawImage(hero.getImage(), hero.getX(), hero.getY(), this);
-        
-        g2d.drawImage(villain.getImage(), villain.getX(), villain.getY(), this);
-
-//        Toolkit.getDefaultToolkit().sync();
-//        g.dispose();
+        // DRAW ACTORS
+        for (int i = 0; i < actors.length; i++) {
+            Actor actor = actors[i];
+            g2d.drawImage(actor.getImage(), actor.getX(), actor.getY(), this);
+        }
     }
 
     @Override
-    public void keyTyped(KeyEvent ke) {
-        System.out.println("TYOPED");
-    }
+    public void keyTyped(KeyEvent ke) { }
 
     @Override
     public void keyPressed(KeyEvent ke) {
@@ -96,7 +86,5 @@ public class Board extends JPanel implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent ke) {
-        System.out.println("RELEASED");
-    }
+    public void keyReleased(KeyEvent ke) {}
 }

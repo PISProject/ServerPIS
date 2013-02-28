@@ -18,11 +18,16 @@ public class GameMain {
         Cliente c = new Cliente();
         Game game = c.startGame();
         JFrame frame = new JFrame();
-        Hero hero = new Hero();
-        hero.setPosition((int)game.getPlayers()[0].pos[0],(int)game.getPlayers()[0].pos[1]);
-        Villain villain = new Villain();
-        villain.setPosition((int)game.getPlayers()[1].pos[0],(int)game.getPlayers()[1].pos[1]);
-        Board board = new Board(hero, villain, c, game);
+        Actor[] actors = new Actor[game.getPlayers().length];
+        for (int i = 0; i < actors.length; i++) {
+            if(i%2==0) {
+                actors[i] = new Hero();
+            }else {
+                actors[i] = new Villain();
+            }
+            actors[i].setPosition((int)game.getPlayers()[i].pos[0],(int)game.getPlayers()[i].pos[1]);
+        }
+        Board board = new Board(actors, c, game);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.addKeyListener(board);
         frame.add(board);
