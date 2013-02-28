@@ -103,7 +103,7 @@ public class Connection extends Thread{
         try {
             this.game = game;
             stateChange(Status.IN_GAME);
-            System.out.println("Connection.java: "+Protocol.READY_TO_START_GAME+"|"+status);
+            System.out.println("Connection.java: "+Protocol.READY_TO_START_GAME+"|"+summoner.summonerId+"&"+status); //Le paso la id que le asocio a ese player para que sepa desde cliente que player es el suyo.
             pushToClient(Protocol.READY_TO_START_GAME+"|"+summoner.summonerId+"&"+status);//Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!
         } catch (IOException ex) {

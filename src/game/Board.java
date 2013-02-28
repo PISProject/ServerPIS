@@ -71,6 +71,7 @@ public class Board extends JPanel implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent ke) {
+        System.out.println("TYOPED");
     }
 
     @Override
@@ -96,5 +97,6 @@ public class Board extends JPanel implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent ke) {
+        System.out.println("RELEASED");
     }
 }

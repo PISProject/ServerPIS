@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class Cliente {
     
-    public static final String IP = "localhost";
+    public static final String IP = "80.28.175.213";
     public static final int PORT = 5050;
     
     private DataInputStream in;
