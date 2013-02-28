@@ -45,8 +45,8 @@ public class Board extends JPanel implements KeyListener {
                         Player player = otherPlayers[i];
                         villains[i].setPosition(player.pos);
                     }
-                    repaint();
                 }
+                repaint();
             }
         };
         Timer t = new Timer();

@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class Cliente {
     
-    public static final String IP = "localhost";
+    public static final String IP = "80.28.175.213";
     public static final int PORT = 5050;
     
     private DataInputStream in;
@@ -99,7 +99,6 @@ public class Cliente {
     
     public void goTo(final float[] pos){
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 try {
@@ -108,7 +107,9 @@ public class Cliente {
                 for (int i = 0; i < pos.length; i++) {
                     res+=pos[i]+(i < pos.length-1?",":"");
                 }
-                out.writeUTF(res);
+                synchronized(out) {
+                    out.writeUTF(res);
+                }
                 } catch (Exception ex) { }
             }
         }).start();
