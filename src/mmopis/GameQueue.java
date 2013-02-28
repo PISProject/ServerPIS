@@ -11,8 +11,8 @@ import java.util.ArrayList;
  * @author kirtash
  */
 public class GameQueue{
-    
-    public static final int PLAYERS_PER_MAP = 2;
+   
+    public static final int PLAYERS_PER_MAP = 2; //Solo hay que cambiar esto si queremos que en una partida haya más players
     
     private ArrayList<Connection> waitingList;
     

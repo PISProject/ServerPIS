@@ -4,6 +4,8 @@
  */
 package game;
 
+import clientepis.Player;
+
 /**
  *
  * @author xaviml

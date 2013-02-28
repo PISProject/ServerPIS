@@ -10,7 +10,7 @@ package clientepis;
  */
 public class Game {
     private Player[] players;
-    private int myId;
+    private int myId; //Esta es la ID que el server le proporciona al cliente para que el cliente sepa que jugador es.
     
     public Game(int id) {
         this.myId = id;
@@ -30,8 +30,25 @@ public class Game {
         return p;
     }
     
+    public int getMyID() {
+        return myId;
+    }
+    
     public Player[] getPlayers() {
         return players;
+    }
+    
+    public Player[] getOtherPlayers() {
+        Player[] pls = new Player[players.length-1];
+        int j = 0;
+        for (int i = 0; i < players.length; i++) {
+            Player player = players[i];
+            if(player.id != myId) {
+                pls[j] = player;
+                j++;
+            }
+        }
+        return pls;
     }
     
     public void setPlayers(Player[] players) {

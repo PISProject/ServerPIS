@@ -18,14 +18,16 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 
 public class Board extends JPanel implements KeyListener {
-    private Actor[] actors;
+    private Villain[] villains;
+    private Hero hero;
     private Cliente c;
     private Game game;
 
-    public Board(Actor[] actors, Cliente c, Game game) {
-        this.actors = actors;
+    public Board(Hero h, Villain[] villains, Cliente c, Game game) {
+        this.villains = villains;
         this.c = c;
         this.game = game;
+        this.hero = h;
 
         setBackground(Color.BLACK);
     }
@@ -37,9 +39,11 @@ public class Board extends JPanel implements KeyListener {
             @Override
             public void run() {
                 synchronized(game){
-                    //System.out.println(game);
-                    for (int i = 0; i < actors.length; i++) {
-                        actors[i].setPosition((int)game.getPlayers()[i].pos[0],(int)game.getPlayers()[i].pos[1]);
+                    Player[] otherPlayers = game.getOtherPlayers();
+                    /*Sólo refresco la posición de los demás players*/
+                    for (int i = 0; i < otherPlayers.length; i++) {
+                        Player player = otherPlayers[i];
+                        villains[i].setPosition(player.pos);
                     }
                     repaint();
                 }
@@ -54,37 +58,44 @@ public class Board extends JPanel implements KeyListener {
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
 
-        // DRAW ACTORS
-        for (int i = 0; i < actors.length; i++) {
-            Actor actor = actors[i];
-            g2d.drawImage(actor.getImage(), actor.getX(), actor.getY(), this);
+        /*Pongo en pantalla a mis contrincantes*/
+        for (int i = 0; i < villains.length; i++) {
+            Actor actor = villains[i];
+            g2d.drawImage(actor.getImage(), (int)actor.getX(), (int)actor.getY(), this);
         }
+        
+        /*Dibujo en pantalla a mi héroe*/
+        g2d.drawImage(hero.getImage(), (int)hero.getX(), (int)hero.getY(), this);
     }
 
     @Override
-    public void keyTyped(KeyEvent ke) { }
+    public void keyTyped(KeyEvent ke) {}
 
     @Override
     public void keyPressed(KeyEvent ke) {
+        /*Aquí refresco mi posición y se la envio al servidor*/
         Player p = game.getMyPlayer();
         if(ke.getKeyCode() == KeyEvent.VK_DOWN) {
-            float[] pos = {p.pos[0], p.pos[1]+20};
-            c.goTo(pos);
+            p.pos[1] += 20;
+            hero.setPosition(p.pos);
+            c.goTo(p.pos);
         }
-        if(ke.getKeyCode() == KeyEvent.VK_UP) {
-            float[] pos = {p.pos[0], p.pos[1]-20};
-            c.goTo(pos);
+        else if(ke.getKeyCode() == KeyEvent.VK_UP) {
+            p.pos[1] -= 20;
+            hero.setPosition(p.pos);
+            c.goTo(p.pos);
         }
         if(ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            float[] pos = {p.pos[0]-20, p.pos[1]};
-            c.goTo(pos);
+            p.pos[0] -= 20;
+            hero.setPosition(p.pos);
+            c.goTo(p.pos);
         }
-        if(ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            float[] pos = {p.pos[0]+20, p.pos[1]};
-            c.goTo(pos);
+        else if(ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            p.pos[0] += 20;
+            hero.setPosition(p.pos);
+            c.goTo(p.pos);
         }
     }
-
     @Override
     public void keyReleased(KeyEvent ke) {}
 }

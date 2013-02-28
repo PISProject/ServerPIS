@@ -6,6 +6,7 @@ package game;
 
 import clientepis.Cliente;
 import clientepis.Game;
+import clientepis.Player;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -18,16 +19,20 @@ public class GameMain {
         Cliente c = new Cliente();
         Game game = c.startGame();
         JFrame frame = new JFrame();
-        Actor[] actors = new Actor[game.getPlayers().length];
-        for (int i = 0; i < actors.length; i++) {
-            if(i%2==0) {
-                actors[i] = new Hero();
-            }else {
-                actors[i] = new Villain();
-            }
-            actors[i].setPosition((int)game.getPlayers()[i].pos[0],(int)game.getPlayers()[i].pos[1]);
+        Villain[] villains = new Villain[game.getOtherPlayers().length];
+        
+        /*Defino la posición de mi player, en este caso es un héroe*/
+        Hero hero = new Hero();
+        hero.setPosition(game.getMyPlayer().pos);
+        
+        /*Defino las posiciones de los demás players que son villanos desde mi punto de vista*/
+        for (int i = 0; i < villains.length; i++) {
+            Player p = game.getOtherPlayers()[i];
+            villains[i] = new Villain();
+            villains[i].setPosition(p.pos);
         }
-        Board board = new Board(actors, c, game);
+        
+        Board board = new Board(hero, villains, c, game);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.addKeyListener(board);
         frame.add(board);
