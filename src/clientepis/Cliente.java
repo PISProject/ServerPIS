@@ -97,16 +97,22 @@ public class Cliente {
          } 
     }
     
-    public void goTo(float[] pos){
-        try {
-            String res = "";
-            res += Protocol.INGAME_MOVE_TO+"|"; //Comanda para ProtocolGame (significa ir a una posicion)
-            for (int i = 0; i < pos.length; i++) {
-                res+=pos[i]+(i < pos.length-1?",":"");
+    public void goTo(final float[] pos){
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                String res = "";
+                res += Protocol.INGAME_MOVE_TO+"|"; //Comanda para ProtocolGame (significa ir a una posicion)
+                for (int i = 0; i < pos.length; i++) {
+                    res+=pos[i]+(i < pos.length-1?",":"");
+                }
+                out.writeUTF(res);
+                } catch (Exception ex) { }
             }
-            out.writeUTF(res);
-        } catch (Exception ex) {
-        }
+        }).start();
+        
     }
     
     public void close() {
