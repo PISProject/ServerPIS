@@ -33,7 +33,7 @@ public class Board extends JPanel implements KeyListener {
         this.game = game;
 
         setBackground(Color.BLACK);
-        setDoubleBuffered(true);
+        //setDoubleBuffered(true);
     }
 
     @Override
@@ -77,19 +77,19 @@ public class Board extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent ke) {
         Player p = game.getMyPlayer();
         if(ke.getKeyCode() == KeyEvent.VK_DOWN) {
-            float[] pos = {p.pos[0], p.pos[1]+4};
+            float[] pos = {p.pos[0], p.pos[1]+20};
             c.goTo(pos);
         }
         if(ke.getKeyCode() == KeyEvent.VK_UP) {
-            float[] pos = {p.pos[0], p.pos[1]-4};
+            float[] pos = {p.pos[0], p.pos[1]-20};
             c.goTo(pos);
         }
         if(ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            float[] pos = {p.pos[0]-4, p.pos[1]};
+            float[] pos = {p.pos[0]-20, p.pos[1]};
             c.goTo(pos);
         }
         if(ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            float[] pos = {p.pos[0]+4, p.pos[1]};
+            float[] pos = {p.pos[0]+20, p.pos[1]};
             c.goTo(pos);
         }
     }

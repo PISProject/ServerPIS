@@ -25,6 +25,7 @@ public class Game {
                 p = players[i];
                 trobat = true;
             }
+            i++;
         }
         return p;
     }
