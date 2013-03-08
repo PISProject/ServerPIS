@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-enum Status{NOT_LOGGED, WAITING_QUEUE, OUT_GAME, IN_GAME,DISCONNECTED};
+
 
 /**
  *
@@ -27,14 +27,14 @@ public class Connection extends Thread{
     private GameThread game;
     private Server server;
 
-    public Status status;
+    public Constants.ClientStatus status;
     
     
     
     public Connection(Socket client, ThreadGroup threads, Server server){
         super(threads,"threadConnection");
         try {
-            this.status = Status.OUT_GAME; //Status.NOT_LOGGED; -> Lo dejo como OUT_GAME para hacer pruebas sin logar-se.
+            this.status = Constants.ClientStatus.OUT_GAME; //Status.NOT_LOGGED; -> Lo dejo como OUT_GAME para hacer pruebas sin logar-se.
             this.client = client;
             this.in = new DataInputStream(client.getInputStream());
             this.out = new DataOutputStream(client.getOutputStream());
@@ -51,20 +51,25 @@ public class Connection extends Thread{
 
     @Override
     public void run() {
-        while(status != Status.DISCONNECTED){
+        while(status != Constants.ClientStatus.DISCONNECTED){
             try {
                 String entrada = in.readUTF();
-                if (status == Status.OUT_GAME || status == Status.WAITING_QUEUE){
+                if (status == Constants.ClientStatus.OUT_GAME || status == Constants.ClientStatus.WAITING_QUEUE){
                     protocolOutGame.parse(entrada);
-                }else if(status == Status.NOT_LOGGED){
+                }else if(status == Constants.ClientStatus.NOT_LOGGED){
                     protocolLogin.parse(entrada);
-                }else if(status == Status.IN_GAME){
+                }else if(status == Constants.ClientStatus.IN_GAME){
                     protocolGame.parse(entrada);
                 }
             } catch (IOException ex) {
-                System.err.println("IO Exception");
+                this.close();
+                System.err.println("IO Exception :: Client disconnected!!");
             }
         }
+    }
+    public void pushMapUpdate(String message)throws IOException{
+        out.flush(); //Limpiamos lo que haya en el socket para que no se forme una cola
+        out.writeUTF(message);
     }
     
     public void pushToClient(String message) throws IOException{
@@ -72,7 +77,8 @@ public class Connection extends Thread{
         try {
             out.writeUTF(message);
         } catch (IOException ex) {
-            System.err.println("I/O Exception");
+            System.err.println("I/O Exception :: Not here!");
+            this.close();
         }
     }
     
@@ -80,17 +86,17 @@ public class Connection extends Thread{
      * Cambia de estado el hilo.
      * @param s
      */
-    public synchronized void stateChange(Status s){
+    public synchronized void stateChange(Constants.ClientStatus s){
         this.status = s;
     }
     
     public void joinQueue(){
-        stateChange(Status.WAITING_QUEUE);
+        stateChange(Constants.ClientStatus.WAITING_QUEUE);
         server.joinQueue(this);
     }
 
     public void quitQueue() {
-        stateChange(Status.OUT_GAME);
+        stateChange(Constants.ClientStatus.OUT_GAME);
         server.quitQueue(this);
         try {
             pushToClient(Protocol.APPROVED);
@@ -102,7 +108,7 @@ public class Connection extends Thread{
     public void startGame(GameThread game, String status) {
         try {
             this.game = game;
-            stateChange(Status.IN_GAME);
+            stateChange(Constants.ClientStatus.IN_GAME);
             System.out.println("Connection.java: "+Protocol.READY_TO_START_GAME+"|"+summoner.summonerId+"&"+status); //Le paso la id que le asocio a ese player para que sepa desde cliente que player es el suyo.
             pushToClient(Protocol.READY_TO_START_GAME+"|"+summoner.summonerId+"&"+status);//Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!
@@ -121,7 +127,7 @@ public class Connection extends Thread{
             in.close();
             out.close();
             client.close();
-            stateChange(Status.DISCONNECTED);
+            stateChange(Constants.ClientStatus.DISCONNECTED);
         } catch (IOException ex) {
             System.err.println("Connection is already close.");
         }
@@ -136,7 +142,7 @@ public class Connection extends Thread{
 
     // OUTPUT FUNCTIONS
     public void notifyGameStarting() {
-        stateChange(Status.IN_GAME);
+        stateChange(Constants.ClientStatus.IN_GAME);
         try {
             pushToClient(Protocol.NOTIFY_GAME_STARTING);
         } catch (IOException ex) {

@@ -4,8 +4,6 @@
  */
 package mmopis;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
-
 /**
  *
  * @author zenbook

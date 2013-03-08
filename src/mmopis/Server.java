@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * @author zenbook
  */
 public class Server {
-    private static final int PORT = 5050; // PORT IN WICH WE ARE RUNNING
     
     private ArrayList<Connection> con_clients;
     private ArrayList<GameThread> active_games;
@@ -26,7 +25,7 @@ public class Server {
         
         //INIT server listener
         System.out.print("Starting to listen connections...");
-        ConnectionListener listener = new ConnectionListener (this,PORT);
+        ConnectionListener listener = new ConnectionListener (this,Constants.PORT);
         listener.start();
         System.out.println("[DONE]");
         

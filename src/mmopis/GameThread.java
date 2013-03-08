@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 enum GameStat{WAITING_CONNECTIONS,INIT,RUNNING,FINISHED};
 
 public class GameThread extends Thread{
+    
     private Connection[] connections;
     private Scenario scenario;
     private GameStat gameStat;
@@ -33,14 +34,23 @@ public class GameThread extends Thread{
 
         @Override
         public void run() {
-            try {
-                synchronized(s) {
-                    c.pushToClient(s.getMap());
+            while (gameStat == GameStat.RUNNING){
+                try {
+                    synchronized(s) {
+                        c.pushMapUpdate(s.getMap());
+                    }
+                } catch (IOException ex) {
+                    //TODO
+                    System.err.println("IO Exception::GameUpdate");
+                    
                 }
-            } catch (IOException ex) {
-                //TODO
-                System.err.println("IO Exception::GameUpdate");
+                try {
+                    sleep(Constants.UPDATETIME);
+                } catch (InterruptedException ex) {
+                    System.err.println("GameUpdateThread Interrupted!");
+                }
             }
+
         }
         
     }
@@ -85,12 +95,16 @@ public class GameThread extends Thread{
             }
             else if (gameStat == GameStat.RUNNING){
                 GameUpdate [] g = new GameUpdate[GameQueue.PLAYERS_PER_MAP];
+                for (int i = 0; i < g.length; i++) {
+                    //Solo se puede hacer un .start() una vez por hilo, hay que hacerlo así.
+                    new GameUpdate(connections[i], scenario).start();
+                }
                 while(gameStat == GameStat.RUNNING) {
-                    for (int i = 0; i < g.length; i++) {
-                        //Solo se puede hacer un .start() una vez por hilo, hay que hacerlo así.
-                        new GameUpdate(connections[i], scenario).start();
+                    try {
+                        sleep(10000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameThread.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    System.gc();
                 }
             }
         }
