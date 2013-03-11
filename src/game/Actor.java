@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 public class Actor{
     private float[] pos;
     private Image image;
-
+    private enum actorAnimation{STANDING, MOVING, ATTACKING, CASTING_SPELL1, CASTING_SPELL2, CASTNG_SPELL3}
     public Actor(String pathImage){
         image = new ImageIcon(pathImage).getImage();
     }

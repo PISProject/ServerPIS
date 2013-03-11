@@ -56,10 +56,10 @@ public class GameThread extends Thread{
     }
     public GameThread(Connection[] players){
         this.connections = players;
-        Summoner [] summoners = new Summoner[players.length];
+        Actor [] summoners = new Actor[players.length];
         int i = 0;
         for (Connection c: players){
-            summoners[i] = c.summoner;
+            summoners[i] = c.actor;
             i++;
         }
         this.scenario = new Scenario(summoners);
@@ -75,7 +75,7 @@ public class GameThread extends Thread{
     @Override
     public void run() {
         for (Connection i:connections){
-            i.startGame(this,scenario.getInit());
+            i.startGame(this,scenario.getMap(),new Actor());
         }
         while(gameStat != GameStat.FINISHED){
             if (gameStat == GameStat.WAITING_CONNECTIONS){

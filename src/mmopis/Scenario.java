@@ -4,6 +4,8 @@
  */
 package mmopis;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author kirtash
@@ -12,28 +14,22 @@ public class Scenario {
     private static final float POSXINIC = 10;
     private static final float POSYINIC = 10;
     
-    private Summoner [] actors;
-    public Scenario(Summoner[] summoners){
-        actors = summoners;
-        for (Summoner s: actors){
-            s.pos[0] = POSXINIC;
-            s.pos[1] = POSYINIC;
+    private ArrayList<Actor> actors;
+    private ArrayList<Item> items; //TODO
+    public Scenario(Actor[] m_actors){
+        actors = new ArrayList();
+        for (Actor a: m_actors){
+            actors.add(a);
+            //SET STARTING POSITIONS
+            
         }
-    }
-    public String getInit(){
-        String map = "";
-        for (int i = 0; i < actors.length; i++) {
-            Summoner s = actors[i];
-            map+=s.summonerId+","+s.pos[0]+","+s.pos[1]+((i<actors.length-1)?"*":"");
-        }
-        return map;
     }
 
-    public String getMap() {
+    public synchronized String getMap() {
         String map = "";
-        for (int i = 0; i < actors.length; i++) {
-            Summoner s = actors[i];
-            map+=s.summonerId+","+s.pos[0]+","+s.pos[1]+((i<actors.length-1)?"*":"");
+        for (int i = 0; i < actors.size(); i++) {
+            Actor s = actors.get(i);
+            map+=s.uid+","+s.posX+","+s.posY+((i<actors.size()-1)?"*":"");
         }
         return map;
     }

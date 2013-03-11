@@ -23,9 +23,9 @@ public class Connection extends Thread{
     private Protocol protocolOutGame;
     private ProtocolGame protocolGame;
     private ProtocolLogin protocolLogin;
-    public Summoner summoner;
     private GameThread game;
     private Server server;
+    public Actor actor;
 
     public Constants.ClientStatus status;
     
@@ -42,7 +42,6 @@ public class Connection extends Thread{
             this.protocolOutGame = new Protocol(this);
             this.protocolLogin = new ProtocolLogin(this);
             this.server = server;
-            this.summoner = new Summoner(Summoner.getNextId());
             
         } catch (IOException ex) {
             System.err.println("I/O Exception");
@@ -105,12 +104,13 @@ public class Connection extends Thread{
         }
     }
 
-    public void startGame(GameThread game, String status) {
+    public void startGame(GameThread game, String status, Actor summoner) {
         try {
+            this.actor = summoner;
             this.game = game;
             stateChange(Constants.ClientStatus.IN_GAME);
-            System.out.println("Connection.java: "+Protocol.READY_TO_START_GAME+"|"+summoner.summonerId+"&"+status); //Le paso la id que le asocio a ese player para que sepa desde cliente que player es el suyo.
-            pushToClient(Protocol.READY_TO_START_GAME+"|"+summoner.summonerId+"&"+status);//Siempre hay que hacer los cambios del server y después notificarselos al cliente.
+            System.out.println("Connection.java: "+Protocol.READY_TO_START_GAME+"|"+summoner.uid+"&"+status); //Le paso la id que le asocio a ese player para que sepa desde cliente que player es el suyo.
+            pushToClient(Protocol.READY_TO_START_GAME+"|"+summoner.uid+"&"+status);//Siempre hay que hacer los cambios del server y después notificarselos al cliente.
                                 //NUNCA AL REVES!
         } catch (IOException ex) {
         }
@@ -136,7 +136,7 @@ public class Connection extends Thread{
     
     public void imReadyToStartGame() {
         synchronized(game){
-            game.setReady(summoner.summonerId);
+            game.setReady(0);
         }
     }
 
