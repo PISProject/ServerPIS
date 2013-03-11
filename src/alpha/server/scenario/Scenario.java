@@ -5,6 +5,7 @@
 package alpha.server.scenario;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -18,8 +19,13 @@ public class Scenario {
         
     }
     public String parseScenario(){
-        //TODO
-        return "";
+        String map = "";
+        for (Map.Entry actor : actores.entrySet()) {
+            Actor a = (Actor)actor.getValue();
+            map+=a.uid+","+a.posX+","+a.posY+"*";
+        }
+        map = map.substring(0, map.length()-2);
+        return map;
     }
 
     /*
@@ -29,6 +35,10 @@ public class Scenario {
     
     public void addHeroe(int uid) {
        actores.put(uid, new Actor());
+    }
+
+    public void moveTo(int uid, int x, int y) {
+        actores.get(uid).moveTo(x,y);
     }
     
 }

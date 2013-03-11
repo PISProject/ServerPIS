@@ -9,9 +9,9 @@ package alpha.server.scenario;
  * @author kirtash
  */
 public class Actor {
-    private int uid;
-    private int posX;
-    private int posY;
+    public int uid;
+    public int posX;
+    public int posY;
     
     private int spawnX;
     private int spawnY;
@@ -36,5 +36,10 @@ public class Actor {
         i[0] = spawnX;
         i[1] = spawnY;
         return i;
+    }
+
+    void moveTo(int x, int y) {
+        this.posX = x;
+        this.posY = y;
     }
 }

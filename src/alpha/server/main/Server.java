@@ -26,6 +26,7 @@ public class Server {
         this.connectionUid = 0;
         this.clients = new ArrayList<>();
         this.listener = new ConnectionListener();
+        listener.start();
         this.game = new Scenario();
     }
     
