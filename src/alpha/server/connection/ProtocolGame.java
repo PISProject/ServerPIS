@@ -4,8 +4,6 @@
  */
 package alpha.server.connection;
 
-import java.net.Socket;
-
 /**
  *
  * @author kirtash
