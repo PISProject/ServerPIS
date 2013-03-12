@@ -50,7 +50,7 @@ public class Board extends JPanel implements KeyListener {
             }
         };
         Timer t = new Timer();
-        t.schedule(task, 0, 100);
+        t.schedule(task, 0, 50);
     }
 
     @Override
@@ -78,22 +78,22 @@ public class Board extends JPanel implements KeyListener {
         if(ke.getKeyCode() == KeyEvent.VK_DOWN) {
             p.pos[1] += 20;
             hero.setPosition(p.pos);
-            c.goTo(p.pos);
+            c.moveTo(90);
         }
         else if(ke.getKeyCode() == KeyEvent.VK_UP) {
             p.pos[1] -= 20;
             hero.setPosition(p.pos);
-            c.goTo(p.pos);
+            c.moveTo(270);
         }
         if(ke.getKeyCode() == KeyEvent.VK_LEFT) {
             p.pos[0] -= 20;
             hero.setPosition(p.pos);
-            c.goTo(p.pos);
+            c.moveTo(180);
         }
         else if(ke.getKeyCode() == KeyEvent.VK_RIGHT) {
             p.pos[0] += 20;
             hero.setPosition(p.pos);
-            c.goTo(p.pos);
+            c.moveTo(0);
         }
     }
     @Override
