@@ -4,6 +4,7 @@
  */
 package alpha.server.connection;
 
+import alpha.server.main.Server;
 import alpha.server.scenario.Scenario;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -18,23 +19,30 @@ import java.net.Socket;
  * @author zenbook
  */
 public class Connection extends Thread{
-    
+    private enum ConnectionState{NOT_LOGGED,OUT_GAME,WAITING_QUEUE,IN_GAME};
+    private ConnectionState state;
+    private Server server;
     private Socket client;
     private Scenario scenario;
-    private int uid;
+    public int uid;
     private DataInputStream in;
     private DataOutputStream out;
     
     //CONSTRUCTOR+RUN
-    public Connection(Socket client, ThreadGroup threads){
+    public Connection(Server server, Socket client, ThreadGroup threads){
         this.client = client;
+        this.server = server;
+        
     }
     @Override
     public void run() {
         while (true){
             try {
                 String entrada = in.readUTF();
-                ProtocolGame.parse(this,entrada);
+                if (state == ConnectionState.IN_GAME){
+                    ProtocolGame.parse(this,entrada);
+                }
+                
             } catch (IOException ex) {
                 System.err.println("IOException::Entrada de datos");
             }
@@ -50,7 +58,7 @@ public class Connection extends Thread{
         try {
             out.writeUTF(message);
         } catch (IOException ex) {
-            System.err.println("Could not push scenario!");
+            System.err.println("IOException:: Could not push scenario!");
         }
     }
     
@@ -59,7 +67,17 @@ public class Connection extends Thread{
         g.start();
     }
 
-
+    
+    //OUT_GAME Actions
+    
+    void joinQueue(){
+        server.joinQueue(this);
+    }
+    
+    void quitQueue(){
+        server.quitQueue(this);
+    }
+    //IN_GAME Actions
     void moveTo(int x, int y) {
         scenario.moveTo(uid,x,y);
     }

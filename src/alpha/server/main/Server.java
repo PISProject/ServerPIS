@@ -5,6 +5,7 @@
 package alpha.server.main;
 
 import alpha.server.connection.*;
+import alpha.server.scenario.GameThread;
 import alpha.server.scenario.Scenario;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,6 +17,9 @@ import java.util.ArrayList;
  * @author kirtash
  */
 public class Server {
+    public ArrayList<GameThread> games;
+    public ThreadGroup threadGroup;
+    public GameQueue queue;
     public int connectionUid;
     public int PORT = 5050;
     ArrayList<Connection> clients;
@@ -23,21 +27,46 @@ public class Server {
     Scenario game;
     
     public Server(){
+        this.threadGroup = new ThreadGroup("Connections");
+        this.queue = new GameQueue();
         this.connectionUid = 0;
         this.clients = new ArrayList<>();
         this.listener = new ConnectionListener();
-        listener.start();
-        this.game = new Scenario();
+        this.games = new ArrayList<>();
+        
+        
+        serverStart();
     }
     
-    private void addConnection(Connection connection) {
+    /* SELF functions */
+    
+    private void serverStart(){
+        this.listener.start(); // Start listening connections
+    }
+    
+    private void addConnection(Socket socket) {
+        Connection connection = new Connection(this, socket, threadGroup);
         clients.add(connection);
-        connection.setScenario(game);
-        game.addHeroe(connectionUid);
-        connectionUid+=1;
+    }
+    
+    private void startGame(Connection[] c) {
+        GameThread thread = new GameThread(c);
+        games.add(thread);
+    }
+    
+    
+    
+    /* CONNECTION functions */
+    public void joinQueue(Connection connection){
+        Connection [] c = queue.join(connection);
+        if (c!= null){
+            this.startGame(c);
+        }
     }
 
-    
+    public boolean quitQueue(Connection aThis) {
+        return queue.quitQueue(aThis);
+    }    
     
     
     /**
@@ -45,7 +74,7 @@ public class Server {
      */
     public class ConnectionListener extends Thread{
         public ServerSocket ss;
-        public ThreadGroup threadGroup;
+        
     
         public ConnectionListener(){ 
             try {
@@ -54,7 +83,6 @@ public class Server {
                 System.err.println("Could not create server socket!");
                 System.exit(1);
             }
-            threadGroup = new ThreadGroup("Connections");
         }
     
     @Override
@@ -62,10 +90,7 @@ public class Server {
         try {
             while(true){
                 Socket socket = ss.accept();
-                Connection connection = new Connection(socket,threadGroup);
-                addConnection(connection);
-                connection.start();
-                
+                addConnection(socket);                
             }
         } catch (IOException ex) {
             System.err.println("IOException::while creating a new clientSocket");
