@@ -17,16 +17,24 @@ import java.util.ArrayList;
  * @author kirtash
  */
 public class Server {
-    public ArrayList<GameThread> games;
+    //INET Att
+    public int PORT = 5050;
+    public ConnectionListener listener;
     public ThreadGroup threadGroup;
+    //
+    
+    //Listas//
+    public ArrayList<GameThread> games;
+    public ArrayList<Connection> clients;
+
+    
     public GameQueue queue;
     public int connectionUid;
-    public int PORT = 5050;
-    ArrayList<Connection> clients;
-    ConnectionListener listener;
-    Scenario game;
+    
+    private final Protocol protocol;
     
     public Server(){
+        this.protocol = new Protocol(this);
         this.threadGroup = new ThreadGroup("Connections");
         this.queue = new GameQueue();
         this.connectionUid = 0;
@@ -45,7 +53,9 @@ public class Server {
     }
     
     private void addConnection(Socket socket) {
-        Connection connection = new Connection(this, socket, threadGroup);
+        Connection connection = new Connection(protocol, socket, threadGroup);
+        connection.uid = connectionUid;
+        connectionUid++;
         clients.add(connection);
     }
     

@@ -4,13 +4,15 @@
  */
 package alpha.server.connection;
 
-import alpha.server.main.Server;
-import alpha.server.scenario.Scenario;
+import alpha.server.main.*;
+import alpha.server.scenario.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -19,39 +21,52 @@ import java.net.Socket;
  * @author zenbook
  */
 public class Connection extends Thread{
-    private enum ConnectionState{NOT_LOGGED,OUT_GAME,WAITING_QUEUE,IN_GAME};
+
+
+
+    private enum ConnectionState{NOT_LOGGED,OUT_GAME,WAITING_QUEUE,IN_GAME,DISCONNECTED};
     private ConnectionState state;
-    private Server server;
+    public ProtocolGame protocolGame;
+    public Protocol protocolServer;
     private Socket client;
-    private Scenario scenario;
     public int uid;
     private DataInputStream in;
     private DataOutputStream out;
     
     //CONSTRUCTOR+RUN
-    public Connection(Server server, Socket client, ThreadGroup threads){
+    public Connection(Protocol protocolServer, Socket client, ThreadGroup threads){
         this.client = client;
-        this.server = server;
-        
+        this.protocolServer = protocolServer;
+        try{
+            this.in = new DataInputStream(client.getInputStream());
+            this.out = new DataOutputStream(client.getOutputStream());
+        }catch(IOException i){
+            System.err.println("IOException::Error creating IO Streams");
+        }
     }
     @Override
     public void run() {
-        while (true){
+        while (state != ConnectionState.DISCONNECTED){
             try {
                 String entrada = in.readUTF();
-                if (state == ConnectionState.IN_GAME){
-                    ProtocolGame.parse(this,entrada);
+                if (state == ConnectionState.OUT_GAME){
+                    protocolServer.parse(this,entrada);
                 }
-                
+                if (state == ConnectionState.IN_GAME){
+                    protocolGame.parse(uid, entrada);
+                }
             } catch (IOException ex) {
                 System.err.println("IOException::Entrada de datos");
             }
         }
     }
     //---------------
-    
-    public void setScenario(Scenario game) {
-        this.scenario = game;
+    public void pushToClient(boolean b) {
+        try {
+            out.writeBoolean(b);
+        } catch (IOException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void pushScenarioToClient(String message){
@@ -66,25 +81,9 @@ public class Connection extends Thread{
         GameUpdate g = new GameUpdate();
         g.start();
     }
+    
 
-    
-    //OUT_GAME Actions
-    
-    void joinQueue(){
-        server.joinQueue(this);
-    }
-    
-    void quitQueue(){
-        server.quitQueue(this);
-    }
-    //IN_GAME Actions
-    void moveTo(int x, int y) {
-        scenario.moveTo(uid,x,y);
-    }
-    
-    
-    
-    
+   
     
     
     
@@ -92,11 +91,12 @@ public class Connection extends Thread{
     /**
      * Class GAMEUPDATE
      */
+    
     private class GameUpdate extends Thread{
         @Override
         public void run() {
-            while (client.isConnected()){
-                pushScenarioToClient(scenario.parseScenario());
+            while (protocolGame.getState()!= GameThread.GameState.FINISHING){
+                pushScenarioToClient(protocolGame.getMap());
 
                 try {
                     sleep(100);

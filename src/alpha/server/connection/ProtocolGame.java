@@ -4,12 +4,19 @@
  */
 package alpha.server.connection;
 
+import alpha.server.scenario.GameThread;
+
 /**
  *
  * @author kirtash
  */
 public class ProtocolGame {
-     public static void parse(Connection cliente,String s){
+    GameThread game;
+    
+    public ProtocolGame(GameThread aThis) {
+        game = aThis;
+    }
+     public void parse(int uid,String s){
         // We assume that info was correctly sent.
         String[] splitted;
         splitted = s.split("[|]");
@@ -20,25 +27,38 @@ public class ProtocolGame {
         }
         
         if(splitted.length==1) {
-            getInfo(cliente,func,null);
+            getInfo(uid,func,null);
         }else{
             splitted = splitted[1].split("[,]");
-            getInfo(cliente,func,splitted);
+            getInfo(uid,func,splitted);
         }
     }
      
      
-    public static void getInfo(Connection cliente, String func, String[] args) {
+    public void getInfo(int uid, String func, String[] args) {
             switch (func) {
-                case "0x02": //Case1 Join Game queue
-                    cliente.startGame();
-                    break;
-                case "0x03": //MoveTo
-                    cliente.moveTo(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+                case "1": //MoveTo
+                    moveTo(uid,Integer.parseInt(args[0]),Integer.parseInt(args[1]));
                     //connection.pushToClient("exit");
                     //Hacer eso, para que el read que espera que le
+                case "2":
+                    attack(uid);
                 default:
                     //throw new AssertionError();
             }
+    }
+    void moveTo(int uid,int x, int y) {
+        game.moveTo(uid,x,y);
+    }
+
+    void attack(int uid){
+        game.attack(uid);
+    }
+    
+    public String getMap(){
+        return game.map;
+    }
+    public GameThread.GameState getState(){
+        return game.gamestate;
     }
 }
