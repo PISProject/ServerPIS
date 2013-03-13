@@ -133,6 +133,8 @@ public class Protocol {
         //TODO  here
         
         //Parsear lo que me diga y meterlo en el game object.
+        //En la clase ProtocoloCliente hay un parser del game, que hice en su momento.
+        //Míralo, a ver si puedes reutilizarlo.
         //TODO here
     }
 
