@@ -12,25 +12,18 @@ import java.io.IOException;
  * @author Albert
  */
 public class ThreadGame extends Thread{
-    private DataInputStream in;
+    private Protocol protocol;
     private Game game;
-    private ProtocoloCliente p;
     
-    public ThreadGame (DataInputStream in, Game game){
-        this.in = in;
+    public ThreadGame (Protocol protocol, Game game){
+        this.protocol = protocol;
         this.game = game;
-        p = new ProtocoloCliente();
     }
     
     @Override
     public void run() {
         while(true){
-            try {
-                String res = in.readUTF();
-                p.parserGame(res, game);
-            } catch (IOException ex) {
-                
-            }
+            protocol.readMap(game);
         }
         
         
