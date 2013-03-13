@@ -7,6 +7,7 @@ package alpha.server.main;
 import alpha.server.connection.*;
 import alpha.server.scenario.GameThread;
 import alpha.server.scenario.Scenario;
+import com.sun.xml.internal.ws.transport.http.server.ServerAdapterList;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,6 +34,11 @@ public class Server {
     
     private final Protocol protocol;
     
+    public static void main(String [] args){
+        Server s = new Server();
+        s.serverStart();
+    }
+    
     public Server(){
         this.protocol = new Protocol(this);
         this.threadGroup = new ThreadGroup("Connections");
@@ -41,14 +47,12 @@ public class Server {
         this.clients = new ArrayList<>();
         this.listener = new ConnectionListener();
         this.games = new ArrayList<>();
-        
-        
-        serverStart();
     }
     
     /* SELF functions */
     
     private void serverStart(){
+        System.out.println("ServerStarting!");
         this.listener.start(); // Start listening connections
     }
     

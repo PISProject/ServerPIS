@@ -24,8 +24,8 @@ public class Connection extends Thread{
 
 
 
-    private enum ConnectionState{NOT_LOGGED,OUT_GAME,WAITING_QUEUE,IN_GAME,DISCONNECTED};
-    private ConnectionState state;
+    public enum ConnectionState{NOT_LOGGED,OUT_GAME,WAITING_QUEUE,IN_GAME,DISCONNECTED};
+    public ConnectionState state;
     public ProtocolGame protocolGame;
     public Protocol protocolServer;
     private Socket client;
@@ -95,7 +95,7 @@ public class Connection extends Thread{
     private class GameUpdate extends Thread{
         @Override
         public void run() {
-            while (protocolGame.getState()!= GameThread.GameState.FINISHING){
+            while (state == ConnectionState.IN_GAME){
                 pushScenarioToClient(protocolGame.getMap());
 
                 try {
