@@ -4,8 +4,6 @@
  */
 package alpha.server.connection;
 
-import alpha.server.main.*;
-import alpha.server.scenario.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
