@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package alpha.server.scenario;
+package game;
 
+import connections.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,22 +15,22 @@ import java.util.Map;
 public class Scenario {
     HashMap<Integer, Actor> actores;
     
-    public Scenario(int ch1,int ch2,int ch3,int ch4){
+    public Scenario(Connection [] connections){
         actores = new HashMap<>();
 
-        actores.put(ch1, new Actor());
-        actores.put(ch2, new Actor());
-        actores.put(ch3, new Actor());
-        actores.put(ch3, new Actor());
+        for (Connection c: connections) {
+            actores.put(c.uid, new Actor());
+            
+        }
         
     }
     public String parseScenario(){
         String map = "";
         for (Map.Entry actor : actores.entrySet()) {
-            Actor a = (Actor)actor.getValue();
-            map+=a.uid+","+a.posX+","+a.posY+"*";
+            Actor a = (Actor)actor.getValue(); 
+           map+=a.uid+","+a.posX+","+a.posY+"*";
         }
-        map = map.substring(0, map.length()-2);
+        map = map.substring(0, map.length()-1);
         return map;
     }
 

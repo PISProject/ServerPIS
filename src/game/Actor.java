@@ -4,36 +4,69 @@
  */
 package game;
 
-import clientepis.Player;
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
-
-public class Actor{
-    private float[] pos;
-    private Image image;
-    private enum actorAnimation{STANDING, MOVING, ATTACKING, CASTING_SPELL1, CASTING_SPELL2, CASTNG_SPELL3}
-    public Actor(String pathImage){
-        image = new ImageIcon(pathImage).getImage();
+/**
+ *
+ * @author kirtash
+ */
+public class Actor {
+    public int uid;
+    public int posX;
+    public int posY;
+    
+    
+    //Stats
+    public int attackDamage;
+    public int defense;
+    public int healthMax;
+    public int health;
+    
+    private int spawnX;
+    private int spawnY;
+    
+    public Actor(){
+        this.posX = 0;
+        this.posY=0;
+        
+        this.spawnX = 0;
+        this.spawnY = 0;
+    }
+    
+    public Integer [] getPos(){
+        Integer [] i = new Integer[2];
+        i[0] = posX;
+        i[1] = posY;
+        return i;
+    }
+    
+    public Integer [] getSpawn(){
+        Integer [] i = new Integer[2];
+        i[0] = spawnX;
+        i[1] = spawnY;
+        return i;
     }
 
-    public void setPosition(float[] pos){
-        this.pos = pos;
+    void moveTo(int x, int y) {
+        this.posX = x;
+        this.posY = y;
     }
-
-    public float[] getPosition(){
-        return this.pos;
+    
+    int healthChange(int hp){
+        this.health+=hp;
+        
+        if(this.health>=this.healthMax){ // When the player it's healed
+            this.health = this.healthMax;
+        } 
+        
+        if(this.health<=0){ // When the player recieves damage
+            return 0; //Muerto
+        }
+        return 1;
     }
-
-    public float getX(){
-        return getPosition()[0];
-    }
-
-    public float getY(){
-        return getPosition()[1];
-    }
-
-    public Image getImage(){
-        return this.image;
+    
+    public int isAttacked(Actor attacker, int attackType){
+        if (attackType == 0){
+            return this.healthChange(attacker.attackDamage);
+        }
+        return 0;
     }
 }
