@@ -24,6 +24,7 @@ public class Connection extends Thread{
     public enum ConnectionState{NOT_LOGGED,OUT_GAME,QUEUE,LOADING,IN_GAME,DISCONNECTED};
     public ConnectionState state;
     public int uid;
+    private Socket socket;
     private GameEngine game;
     private Scenario scenario;
     private Protocol protocol;
@@ -31,6 +32,7 @@ public class Connection extends Thread{
     private DataOutputStream out;
 
     public Connection(Socket socket) {
+        this.socket = socket;
         state = ConnectionState.OUT_GAME;
         protocol = new Protocol(this);
         try{
@@ -110,5 +112,12 @@ public class Connection extends Thread{
     }
     public void startGame() {
         this.state = ConnectionState.IN_GAME;
+    }
+    
+    ///////
+    // GENERAL Methods
+    
+    public boolean isConnected(){
+        return socket.isConnected();
     }
 }   
