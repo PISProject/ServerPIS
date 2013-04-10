@@ -114,10 +114,18 @@ public class Connection extends Thread{
         this.state = ConnectionState.IN_GAME;
     }
     
+    //////////
+    // IN_GAME Methods
+    ////////////////////////////////////////////////////////////////////////////
+    public void moveTo(float x, float y){
+        scenario.moveTo(this.uid,x,y);
+    }
+    
     ///////
     // GENERAL Methods
     
     public boolean isConnected(){
         return socket.isConnected();
     }
+
 }   

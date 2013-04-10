@@ -62,8 +62,7 @@ public class GameEngine{
     public void startGameThread() {
         streaming.start(); // Aqui empieza a correr el GameThread
         clock = new Timer();
-    }
-    
+    }   
     
     
     public class Player{

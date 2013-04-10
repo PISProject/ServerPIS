@@ -19,7 +19,8 @@ public class Scenario {
         actores = new HashMap<>();
 
         for (Connection c: connections) {
-            actores.put(c.uid, new Actor());
+            actores.put(c.uid, new Actor(c.uid));
+            
             
         }
         
@@ -43,7 +44,7 @@ public class Scenario {
        actores.put(uid, new Actor());
     }
 
-    public void moveTo(int uid, int x, int y) {
+    public void moveTo(int uid, float x, float y) {
         actores.get(uid).moveTo(x,y);
     }
     

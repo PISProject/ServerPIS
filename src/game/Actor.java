@@ -10,8 +10,8 @@ package game;
  */
 public class Actor {
     public int uid;
-    public int posX;
-    public int posY;
+    public float posX;
+    public float posY;
     
     
     //Stats
@@ -20,8 +20,8 @@ public class Actor {
     public int healthMax;
     public int health;
     
-    private int spawnX;
-    private int spawnY;
+    private float spawnX;
+    private float spawnY;
     
     public Actor(){
         this.posX = 0;
@@ -30,22 +30,30 @@ public class Actor {
         this.spawnX = 0;
         this.spawnY = 0;
     }
+    public Actor(int uid){
+        this.uid = uid;
+        this.posX = 0;
+        this.posY=0;
+        
+        this.spawnX = 0;
+        this.spawnY = 0;
+    }
     
-    public Integer [] getPos(){
-        Integer [] i = new Integer[2];
+    public Float [] getPos(){
+        Float [] i = new Float[2];
         i[0] = posX;
         i[1] = posY;
         return i;
     }
     
-    public Integer [] getSpawn(){
-        Integer [] i = new Integer[2];
+    public Float [] getSpawn(){
+        Float [] i = new Float[2];
         i[0] = spawnX;
         i[1] = spawnY;
         return i;
     }
 
-    void moveTo(int x, int y) {
+    void moveTo(float x, float y) {
         this.posX = x;
         this.posY = y;
     }
