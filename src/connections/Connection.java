@@ -91,7 +91,8 @@ public class Connection extends Thread{
     
     public void notifyGameStarting() {
         this.state = ConnectionState.LOADING;
-        write(protocol.GAME_FOUND);
+        //write(protocol.GAME_FOUND);
+        write(""+this.uid); //Provisional
     }
     ////////////////////
     // LOADING Methods
