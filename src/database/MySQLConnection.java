@@ -13,7 +13,7 @@ public class MySQLConnection {
     public static String LOCALHOST = "jdbc:mysql://localhost/";
     public static String DB_NAME = "machango_fightdb";
     public static String USER = "root";
-    public static String PASSWORD = "t5fhphje";
+    public static String PASSWORD = "root";
     
     private Connection db;
     private String query;
