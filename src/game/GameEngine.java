@@ -63,14 +63,25 @@ public class GameEngine{
         streaming.start(); // Aqui empieza a correr el GameThread
         clock = new Timer();
     }   
+
+    public void disconnect(Connection aThis) {
+        for (Player p:players){
+            if (aThis.equals(p.con)){
+                p.connected = false;
+            }
+        }
+        System.err.println("Player "+aThis.uid+" disconnected!");
+    }
     
     
     public class Player{
         private Connection con;
         private int uid;
         private boolean ready;
+        private boolean connected;
         
         public Player(Connection c){
+            this.connected = true;
             this.con = c;
             this.uid = con.uid;
         }
@@ -85,9 +96,8 @@ public class GameEngine{
             while(true){
             String s = scenario.parseScenario();
             for (Player p: players) {
-                p.con.pushMapToClient(s);
+                if(p.connected) p.con.pushMapToClient(s);
             }
-            
             
             try {
                 sleep(100);

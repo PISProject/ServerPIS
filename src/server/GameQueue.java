@@ -33,4 +33,12 @@ class GameQueue {
        }
        return null;
     }
+
+    void quit(Connection con) {
+        players.remove(con);
+    }
+
+    boolean isConnectionInQueue(Connection con) {
+        return players.contains(con);
+    }
 }

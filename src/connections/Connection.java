@@ -39,6 +39,7 @@ public class Connection extends Thread{
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
         }catch(IOException i){
+            onDisconnect();
             System.err.println("IOException::Error creating IO Streams");
         }
         this.start();
@@ -53,6 +54,7 @@ public class Connection extends Thread{
                 protocol.parse(entrada);
                 
             } catch (IOException ex) {
+                onDisconnect();
                 System.err.println("IOException::Entrada de datos");
                 state = ConnectionState.DISCONNECTED;
             }
@@ -66,6 +68,7 @@ public class Connection extends Thread{
         try {
             out.writeBoolean(b);
         } catch (IOException ex) {
+            onDisconnect();
             System.err.println("IOException::Couldnt write in client");
         }
     }
@@ -73,14 +76,16 @@ public class Connection extends Thread{
         try{
             out.writeUTF(s);
         } catch (IOException ex) {
+            onDisconnect();
             System.err.println("IOException::Couldnt write in client");
         }
     }
     ////////////////////////////////////////////////////////////////////////////
     
-    ////////////////////
+    
+    ////////////////////////////////////////////////////////////////////////////
     // OUT_GAME Methods
-    ////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     void joinQueue() {
         MFServer.SERVER.joinQueue(this);
     }
@@ -89,35 +94,47 @@ public class Connection extends Thread{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // QUEUE Methods
+    ////////////////////////////////////////////////////////////////////////////
+    
+    // OUTGOING Messages
     public void notifyGameStarting() {
         this.state = ConnectionState.LOADING;
         //write(protocol.GAME_FOUND);
         write(""+this.uid); //Provisional
     }
-    ////////////////////
+    
+    ////////////////////////////////////////////////////////////////////////////
     // LOADING Methods
     ////////////////////////////////////////////////////////////////////////////
     
+    // INCOMING Messages
+    public void notifyGameAvalible(){
+        game.connectionIsReady(this);
+    }
+    
+    // OUTGOING Messages
+    public void startGame() {
+        this.state = ConnectionState.IN_GAME;
+    }
+    
+    // Others
     public void setGame(GameEngine aThis) {
         this.game = aThis;
     }
     public void setScenario(Scenario scenario) {
         this.scenario = scenario;
     }
-
-    public void pushMapToClient(String s) {
-        write(s);
-    }
-    public void notifyGameReady(){
-        game.connectionIsReady(this);
-    }
-    public void startGame() {
-        this.state = ConnectionState.IN_GAME;
-    }
     
     //////////
     // IN_GAME Methods
     ////////////////////////////////////////////////////////////////////////////
+    public void pushMapToClient(String s) {
+        write(s);
+    }
+    
     public void moveTo(float x, float y){
         scenario.moveTo(this.uid,x,y);
     }
@@ -127,6 +144,19 @@ public class Connection extends Thread{
     
     public boolean isConnected(){
         return socket.isConnected();
+    }
+    
+    public void onDisconnect(){
+        switch (state){
+            case OUT_GAME:
+                MFServer.SERVER.onDisconnectClient(this);
+                break;
+            case QUEUE:
+                MFServer.SERVER.onDisconnectClient(this);
+                break;
+            case IN_GAME:
+                game.disconnect(this);
+        }
     }
 
 }   

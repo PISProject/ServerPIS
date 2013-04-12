@@ -5,11 +5,16 @@
 package server;
 
 import connections.Connection;
+import database.MySQLConnection;
 import game.GameEngine;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +24,7 @@ public class MFServer {
     public static void main(String[] args) {
        SERVER = new MFServer();
     }
+    
     public static MFServer SERVER;
 
 
@@ -28,9 +34,12 @@ public class MFServer {
     public ThreadGroup threadGroup;
     //
     
+    //Controlador de la base de datos
+    public MySQLConnection db;
+    
     //Listas//
     public ArrayList<GameEngine> games;
-    public ArrayList<Connection> clients;
+    public HashMap<Integer,Connection> clients;
 
     
     public GameQueue queue;
@@ -39,11 +48,29 @@ public class MFServer {
 
     
     public MFServer(){
-        listener = new ConnectionListener();
-        threadGroup = new ThreadGroup("g");
         games = new ArrayList<>();
-        clients = new ArrayList<>();
+        clients = new HashMap<>();
         queue = new GameQueue();
+        
+        //Intentamos crear el connectionListener
+        try{
+            listener = new ConnectionListener();
+        }catch(IOException ex){
+            //No ha podido ser
+            System.err.println("Listener could not be created!");
+            System.exit(1);
+        }
+        
+        try {
+            //Intentamos crear la base de datos
+            db = new MySQLConnection();
+        } catch (SQLException ex) {
+            System.err.println("Cannot establish connection with database.");
+            
+        } catch (ClassNotFoundException ex) {
+        }
+        threadGroup = new ThreadGroup("g");
+
         startServer();
         
     }
@@ -52,7 +79,7 @@ public class MFServer {
         Connection c = new Connection(socket);
         c.uid = connectionUid;
         connectionUid++;
-        clients.add(c);
+        clients.put(c.uid,c);
     }
     
     public void joinQueue(Connection aThis) {
@@ -72,7 +99,15 @@ public class MFServer {
         listener.start();
     }    
     
-    
+    private void quitQueue(Connection con){
+        queue.quit(con);
+    }
+    public void onDisconnectClient(Connection con) {
+        if (queue.isConnectionInQueue(con)){
+            queue.quit(con);
+        }
+        clients.remove(con.uid);
+    }
     
     
     
@@ -92,13 +127,8 @@ public class MFServer {
          public ServerSocket ss;
 
 
-         public ConnectionListener(){ 
-             try {
-                 ss = new ServerSocket(PORT);
-             } catch (IOException ex) { // Catch IO Exception
-                 System.err.println("Could not create server socket!");
-                 System.exit(1);
-             }
+         public ConnectionListener() throws IOException{ 
+            ss = new ServerSocket(PORT);
          }
 
      @Override
