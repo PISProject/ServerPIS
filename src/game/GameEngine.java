@@ -106,7 +106,7 @@ public class GameEngine{
                 if (checkConnected == 99){
                     int ammount=0;
                     for (Player p: players){
-                        if (p.connected) ammount+=1;
+                        if (!p.connected) ammount+=1;
                     }
                     if (ammount==players.length){
                         System.err.println("No players connected");
