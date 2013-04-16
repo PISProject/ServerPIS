@@ -26,15 +26,15 @@ public class Actor {
     private float spawnY;
     
     public Actor(){
-        this.posX = 0;
-        this.posY=0;
+        this.posX = (float)Math.random()*10;
+        this.posY= (float)Math.random()*10;
         this.spawnX = 0;
         this.spawnY = 0;
     }
     public Actor(int uid){
         this.uid = uid;
-        this.posX = 0;
-        this.posY=0;
+        this.posX = (float)Math.random()*10;
+        this.posY= (float)Math.random()*10;
         
         this.spawnX = 0;
         this.spawnY = 0;

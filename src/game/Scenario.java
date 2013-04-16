@@ -51,7 +51,9 @@ public class Scenario {
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
-        if (checkCollision(x, y)) a.moveTo(x,y);
+        if (!checkCollision(uid,x, y)){
+            a.moveTo(x,y);
+        }
     }
     
     public void attack(int uid){
@@ -69,12 +71,13 @@ public class Scenario {
         }
         
     }
-    public boolean checkCollision(float x,float y){
+    public boolean checkCollision(int uid, float x,float y){
         Actor a;
         for (Map.Entry entry : actores.entrySet()) {
             a = (Actor)entry.getValue();
-            if (Math.abs(a.posX-x) < 0.5 && Math.abs(a.posY-y) < 0.5){
+            if (a.uid!= uid &&(Math.abs(a.posX-x) < 2 && Math.abs(a.posY-y) < 2)){
                 return true;
+                
             }
         }
         return false;
