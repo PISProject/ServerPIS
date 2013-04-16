@@ -101,7 +101,7 @@ public class Connection extends Thread{
                 break;
             case -1:
                 try {
-                    out.writeUTF("2");
+                    out.writeUTF("1");
                 } catch (IOException ex) {
                 }
                 disconnect();
