@@ -19,7 +19,7 @@ public class Actor {
     public int defense;
     public int healthMax;
     public int health;
-    public double speed;
+    public double speed =3;
 
     
     private float spawnX;
@@ -28,7 +28,6 @@ public class Actor {
     public Actor(){
         this.posX = 0;
         this.posY=0;
-        this.speed = 100;
         this.spawnX = 0;
         this.spawnY = 0;
     }
@@ -36,7 +35,6 @@ public class Actor {
         this.uid = uid;
         this.posX = 0;
         this.posY=0;
-        this.speed = 100;
         
         this.spawnX = 0;
         this.spawnY = 0;
