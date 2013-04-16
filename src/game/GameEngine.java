@@ -91,7 +91,7 @@ public class GameEngine{
         }
     }
 
-    // La clase Streaming es la que enviara constantemente el mapa a todos los
+    // La clase Streamingcn es la que enviara constantemente el mapa a todos los
     // jugadores de la partida, lo hara incondicionalmente cada 100ms.
     public class Streaming extends Thread{
         private long STREAMING_PING = 100; // Intervalo de tiempo entre cada envio
@@ -106,7 +106,7 @@ public class GameEngine{
                 if (checkConnected == 99){
                     int ammount=0;
                     for (Player p: players){
-                        if (p.connected) ammount+=1;
+                        if (!p.connected) ammount+=1;
                     }
                     if (ammount==players.length){
                         System.err.println("No players connected");
