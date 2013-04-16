@@ -19,7 +19,7 @@ public class Actor {
     public int defense;
     public int healthMax;
     public int health;
-    public double speed =3;
+    public double speed = 1;
 
     
     private float spawnX;

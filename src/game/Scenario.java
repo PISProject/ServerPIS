@@ -45,13 +45,13 @@ public class Scenario {
     }
 
     public void moveTo(int uid, int angle) {
-        angle -= 90;
+        angle -= 90; //<- Este factor hay que cambiarlo,
         float x, y;
         Actor a = actores.get(uid);
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
-        a.moveTo(x,y);
+        if (checkCollision(x, y)) a.moveTo(x,y);
     }
     
     public void attack(int uid){
@@ -67,6 +67,17 @@ public class Scenario {
                 }
             }
         }
+        
+    }
+    public boolean checkCollision(float x,float y){
+        Actor a;
+        for (Map.Entry entry : actores.entrySet()) {
+            a = (Actor)entry.getValue();
+            if (Math.abs(a.posX-x) < 0.5 && Math.abs(a.posY-y) < 0.5){
+                return true;
+            }
+        }
+        return false;
         
     }
     
