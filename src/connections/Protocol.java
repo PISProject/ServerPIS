@@ -16,6 +16,7 @@ public class Protocol {
     public static final String READY_TO_START = "4";
     public static final String MOVE_TO = "5";
     public static final String LOGIN = "6";
+    public static final String REGISTER = "7";
     
     private Connection client;
 
@@ -72,7 +73,7 @@ public class Protocol {
         else if (client.state == Connection.ConnectionState.IN_GAME){
             switch (func) {
                 case MOVE_TO:
-                    client.moveTo(Float.parseFloat(args[0]), Float.parseFloat(args[1]));
+                    client.moveTo(Integer.parseInt(args[0]));
                     break;
             }
         }

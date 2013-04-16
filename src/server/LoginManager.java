@@ -23,7 +23,10 @@ public class LoginManager {
         int id = db.getUserId(name);
         if(id != -1){
             if(db.getPassword(id).equals(password)){
-                return id;
+                if (!MFServer.SERVER.isClientOnline(id)){
+                    return id;
+                }
+                return -2;
             }
         }
         return -1;

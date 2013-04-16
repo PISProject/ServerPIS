@@ -44,7 +44,11 @@ public class Scenario {
        actores.put(uid, new Actor());
     }
 
-    public void moveTo(int uid, float x, float y) {
+    public void moveTo(int uid, int angle) {
+        float x, y;
+        double speed = actores.get(uid).speed;
+        y = (float) (Math.sin(angle)*speed);
+        x = (float) (Math.cos(angle)*speed);
         actores.get(uid).moveTo(x,y);
     }
     

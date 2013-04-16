@@ -105,6 +105,10 @@ public class MFServer {
         clients.remove(con.uid);
         System.out.println(clients.size());
     }
+
+    boolean isClientOnline(int id) {
+        return (clients.get(id) != null);
+    }
     
     
     

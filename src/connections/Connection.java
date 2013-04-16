@@ -91,23 +91,35 @@ public class Connection extends Thread{
     ////////////////////////////////////////////////////////////////////////////
     void login(String user, String password){
         this.uid = login.login(user, password);
-        if (uid!= -1){
-            MFServer.SERVER.addPlayer(this);
-            this.state = ConnectionState.OUT_GAME;
-            System.err.println("Logged succesfully");
-            try {
-                out.writeUTF("0"); // <- provisional, habra que poner una constante aqui
-            } catch (IOException ex) {
+        switch (uid){
+            case -2:
+                try {
+                    out.writeUTF("2");
+                } catch (IOException ex) {
+                }
                 disconnect();
-            }
-            return;
+                break;
+            case -1:
+                try {
+                    out.writeUTF("2");
+                } catch (IOException ex) {
+                }
+                disconnect();
+                break;
+            default:
+                MFServer.SERVER.addPlayer(this);
+               this.state = ConnectionState.OUT_GAME;
+               System.err.println("Logged succesfully");
+               try {
+                   out.writeUTF("0"); // <- provisional, habra que poner la uid aqui
+               } catch (IOException ex) {
+                   disconnect();
+               }
+               break;               
+                
         }
         System.err.println("Couldnt log");
-        try {
-            out.writeUTF("1");
-        } catch (IOException ex) {
-        }
-        disconnect();
+
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -162,8 +174,8 @@ public class Connection extends Thread{
         write(s);
     }
     
-    public void moveTo(float x, float y){
-        scenario.moveTo(this.uid,x,y);
+    public void moveTo(int angle){
+        scenario.moveTo(this.uid,angle);
     }
     
     ///////
