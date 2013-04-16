@@ -100,6 +100,8 @@ public class GameEngine{
             while(state != GameState.FINISHED){
                 // Si ningun player esta online el thread muere
                 if(players.length == 0){
+                    System.err.println("No players connected");
+                    System.out.println("Closing game");
                     state = GameState.FINISHED;
                 }
                 
