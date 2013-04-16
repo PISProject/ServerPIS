@@ -101,9 +101,9 @@ public class GameEngine{
         public void run() {
             while(state != GameState.FINISHED){
                 // Si ningun player esta online el thread muere
-
+                checkConnected =(checkConnected+1)%100;
                 //Cada 100 iteraciones comprobamos que haya players online
-                if (checkConnected == 100){
+                if (checkConnected == 99){
                     int ammount=0;
                     for (Player p: players){
                         if (p.connected) ammount+=1;
