@@ -82,6 +82,7 @@ public class GameEngine{
         private int uid;
         private boolean ready;
         private boolean connected;
+
         
         public Player(Connection c){
             this.connected = true;
@@ -94,17 +95,25 @@ public class GameEngine{
     // jugadores de la partida, lo hara incondicionalmente cada 100ms.
     public class Streaming extends Thread{
         private long STREAMING_PING = 100; // Intervalo de tiempo entre cada envio
-
+        private int checkConnected=0;
+        
         @Override
         public void run() {
             while(state != GameState.FINISHED){
                 // Si ningun player esta online el thread muere
-                if(players.length == 0){
-                    System.err.println("No players connected");
-                    System.out.println("Closing game");
-                    state = GameState.FINISHED;
+
+                //Cada 100 iteraciones comprobamos que haya players online
+                if (checkConnected == 100){
+                    int ammount=0;
+                    for (Player p: players){
+                        if (p.connected) ammount+=1;
+                    }
+                    if (ammount==players.length){
+                        System.err.println("No players connected");
+                        System.out.println("Closing game");
+                        state = GameState.FINISHED;
+                    }
                 }
-                
                 // Parseamos el escenario...
                 String s = scenario.parseScenario();
                 
