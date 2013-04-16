@@ -140,6 +140,7 @@ public class Connection extends Thread{
     
     // OUTGOING Messages
     public void notifyGameStarting() {
+        System.err.println("Notifying "+this.uid+" game its starting");
         this.state = ConnectionState.LOADING;
         //write(protocol.GAME_FOUND);
         write(""+this.uid); //Provisional
