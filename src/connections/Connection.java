@@ -188,7 +188,6 @@ public class Connection extends Thread{
     public void disconnect(){
         
         System.out.println("Client "+uid+" disconnected");
-        state = ConnectionState.DISCONNECTED;
         try {
             socket.close();
         } catch (IOException ex) {
@@ -204,6 +203,7 @@ public class Connection extends Thread{
             case IN_GAME:
                 game.disconnect(this);
         }
+        state = ConnectionState.DISCONNECTED;
     }
 
 }   
