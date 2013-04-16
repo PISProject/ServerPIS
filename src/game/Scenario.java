@@ -45,6 +45,7 @@ public class Scenario {
     }
 
     public void moveTo(int uid, int angle) {
+        angle -= 90;
         float x, y;
         Actor a = actores.get(uid);
         double speed = a.speed;
