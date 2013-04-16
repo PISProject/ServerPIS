@@ -48,9 +48,9 @@ public class Scenario {
         float x, y;
         Actor a = actores.get(uid);
         double speed = a.speed;
-        y = a.posY+(float) (Math.sin(angle)*speed);
-        x = a.posX+(float) (Math.cos(angle)*speed);
-        actores.get(uid).moveTo(x,y);
+        y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
+        x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
+        a.moveTo(x,y);
     }
     
     public void attack(int uid){
