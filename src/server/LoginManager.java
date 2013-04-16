@@ -31,4 +31,14 @@ public class LoginManager {
         }
         return -1;
     }
+
+    /*
+     * Devuelve: 0 si todo va bien
+     * 1 si el nombre de usuario esta en uso
+     * 2 si hay una excepcion en el SQL (Error de conexion con la DB)
+     */
+    public int register(String username, String password, String email) {
+        if (db.isUsernameInUse(username)) return -1;
+        return (db.addPlayer(username, password, email)) ? 0 : -2; 
+    }
 }

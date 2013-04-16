@@ -12,7 +12,9 @@ import java.util.Timer;
  * @author kirtash
  */
 public class GameEngine{
+    public enum GameState {LOADING, RUNNING, FINISHED};
     private Scenario scenario;
+    public GameState state;
     Player [] players;
     Scenario s;
     Streaming streaming;
@@ -60,6 +62,7 @@ public class GameEngine{
     }
 
     public void startGameThread() {
+        state = GameState.RUNNING;
         streaming.start(); // Aqui empieza a correr el GameThread
         clock = new Timer();
     }   
@@ -90,21 +93,31 @@ public class GameEngine{
     // La clase Streaming es la que enviara constantemente el mapa a todos los
     // jugadores de la partida, lo hara incondicionalmente cada 100ms.
     public class Streaming extends Thread{
+        private long STREAMING_PING = 100; // Intervalo de tiempo entre cada envio
 
         @Override
         public void run() {
-            while(true){
-            String s = scenario.parseScenario();
-            for (Player p: players) {
-                if(p.connected) p.con.pushMapToClient(s);
+            while(state != GameState.FINISHED){
+                // Si ningun player esta online el thread muere
+                if(players.length == 0){
+                    state = GameState.FINISHED;
+                }
+                
+                // Parseamos el escenario...
+                String s = scenario.parseScenario();
+                
+                // ...y lo enviamos a todas las conexiones
+                for (Player p: players) {
+                    if(p.connected) p.con.pushMapToClient(s);
+                }
+
+                // El thread se va a dormir durante un tiempo de refresco = t;
+                try {
+                    sleep(STREAMING_PING);
+                } catch (InterruptedException ex) {
+                    System.err.println("Interrupted!");
+                }
             }
-            
-            try {
-                sleep(100);
-            } catch (InterruptedException ex) {
-                System.err.println("Interrupted!");
-            }
-        }
         }
         
     }

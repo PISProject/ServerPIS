@@ -89,37 +89,39 @@ public class Connection extends Thread{
     ////////////////////////////////////////////////////////////////////////////
     // NOT_LOGGED Methods
     ////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * En adelante añadiremos la opcion de que el jugador pudiese estar en una
+     * partida
+     */
     void login(String user, String password){
         this.uid = login.login(user, password);
         switch (uid){
             case -2:
-                try {
-                    out.writeUTF("2");
-                } catch (IOException ex) {
-                }
+                write("2");
                 disconnect();
                 break;
             case -1:
-                try {
-                    out.writeUTF("1");
-                } catch (IOException ex) {
-                }
-                disconnect();
+                write("1");
                 break;
             default:
                 MFServer.SERVER.addPlayer(this);
-               this.state = ConnectionState.OUT_GAME;
-               System.err.println("Logged succesfully");
-               try {
-                   out.writeUTF("0"); // <- provisional, habra que poner la uid aqui
-               } catch (IOException ex) {
-                   disconnect();
-               }
-               break;               
+                this.state = ConnectionState.OUT_GAME;
+                System.err.println("Logged succesfully");
+                write("0"); // <- provisional, habra que poner la uid aqui
+                break;               
                 
         }
-        System.err.println("Couldnt log");
-
+    }
+    
+    public void register(String username, String password, String email){
+        
+        if (!username.equals("") && !password.equals("")){
+            write(login.register(username,password,email)+"");
+            // 0-> Todo ha ido bien
+            // -1-> Player en uso
+            // -2-> Fallo de conexion con la base de datos
+        }
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -203,6 +205,7 @@ public class Connection extends Thread{
                 break;
             case IN_GAME:
                 game.disconnect(this);
+                MFServer.SERVER.onDisconnectClient(this);
         }
     }
 
