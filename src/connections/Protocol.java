@@ -15,6 +15,7 @@ public class Protocol {
     public static final String GAME_FOUND = "3";
     public static final String READY_TO_START = "4";
     public static final String MOVE_TO = "5";
+    public static final String LOGIN = "6";
     
     private Connection client;
 
@@ -43,25 +44,36 @@ public class Protocol {
         }
     }
     void ejecutaFuncion(String func, String [] args){
-        if (client.state == Connection.ConnectionState.OUT_GAME){
+        if (func.equals("0")) client.disconnect();
+        if (client.state == Connection.ConnectionState.NOT_LOGGED){
+            switch (func) {
+                case LOGIN:
+                    client.login(args[0],args[1]);
+                    break;
+            }
+        }
+        else if (client.state == Connection.ConnectionState.OUT_GAME){
             switch (func) {
                 case JOIN_QUEUE:
-                        client.joinQueue();
+                    client.joinQueue();
                     break;
                 case QUIT_QUEUE:
-                        client.quitQueue();
+                    client.quitQueue();
+                    break;
             }
         }
         else if (client.state == Connection.ConnectionState.LOADING){
             switch (func) {
                 case READY_TO_START:
                     client.notifyGameAvalible();
+                    break;
             }
         }
         else if (client.state == Connection.ConnectionState.IN_GAME){
             switch (func) {
                 case MOVE_TO:
                     client.moveTo(Float.parseFloat(args[0]), Float.parseFloat(args[1]));
+                    break;
             }
         }
     }

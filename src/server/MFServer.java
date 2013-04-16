@@ -13,8 +13,6 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +24,7 @@ public class MFServer {
     }
     
     public static MFServer SERVER;
-
+    public static boolean ACCEPT_CONNECTIONS = false;
 
     //INET Att
     public int PORT = 5050;
@@ -35,7 +33,7 @@ public class MFServer {
     //
     
     //Controlador de la base de datos
-    public MySQLConnection db;
+    public LoginManager login;
     
     //Listas//
     public ArrayList<GameEngine> games;
@@ -63,23 +61,20 @@ public class MFServer {
         
         try {
             //Intentamos crear la base de datos
-            db = new MySQLConnection();
+            login = new LoginManager(new MySQLConnection());
         } catch (SQLException ex) {
             System.err.println("Cannot establish connection with database.");
             
         } catch (ClassNotFoundException ex) {
         }
         threadGroup = new ThreadGroup("g");
-
+        
         startServer();
         
     }
     
-    public void addConnection(Socket socket){ // Metodo a modificar cuando implementemos el login.
-        Connection c = new Connection(socket);
-        c.uid = connectionUid;
-        connectionUid++;
-        clients.put(c.uid,c);
+    public void addPlayer(Connection con){
+        clients.put(con.uid,con);
     }
     
     public void joinQueue(Connection aThis) {
@@ -96,8 +91,9 @@ public class MFServer {
      }   
 
     private void startServer() {
+        ACCEPT_CONNECTIONS = true;
         listener.start();
-    }    
+    }
     
     private void quitQueue(Connection con){
         queue.quit(con);
@@ -107,6 +103,7 @@ public class MFServer {
             queue.quit(con);
         }
         clients.remove(con.uid);
+        System.out.println(clients.size());
     }
     
     
@@ -137,7 +134,7 @@ public class MFServer {
              while(true){
                  System.err.println("Waiting connection...");
                  Socket socket = ss.accept();
-                 addConnection(socket);                
+                 new Connection(socket, login);
                  System.err.println("New incoming connection detected.");
              }
          } catch (IOException ex) {

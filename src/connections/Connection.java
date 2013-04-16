@@ -10,6 +10,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import server.LoginManager;
 import server.MFServer;
 
 /**
@@ -30,19 +33,22 @@ public class Connection extends Thread{
     private Protocol protocol;
     private DataInputStream in;
     private DataOutputStream out;
+    private LoginManager login;
 
-    public Connection(Socket socket) {
+    public Connection(Socket socket, LoginManager login) {
+        this.login = login;
         this.socket = socket;
-        state = ConnectionState.OUT_GAME;
-        protocol = new Protocol(this);
+        this.state = ConnectionState.NOT_LOGGED;
+        this.protocol = new Protocol(this);
         try{
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
+            this.start();
         }catch(IOException i){
-            onDisconnect();
+            disconnect();
             System.err.println("IOException::Error creating IO Streams");
         }
-        this.start();
+        
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -54,9 +60,7 @@ public class Connection extends Thread{
                 protocol.parse(entrada);
                 
             } catch (IOException ex) {
-                onDisconnect();
-                System.err.println("IOException::Entrada de datos");
-                state = ConnectionState.DISCONNECTED;
+                disconnect();
             }
         }
     }
@@ -68,7 +72,7 @@ public class Connection extends Thread{
         try {
             out.writeBoolean(b);
         } catch (IOException ex) {
-            onDisconnect();
+            disconnect();
             System.err.println("IOException::Couldnt write in client");
         }
     }
@@ -76,12 +80,35 @@ public class Connection extends Thread{
         try{
             out.writeUTF(s);
         } catch (IOException ex) {
-            onDisconnect();
+            disconnect();
             System.err.println("IOException::Couldnt write in client");
         }
     }
     ////////////////////////////////////////////////////////////////////////////
     
+    ////////////////////////////////////////////////////////////////////////////
+    // NOT_LOGGED Methods
+    ////////////////////////////////////////////////////////////////////////////
+    void login(String user, String password){
+        this.uid = login.login(user, password);
+        if (uid!= -1){
+            MFServer.SERVER.addPlayer(this);
+            this.state = ConnectionState.OUT_GAME;
+            System.err.println("Logged succesfully");
+            try {
+                out.writeUTF("0"); // <- provisional, habra que poner una constante aqui
+            } catch (IOException ex) {
+                disconnect();
+            }
+            return;
+        }
+        System.err.println("Couldnt log");
+        try {
+            out.writeUTF("1");
+        } catch (IOException ex) {
+        }
+        disconnect();
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     // OUT_GAME Methods
@@ -146,7 +173,15 @@ public class Connection extends Thread{
         return socket.isConnected();
     }
     
-    public void onDisconnect(){
+    public void disconnect(){
+        
+        System.out.println("Client "+uid+" disconnected");
+        state = ConnectionState.DISCONNECTED;
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            System.err.println("Cannot close the connection socket.");
+        }
         switch (state){
             case OUT_GAME:
                 MFServer.SERVER.onDisconnectClient(this);

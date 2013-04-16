@@ -162,7 +162,7 @@ public class MySQLConnection {
             
         }catch(SQLException ex){
             // No deberia de pasar.
-            return 0;
+            return -1;
         }
     }
     
@@ -180,10 +180,5 @@ public class MySQLConnection {
             // No deberia de pasar.
             return false;
         }
-    }
-    public static void main(String[] args) {
-        MySQLConnection db = startDatabaseConnection();
-        db.addPlayer("Kirtash", "a", "lol@wha.com");
-        
     }
 }
