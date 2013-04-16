@@ -15,7 +15,7 @@ public class MySQLConnection {
     public static String USER = "root";
     public static String PASSWORD = "root";
     
-    private Connection db;
+    private static Connection db;
     private String query;
     private PreparedStatement preparedStmt;
     private ResultSet resultSet;
@@ -49,13 +49,14 @@ public class MySQLConnection {
     
     public boolean addPlayer(String username, String password, String email){
         try{
-            query = "insert into players (username, password, email)" + "values (?,?,?)";
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setString(1, username);
-            preparedStmt.setString(2, password);
-            preparedStmt.setString(3, email);
-            preparedStmt.executeUpdate();
-            
+            synchronized(db){
+                query = "insert into players (username, password, email)" + "values (?,?,?)";
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setString(1, username);
+                preparedStmt.setString(2, password);
+                preparedStmt.setString(3, email);
+                preparedStmt.executeUpdate();
+            }
             return true;
         }catch(SQLException ex){
             // No deberia de pasar.
@@ -66,37 +67,38 @@ public class MySQLConnection {
     public boolean addNewPassword(String username, String newPassword){
         
         try{
-            query = "update players set password = ? where username = ?";
-            
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setString(1, newPassword);
-            preparedStmt.setString(2, username);
-            preparedStmt.executeUpdate();
-           /* resultSet.absolute(1);
-            
-            resultSet.updateString("password", newPassword);
-            resultSet.updateRow();*/
-            
+            synchronized(db){
+                query = "update players set password = ? where username = ?";
+
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setString(1, newPassword);
+                preparedStmt.setString(2, username);
+                preparedStmt.executeUpdate();
+               /* resultSet.absolute(1);
+
+                resultSet.updateString("password", newPassword);
+                resultSet.updateRow();*/
+            }
             return true;
         }catch(SQLException ex){
-            ex.printStackTrace();
             return false;
         }
     }
         public boolean addNewPassword(int id, String newPassword){
         
         try{
-            query = "update players set password = ? where id = ?";
-            
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setString(1, newPassword);
-            preparedStmt.setInt(2, id);
-            preparedStmt.executeUpdate();
-           /* resultSet.absolute(1);
-            
-            resultSet.updateString("password", newPassword);
-            resultSet.updateRow();*/
-            
+            synchronized(db){
+                query = "update players set password = ? where id = ?";
+
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setString(1, newPassword);
+                preparedStmt.setInt(2, id);
+                preparedStmt.executeUpdate();
+               /* resultSet.absolute(1);
+
+                resultSet.updateString("password", newPassword);
+                resultSet.updateRow();*/
+            }
             return true;
         }catch(SQLException ex){
             return false;
@@ -106,14 +108,15 @@ public class MySQLConnection {
     //---------------------GETTERS *Retornan null si no existe*
     public String getPassword(int id){
         try{
-            query = "select password from players where id = ?";
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setInt(1, id);
-            resultSet = preparedStmt.executeQuery();
-            
-            resultSet.first(); //situamos el cursor en el primer resultado
-            return resultSet.getString("password"); //devolvemos la password
-            
+            synchronized(db){
+                query = "select password from players where id = ?";
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setInt(1, id);
+                resultSet = preparedStmt.executeQuery();
+
+                resultSet.first(); //situamos el cursor en el primer resultado
+                return resultSet.getString("password"); //devolvemos la password
+            }
         }catch(SQLException ex){
             // No deberia de pasar.
             return null;
@@ -122,12 +125,14 @@ public class MySQLConnection {
     
     public String getPassword(String username){
         try{
-            query = "select password from players where username = ?";
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setString(1, username);
-            resultSet = preparedStmt.executeQuery();
-            
-            resultSet.first(); //situamos el cursor en el primer resultado
+            synchronized(db){
+                query = "select password from players where username = ?";
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setString(1, username);
+                resultSet = preparedStmt.executeQuery();
+
+                resultSet.first(); //situamos el cursor en el primer resultado
+            }
             return resultSet.getString("password"); //devolvemos la password
             
         }catch(SQLException ex){
@@ -137,12 +142,14 @@ public class MySQLConnection {
     }
     public String getUserName(int id){
         try{
-            query = "select username from players where id = ?";
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setInt(1, id);
-            resultSet = preparedStmt.executeQuery();
-            
-            resultSet.first(); //situamos el cursor en el primer resultado
+            synchronized(db){
+                query = "select username from players where id = ?";
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setInt(1, id);
+                resultSet = preparedStmt.executeQuery();
+
+                resultSet.first(); //situamos el cursor en el primer resultado
+            }
             return resultSet.getString("username"); //devolvemos la password
             
         }catch(SQLException ex){
@@ -152,12 +159,14 @@ public class MySQLConnection {
     }
     public int getUserId(String username){
         try{
-            query = "select id from players where username = ?";
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setString(1, username);
-            resultSet = preparedStmt.executeQuery();
-            
-            resultSet.first(); //situamos el cursor en el primer resultado
+            synchronized(db){
+                query = "select id from players where username = ?";
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setString(1, username);
+                resultSet = preparedStmt.executeQuery();
+
+                resultSet.first(); //situamos el cursor en el primer resultado
+            }
             return resultSet.getInt("id"); //devolvemos la password
             
         }catch(SQLException ex){
@@ -169,10 +178,12 @@ public class MySQLConnection {
     //---------------------IS *Retornan un boleano*
     public boolean isUsernameInUse(String username){
         try{
-            query = "select username from players where username = ?";
-            preparedStmt = db.prepareStatement(query);
-            preparedStmt.setString(1, username);
-            resultSet = preparedStmt.executeQuery();
+            synchronized(db){
+                query = "select username from players where username = ?";
+                preparedStmt = db.prepareStatement(query);
+                preparedStmt.setString(1, username);
+                resultSet = preparedStmt.executeQuery();
+            }
             return resultSet.first();
 
             
