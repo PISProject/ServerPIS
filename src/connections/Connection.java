@@ -142,6 +142,7 @@ public class Connection extends Thread{
     
     // OUTGOING Messages
     public void notifyGameStarting() {
+        System.err.println("Notifying "+this.uid+" game its starting");
         this.state = ConnectionState.LOADING;
         //write(protocol.GAME_FOUND);
         write(""+this.uid); //Provisional
@@ -190,7 +191,6 @@ public class Connection extends Thread{
     public void disconnect(){
         
         System.out.println("Client "+uid+" disconnected");
-        state = ConnectionState.DISCONNECTED;
         try {
             socket.close();
         } catch (IOException ex) {
@@ -207,6 +207,7 @@ public class Connection extends Thread{
                 game.disconnect(this);
                 MFServer.SERVER.onDisconnectClient(this);
         }
+        state = ConnectionState.DISCONNECTED;
     }
 
 }   

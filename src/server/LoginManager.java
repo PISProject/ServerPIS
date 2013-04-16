@@ -5,8 +5,6 @@
 package server;
 
 import database.MySQLConnection;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 
 /**
  *
