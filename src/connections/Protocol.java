@@ -68,7 +68,7 @@ public class Protocol {
         else if (client.state == Connection.ConnectionState.LOADING){
             switch (func) {
                 case READY_TO_START:
-                    client.notifyGameAvalible();
+                    client.connectionIsReady();
                     break;
             }
         }

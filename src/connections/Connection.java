@@ -25,6 +25,8 @@ public class Connection extends Thread{
     public enum ConnectionState{NOT_LOGGED,OUT_GAME,QUEUE,LOADING,IN_GAME,DISCONNECTED};
     public ConnectionState state;
     public int uid;
+    public String name;
+    
     private Socket socket;
     private GameEngine game;
     private Scenario scenario;
@@ -94,19 +96,23 @@ public class Connection extends Thread{
      */
     void login(String user, String password){
         this.uid = login.login(user, password);
+        this.name = login.getPlayerName(uid);
+        /*
+         * El cliente tiene que leer para Integer.parseInt(in.readUTF())>0 y <0.
+         */
         switch (uid){
             case -2:
-                write("2");
+                write("-2");
                 disconnect();
                 break;
             case -1:
-                write("1");
+                write("-1");
                 break;
             default:
                 MFServer.SERVER.addPlayer(this);
                 this.state = ConnectionState.OUT_GAME;
                 System.err.println("Logged succesfully");
-                write("0"); // <- provisional, habra que poner la uid aqui
+                write(""+uid); // <- provisional, habra que poner la uid aqui
                 break;               
                 
         }
@@ -139,11 +145,11 @@ public class Connection extends Thread{
     ////////////////////////////////////////////////////////////////////////////
     
     // OUTGOING Messages
-    public void notifyGameStarting() {
+    public void notifyGameFound(String infoPlayers) {
         System.err.println("Notifying "+this.uid+" game its starting");
         this.state = ConnectionState.LOADING;
         //write(protocol.GAME_FOUND);
-        write(""+this.uid); //Provisional
+        write(infoPlayers); //Provisional
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -151,12 +157,13 @@ public class Connection extends Thread{
     ////////////////////////////////////////////////////////////////////////////
     
     // INCOMING Messages
-    public void notifyGameAvalible(){
+    public void connectionIsReady(){
         game.connectionIsReady(this);
     }
     
     // OUTGOING Messages
     public void startGame() {
+        write("1"); // ?? para que el cliente sepa que esta empezando la partida
         this.state = ConnectionState.IN_GAME;
     }
     

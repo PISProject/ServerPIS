@@ -39,4 +39,8 @@ public class LoginManager {
         if (db.isUsernameInUse(username)) return -1;
         return (db.addPlayer(username, password, email)) ? 0 : -2; 
     }
+
+    public String getPlayerName(int uid) {
+        return db.getUserName(uid);
+    }
 }

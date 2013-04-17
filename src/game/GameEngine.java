@@ -29,15 +29,17 @@ public class GameEngine{
         
         // Creamos un player por cada conexion, y le asignamos una referencia de
         // la partida a cada una de ellas.
+        String info = new String();
         for (int i = 0; i < game.length; i++) {
             game[i].setGame(this);
             game[i].setScenario(scenario);
+            info+=game [i].uid+","+game[i].name+"*";
             players[i] = new Player(game[i]);
         }
         // Notificamos a todas las conexiones que se ha creado un juego y que tienen
         // que empezar a cargar
         for(Connection c: game){
-            c.notifyGameStarting();
+            c.notifyGameFound(info);
         }
         
         streaming = new Streaming();
