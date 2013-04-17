@@ -14,16 +14,17 @@ import java.util.ArrayList;
  */
 class GameQueue {
     public static final int QUEUE_SIZE = 2;
-    private ArrayList<Connection> players;
+    private final ArrayList<Connection> players = new ArrayList<>();
     
     public GameQueue(){
-        players = new ArrayList<>();
     }
     
     // Metodo que junta a los cuatro players. Es un metodo sincronizado para que
     // la lista no pueda ser modificada en la ejecucion del metodo.
     public synchronized Connection [] join(Connection uid){
-       players.add(uid);
+       synchronized(players){
+            players.add(uid);
+       }
        if (players.size()>=QUEUE_SIZE){
            Connection [] p = new Connection[QUEUE_SIZE];
            for (int i = 0; i < QUEUE_SIZE; i++) {
@@ -34,8 +35,10 @@ class GameQueue {
        return null;
     }
 
-    void quit(Connection con) {
-        players.remove(con);
+    boolean quit(Connection con) {
+        synchronized(players){
+            return players.remove(con);
+        }
     }
 
     boolean isConnectionInQueue(Connection con) {

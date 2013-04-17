@@ -136,7 +136,12 @@ public class Connection extends Thread{
     }
 
     void quitQueue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (MFServer.SERVER.quitQueue(this)){
+            this.state = ConnectionState.OUT_GAME;
+            write("1");
+            return;
+        }
+        write("0");
     }
     
     

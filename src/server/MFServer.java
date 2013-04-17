@@ -95,8 +95,8 @@ public class MFServer {
         listener.start();
     }
     
-    private void quitQueue(Connection con){
-        queue.quit(con);
+    public boolean quitQueue(Connection con){
+        return queue.quit(con);
     }
     public void onDisconnectClient(Connection con) {
         if (queue.isConnectionInQueue(con)){
