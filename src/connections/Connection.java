@@ -117,7 +117,7 @@ public class Connection extends Thread{
     public void register(String username, String password, String email){
         
         if (!username.equals("") && !password.equals("")){
-            write(login.register(username,password,email)+"");
+            write(Math.abs(login.register(username,password,email))+"");
             // 0-> Todo ha ido bien
             // -1-> Player en uso
             // -2-> Fallo de conexion con la base de datos
