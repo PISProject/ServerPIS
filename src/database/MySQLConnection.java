@@ -49,7 +49,7 @@ public class MySQLConnection {
     
     public boolean addPlayer(String username, String password, String email){
         try{
-                query = "insert into players (username, password, email) values ("+username+","+password+","+email+")";
+                query = "insert into players (username, password, email) values ('"+username+"','"+password+"','"+email+"')";
                
                 executeUpdate(query);
                 
@@ -63,7 +63,7 @@ public class MySQLConnection {
     public boolean addNewPassword(String username, String newPassword){
         
         try{
-                query = "update players set password = "+newPassword+" where username = "+username;
+                query = "update players set password = '"+newPassword+"' where username = '"+username+"'";
 
                 
                 executeUpdate(query);
@@ -79,7 +79,7 @@ public class MySQLConnection {
         public boolean addNewPassword(int id, String newPassword){
         
         try{
-                query = "update players set password = "+newPassword+" where id = "+id;
+                query = "update players set password = '"+newPassword+"' where id = "+id;
 
                 
                 executeUpdate(query);
@@ -109,7 +109,7 @@ public class MySQLConnection {
     
     public String getPassword(String username){
         try{
-                query = "select password from players where username = "+username;
+                query = "select password from players where username = '"+username+"'";
                 resultSet = executeQuery(query);
 
                 resultSet.first(); //situamos el cursor en el primer resultado
@@ -135,14 +135,13 @@ public class MySQLConnection {
     }
     public int getUserId(String username){
         try{
-                query = "select id from players where username = "+username;
+                query = "select id from players where username = '"+username+"'";
                 resultSet = executeQuery(query);
-
                 resultSet.first(); //situamos el cursor en el primer resultado
             return resultSet.getInt("id"); //devolvemos la password
             
         }catch(SQLException ex){
-            // No deberia de pasar.
+            ex.printStackTrace();
             return -1;
         }
     }
@@ -150,7 +149,7 @@ public class MySQLConnection {
     //---------------------IS *Retornan un boleano*
     public boolean isUsernameInUse(String username){
         try{
-                query = "select username from players where username = "+username;
+                query = "select username from players where username = '"+username+"'";
                 resultSet = executeQuery(query);
             return resultSet.first();
 
