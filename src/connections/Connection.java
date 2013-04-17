@@ -138,7 +138,7 @@ public class Connection extends Thread{
     void quitQueue() {
         if (MFServer.SERVER.quitQueue(this)){
             this.state = ConnectionState.OUT_GAME;
-            System.out.println("Player "+uid+" leaved queue.");
+            System.out.println("Player "+uid+" left queue.");
             write("1");
             return;
         }
