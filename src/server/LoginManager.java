@@ -19,8 +19,6 @@ public class LoginManager {
     
     public int login(String name, String password){
         int id = db.getUserId(name);
-        System.out.println(name);
-        System.out.println(id+"");
         if(id != -1){
             if(db.getPassword(id).equals(password)){
                 if (!MFServer.SERVER.isClientOnline(id)){
