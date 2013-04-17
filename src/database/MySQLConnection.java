@@ -49,13 +49,9 @@ public class MySQLConnection {
     
     public boolean addPlayer(String username, String password, String email){
         try{
-                query = "insert into players (username, password, email)" + "values (?,?,?)";
+                query = "insert into players (username, password, email) values ("+username+","+password+","+email+")";
                
-                preparedStmt.setString(1, username);
-                preparedStmt.setString(2, password);
-                preparedStmt.setString(3, email);
-                
-                executeUpdate(preparedStmt, query);
+                executeUpdate(query);
                 
             return true;
         }catch(SQLException ex){
@@ -67,12 +63,10 @@ public class MySQLConnection {
     public boolean addNewPassword(String username, String newPassword){
         
         try{
-                query = "update players set password = ? where username = ?";
+                query = "update players set password = "+newPassword+" where username = "+username;
 
-                preparedStmt.setString(1, newPassword);
-                preparedStmt.setString(2, username);
                 
-                executeUpdate(preparedStmt, query);
+                executeUpdate(query);
                /* resultSet.absolute(1);
 
                 resultSet.updateString("password", newPassword);
@@ -85,19 +79,15 @@ public class MySQLConnection {
         public boolean addNewPassword(int id, String newPassword){
         
         try{
-            synchronized(db){
-                query = "update players set password = ? where id = ?";
+                query = "update players set password = "+newPassword+" where id = "+id;
 
-                preparedStmt.setString(1, newPassword);
-                preparedStmt.setInt(2, id);
                 
-                executeUpdate(preparedStmt, query);
+                executeUpdate(query);
                /* resultSet.absolute(1);
 
                 resultSet.updateString("password", newPassword);
                 resultSet.updateRow();*/
-            }
-            return true;
+                return true;
         }catch(SQLException ex){
             return false;
         }
@@ -106,10 +96,9 @@ public class MySQLConnection {
     //---------------------GETTERS *Retornan null si no existe*
     public String getPassword(int id){
         try{
-                query = "select password from players where id = ?";
-                preparedStmt.setInt(1, id);
+                query = "select password from players where id = "+id;
 
-                resultSet = executeQuery(preparedStmt, query);
+                resultSet = executeQuery(query);
                 resultSet.first(); //situamos el cursor en el primer resultado
                 return resultSet.getString("password"); //devolvemos la password
         }catch(SQLException ex){
@@ -120,9 +109,8 @@ public class MySQLConnection {
     
     public String getPassword(String username){
         try{
-                query = "select password from players where username = ?";
-                preparedStmt.setString(1, username);
-                resultSet = executeQuery(preparedStmt, query);
+                query = "select password from players where username = "+username;
+                resultSet = executeQuery(query);
 
                 resultSet.first(); //situamos el cursor en el primer resultado
             return resultSet.getString("password"); //devolvemos la password
@@ -134,9 +122,8 @@ public class MySQLConnection {
     }
     public String getUserName(int id){
         try{
-                query = "select username from players where id = ?";
-                preparedStmt.setInt(1, id);
-                resultSet = executeQuery(preparedStmt, query);
+                query = "select username from players where id = "+id;
+                resultSet = executeQuery(query);
 
                 resultSet.first(); //situamos el cursor en el primer resultado
             return resultSet.getString("username"); //devolvemos la password
@@ -148,9 +135,8 @@ public class MySQLConnection {
     }
     public int getUserId(String username){
         try{
-                query = "select id from players where username = ?";
-                preparedStmt.setString(1, username);
-                resultSet = executeQuery(preparedStmt, query);
+                query = "select id from players where username = "+username;
+                resultSet = executeQuery(query);
 
                 resultSet.first(); //situamos el cursor en el primer resultado
             return resultSet.getInt("id"); //devolvemos la password
@@ -164,9 +150,8 @@ public class MySQLConnection {
     //---------------------IS *Retornan un boleano*
     public boolean isUsernameInUse(String username){
         try{
-                query = "select username from players where username = ?";
-                preparedStmt.setString(1, username);
-                resultSet = executeQuery(preparedStmt, query);
+                query = "select username from players where username = "+username;
+                resultSet = executeQuery(query);
             return resultSet.first();
 
             
@@ -176,17 +161,17 @@ public class MySQLConnection {
         }
     }
     
-    private ResultSet executeQuery(PreparedStatement p, String query) throws SQLException{
+    private ResultSet executeQuery(String query) throws SQLException{
         synchronized(db){
-            db.prepareStatement(query);
-            return p.executeQuery();
+            preparedStmt = db.prepareStatement(query);
+            return preparedStmt.executeQuery();
         }
     }
     
-    private void executeUpdate(PreparedStatement p, String query) throws SQLException{
+    private void executeUpdate(String query) throws SQLException{
         synchronized(db){
-            db.prepareStatement(query);
-            p.executeUpdate();
+            preparedStmt = db.prepareStatement(query);
+            preparedStmt.executeUpdate();
         }
     }
 }
