@@ -51,6 +51,8 @@ public class Protocol {
                 case LOGIN:
                     client.login(args[0],args[1]);
                     break;
+                case REGISTER:
+                    client.register(args[0], args[1], args[2]);
             }
         }
         else if (client.state == Connection.ConnectionState.OUT_GAME){
