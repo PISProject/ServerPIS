@@ -22,7 +22,7 @@ public class Connection extends Thread{
 
 
  
-    public enum ConnectionState{NOT_LOGGED,OUT_GAME,QUEUE,LOADING,IN_GAME,DISCONNECTED};
+    public enum ConnectionState{NOT_LOGGED,OUT_GAME,QUEUE,LOADING, READY, IN_GAME,DISCONNECTED};
     public ConnectionState state;
     public int uid;
     public String name;
@@ -215,7 +215,7 @@ public class Connection extends Thread{
                 MFServer.SERVER.onDisconnectClient(this);
                 break;
             case IN_GAME:
-                game.disconnect(this);
+                //game.disconnect(this);
                 MFServer.SERVER.onDisconnectClient(this);
         }
         state = ConnectionState.DISCONNECTED;

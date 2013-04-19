@@ -13,9 +13,11 @@ import java.util.Map;
  * @author kirtash
  */
 public class Scenario {
-    HashMap<Integer, Actor> actores;
+    public int monsterCount;
+    public HashMap<Integer, Actor> actores;
     
     public Scenario(Connection [] connections){
+        monsterCount = 0;
         actores = new HashMap<>();
 
         for (Connection c: connections) {
@@ -56,12 +58,19 @@ public class Scenario {
         }
     }
     
-    public void attack(int uid){
+    public void moveToTarget(int uid, int t_uid){
+        Actor a1,a2;
+        a1 = actores.get(uid);
+        a2 = actores.get(t_uid);
+        moveTo(uid, (int)Math.atan2(a2.posY-a1.posY, a2.posX-a1.posX));
+    }
+    
+    public void attack(int uid, int range){
         /* Funcion de ataqueProvisional*/
         Actor attacker = actores.get(uid);
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
-            if (Math.abs(attacker.getPos()[0]-a.getPos()[0])< 10 && Math.abs(attacker.getPos()[1]-a.getPos()[1])< 10){
+            if (Math.abs(attacker.getPos()[0]-a.getPos()[0])< range && Math.abs(attacker.getPos()[1]-a.getPos()[1])< range){
                 //Los parametros 10,10 son el area que definimos para el ataque
                 //TODO: Poner el range del ataque en el Actor
                 if(a.isAttacked(attacker,0)==1){ //0 es ataque basico
@@ -82,6 +91,30 @@ public class Scenario {
         }
         return false;
         
+    }
+
+    /**
+     * Param se refiere a que tipo de busqueda tiene que realizar.
+     * 
+     * @param uid
+     * @param dist 
+     * @param PARAM
+     * @return 
+     */
+    public int lookForNearbyHero(int uid, int dist, int PARAM) {
+        double x = actores.get(uid).posX;
+        double y = actores.get(uid).posY;
+
+        Actor a;
+        for (Map.Entry actor : actores.entrySet()){
+            a = (Actor)actor.getValue();
+            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) return a.uid;
+        }
+        return -1;
+    }
+
+    void addMonster(Actor c_creature) {
+        actores.put(c_creature.uid, c_creature);
     }
     
 }

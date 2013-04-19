@@ -9,10 +9,19 @@ package game;
  * @author kirtash
  */
 public class Actor {
+    
+    public enum ActorType{HERO, VILLAIN};
+    public ActorType type;
     public int uid;
+    
+    //Actor location
+    public float spawnX;
+    public float spawnY;  
     public float posX;
     public float posY;
     
+    //LookType
+    public int model;
     
     //Stats
     public int attackDamage;
@@ -22,8 +31,7 @@ public class Actor {
     public double speed = 1;
 
     
-    private float spawnX;
-    private float spawnY;
+
     
     public Actor(){
         this.posX = (float)Math.random()*10;
@@ -31,10 +39,26 @@ public class Actor {
         this.spawnX = 0;
         this.spawnY = 0;
     }
+    
+    // Constructor provisional para heroes
     public Actor(int uid){
+        this.type = ActorType.HERO;
         this.uid = uid;
-        this.posX = (float)Math.random()*10;
-        this.posY= (float)Math.random()*10;
+        
+        this.posX = (float)Math.random()*20;
+        this.posY= (float)Math.random()*20;
+    }
+    
+    // Constructor provisional para enemigos
+    public Actor(int uid, int hp, int attack, int speed){
+        this.type = ActorType.VILLAIN;
+        this.speed = speed;
+        this.attackDamage = attack;
+        this.healthMax = hp;
+        this.health = hp;
+        this.uid = uid;
+        this.posX = (float)Math.random()*20;
+        this.posY= (float)Math.random()*20;
         
         this.spawnX = 0;
         this.spawnY = 0;
@@ -77,5 +101,9 @@ public class Actor {
             return this.healthChange(attacker.attackDamage);
         }
         return 0;
+    }
+    
+    public boolean isHero(){
+        return (type == ActorType.HERO);
     }
 }

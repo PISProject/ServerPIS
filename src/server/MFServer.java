@@ -7,6 +7,8 @@ package server;
 import connections.Connection;
 import database.MySQLConnection;
 import game.GameEngine;
+import game.models.Game;
+import game.models.GameTest;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -87,7 +89,7 @@ public class MFServer {
     }  
     
      private void startGame(Connection[] game) {
-         games.add(new GameEngine(game));
+         games.add(new GameEngine(game, (Game) (new GameTest()))); //Provisional, en adelante los usuarios podran escoger la partida
      }   
 
     private void startServer() {

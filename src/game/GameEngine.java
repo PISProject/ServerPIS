@@ -5,36 +5,42 @@
 package game;
 
 import connections.Connection;
+import connections.Streaming;
+import game.models.Game;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import monsters.MonsterTest;
 
 /**
  *
  * @author kirtash
  */
-public class GameEngine{
+public class GameEngine extends Thread{
     public enum GameState {LOADING, RUNNING, FINISHED};
-    private Scenario scenario;
+    public Scenario scenario;
     public GameState state;
-    Player [] players;
-    Scenario s;
+    public Game game;
+    public Connection [] players;
+    public Scenario s;
     Streaming streaming;
     int ready = 0;
     Timer clock;
-    public GameEngine(Connection[] game) {
+    public GameEngine(Connection[] game, Game t_game) {
         
         scenario = new Scenario(game);
         
         //Inicializamos la lista de players
-        players = new Player[game.length];
+        players = new Connection[game.length];
         
         // Creamos un player por cada conexion, y le asignamos una referencia de
         // la partida a cada una de ellas.
         String info = new String();
-        for (int i = 0; i < game.length; i++) {
-            game[i].setGame(this);
-            game[i].setScenario(scenario);
-            info+=game [i].uid+","+game[i].name+"*";
-            players[i] = new Player(game[i]);
+        players = game;
+        for (Connection c: game) {
+            c.setGame(this);
+            c.setScenario(scenario);
+            info+=c.uid+","+c.name+"*";
         }
         // Notificamos a todas las conexiones que se ha creado un juego y que tienen
         // que empezar a cargar
@@ -42,22 +48,18 @@ public class GameEngine{
             c.notifyGameFound(info);
         }
         
-        streaming = new Streaming();
+        streaming = new Streaming(this);
+        streaming.startStreaming();
         // GameThread acaba, hasta que todas las conexiones esten listas.
     }
 
     
     // Cuando una conexion esta lista para inciar la partida, notifica al servidor.
     public synchronized void connectionIsReady(Connection aThis) {
-        for (Player p: players) {
-            if (p.uid == aThis.uid){
-                p.ready = true;
-            }
-        }
         ready++;
         if (ready == players.length){
-            for (Player p:players){
-                p.con.startGame();
+            for (Connection p:players){
+                p.startGame();
             }
             startGameThread();
         }
@@ -67,8 +69,11 @@ public class GameEngine{
         state = GameState.RUNNING;
         streaming.start(); // Aqui empieza a correr el GameThread
         clock = new Timer();
+        
     }   
-
+    
+    
+    /*
     public void disconnect(Connection aThis) {
         for (Player p:players){
             if (aThis.equals(p.con)){
@@ -76,62 +81,27 @@ public class GameEngine{
             }
         }
         System.err.println("Player "+aThis.uid+" disconnected!");
-    }
-    
-    
-    public class Player{
-        private Connection con;
-        private int uid;
-        private boolean ready;
-        private boolean connected;
+    }*/
 
-        
-        public Player(Connection c){
-            this.connected = true;
-            this.con = c;
-            this.uid = con.uid;
-        }
-    }
-
+    
     // La clase Streaming es la que enviara constantemente el mapa a todos los
     // jugadores de la partida, lo hara incondicionalmente cada 100ms.
-    public class Streaming extends Thread{
-        private long STREAMING_PING = 100; // Intervalo de tiempo entre cada envio
-        private int checkConnected=0;
-        
-        @Override
-        public void run() {
-            while(state != GameState.FINISHED){
-                // Si ningun player esta online el thread muere
-                checkConnected =(checkConnected+1)%100;
-                //Cada 100 iteraciones comprobamos que haya players online
-                if (checkConnected == 99){
-                    int ammount=0;
-                    for (Player p: players){
-                        if (!p.connected) ammount+=1;
-                    }
-                    if (ammount==players.length){
-                        System.err.println("No players connected");
-                        System.out.println("Closing game");
-                        state = GameState.FINISHED;
-                    }
-                }
-                // Parseamos el escenario...
-                String s = scenario.parseScenario();
-                
-                // ...y lo enviamos a todas las conexiones
-                for (Player p: players) {
-                    if(p.connected) p.con.pushMapToClient(s);
-                }
 
-                // El thread se va a dormir durante un tiempo de refresco = t;
-                try {
-                    sleep(STREAMING_PING);
-                } catch (InterruptedException ex) {
-                    System.err.println("Interrupted!");
-                }
-            }
+    @Override
+    public void run() { // Este run se encargara de gstionar los cambios en el juego
+        if (scenario.monsterCount == 0){
+            scenario.addMonster(new MonsterTest().createMonster(100,scenario));
+            
+            /*try {
+                MonsterTest m = (MonsterTest)Class.forName(s).newInstance();
+                
+            } catch (ClassNotFoundException ex) {
+            } catch (InstantiationException ex) {
+                Logger.getLogger(GameEngine.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GameEngine.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
         }
-        
     }
+
 }
