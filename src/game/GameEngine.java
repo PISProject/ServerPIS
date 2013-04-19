@@ -51,8 +51,8 @@ public class GameEngine extends Thread{
         streaming = new Streaming(this);
         streaming.startStreaming();
         // GameThread acaba, hasta que todas las conexiones esten listas.
-        
-        this.start();
+        scenario.addMonster(new MonsterTest().createMonster(100,scenario));
+        //this.start();
     }
 
     
