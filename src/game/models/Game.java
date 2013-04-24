@@ -4,7 +4,7 @@
  */
 package game.models;
 
-import monsters.Monster;
+import game.monsters.Monster;
 
 /**
  * La clase game es la superclase que contiene todos los tipos de partidas.
