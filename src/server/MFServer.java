@@ -42,7 +42,7 @@ public class MFServer {
     public HashMap<Integer,Connection> clients;
 
     
-    public GameQueue queue;
+    private GameQueue queue;
     public int connectionUid=0; //Provisional mientras no esta implementado el Login
    
 

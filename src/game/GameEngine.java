@@ -10,7 +10,7 @@ import game.models.Game;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import monsters.MonsterTest;
+import game.monsters.MonsterTest;
 
 /**
  *
