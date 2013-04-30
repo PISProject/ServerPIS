@@ -75,6 +75,7 @@ public class MonsterTest extends Thread{
                     target = scenario.lookForNearbyHero(uid, 3, 0);
                     if (target != -1){
                         state = MonsterState.FOLLOWING_TARGET;
+                        System.err.println("Target found! starting to follow "+target);
                     }
                     else{
                         state =MonsterState.WALKING_AROUND;
