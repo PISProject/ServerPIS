@@ -63,7 +63,7 @@ public class Scenario {
         Actor a1,a2;
         a1 = actores.get(uid);
         a2 = actores.get(t_uid);
-        moveTo(uid, (int)Math.atan2(a2.posY-a1.posY, a2.posX-a1.posX));
+        moveTo(uid, (int)(Math.atan2(a2.posY-a1.posY, a2.posX-a1.posX)*180/Math.PI));
     }
     
     public void attack(int uid, int range){
