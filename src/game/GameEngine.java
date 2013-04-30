@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import game.monsters.MonsterTest;
+import server.MFServer;
 
 /**
  *
@@ -57,7 +58,9 @@ public class GameEngine extends Thread{
     // Cuando una conexion esta lista para inciar la partida, notifica al servidor.
     public synchronized void connectionIsReady(Connection aThis) {
         ready++;
-        System.out.println("Connection "+aThis.uid+" is ready.");
+        if (MFServer.DEBUG_CONNECTIONS || MFServer.DEBUG_GAMES){
+                System.out.println("==> Connection "+aThis.uid+" is ready to start.");
+        }
         if (ready == players.length){
             for (Connection p:players){
                 p.startGame();
@@ -68,7 +71,9 @@ public class GameEngine extends Thread{
 
     public void startGameThread() {
         state = GameState.RUNNING;
-        System.out.println("Starting streaming");
+        if (MFServer.DEBUG_GAMES){
+                System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
+        }
         streaming.start(); // Aqui empieza a correr el Streaming
         
         scenario.addMonster(new MonsterTest().createMonster(100,scenario));

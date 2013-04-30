@@ -25,6 +25,12 @@ public class MFServer {
        SERVER = new MFServer();
     }
     
+   public static final boolean DEBUG_SERVER = true;
+    public static final boolean DEBUG_CONNECTIONS = true;
+    public static final boolean DEBUG_MYSQL = true;
+    public static final boolean DEBUG_GAMES = true;
+    public static final boolean DEBUG_SCENARIO = true;
+    
     public static MFServer SERVER;
     public static boolean ACCEPT_CONNECTIONS = false;
 
@@ -57,7 +63,10 @@ public class MFServer {
             listener = new ConnectionListener();
         }catch(IOException ex){
             //No ha podido ser
-            System.err.println("Listener could not be created!");
+            if(MFServer.DEBUG_SERVER){
+                System.err.println("==> [SERVER] Listener could not be created! Leaving system [EXIT]");
+            }
+            
             System.exit(1);
         }
         
@@ -65,8 +74,10 @@ public class MFServer {
             //Intentamos crear la base de datos
             login = new LoginManager(new MySQLConnection());
         } catch (SQLException ex) {
-            System.err.println("Cannot establish connection with database.");
-            
+            if(MFServer.DEBUG_SERVER){
+                System.err.println("==> [SERVER]Cannot stablish connection with database! Leaving the system [EXIT]");
+            }
+            System.exit(1);
         } catch (ClassNotFoundException ex) {
         }
         threadGroup = new ThreadGroup("g");
@@ -80,11 +91,12 @@ public class MFServer {
     }
     
     public void joinQueue(Connection aThis) {
-        System.err.println("Player "+aThis.uid+" joined queue");
         Connection [] game = queue.join(aThis);
         if (game != null){
+            if (MFServer.DEBUG_GAMES){
+                System.err.println("==> [SERVER]Starting new game!");
+            }
             startGame(game);
-            System.err.println("Starting New Game!");
         }
     }  
     
@@ -105,7 +117,9 @@ public class MFServer {
             queue.quit(con);
         }
         clients.remove(con.uid);
-        System.out.println(clients.size());
+        if(MFServer.DEBUG_SERVER){
+            System.err.println("==> [SERVER] Client "+con.uid+" left.");
+        }
     }
 
     boolean isClientOnline(int id) {
@@ -138,13 +152,21 @@ public class MFServer {
      public void run() {
          try {
              while(true){
-                 System.err.println("Waiting connection...");
+                 if (MFServer.DEBUG_SERVER){
+                     System.err.println("==> [SERVER] Waiting connection...");
+                 }
+                 
                  Socket socket = ss.accept();
                  new Connection(socket, login);
-                 System.err.println("New incoming connection detected.");
+                 
+                if (MFServer.DEBUG_SERVER){
+                     System.err.println("==> [SERVER] New incoming connection detected.");
+                 }
              }
          } catch (IOException ex) {
-             System.err.println("IOException::while creating a new clientSocket");
+            if (MFServer.DEBUG_SERVER){
+                System.err.println("==> [SERVER] Error while creating a new client socket.");
+            }
          }
 
         }       

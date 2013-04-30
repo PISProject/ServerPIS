@@ -4,6 +4,7 @@
  */
 package database;
 import java.sql.*;
+import server.MFServer;
         
 /**
  *
@@ -22,14 +23,14 @@ public class MySQLConnection {
     private Statement statement;
     
     public MySQLConnection() throws SQLException, ClassNotFoundException{
-        System.out.println("Testing connection...");
         // Cargamos los drivers de MySQL, por si java no lo ha hecho.
-
         Class.forName("com.mysql.jdbc.Driver");
 
         //Establecemos la conexion con MySQL
         db = DriverManager.getConnection(LOCALHOST+DB_NAME, USER, PASSWORD);
-        System.out.println("Connected!");
+        if (MFServer.DEBUG_MYSQL){
+            System.err.println("==> MySQL Connection stablished");
+        }
         query = new String();
     }
     
@@ -55,6 +56,7 @@ public class MySQLConnection {
                 
             return true;
         }catch(SQLException ex){
+            ex.printStackTrace();
             // No deberia de pasar.
             return false;
         }

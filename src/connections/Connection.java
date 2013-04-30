@@ -46,7 +46,9 @@ public class Connection extends Thread{
             this.start();
         }catch(IOException i){
             disconnect();
-            System.err.println("IOException::Error creating IO Streams");
+            if(MFServer.DEBUG_CONNECTIONS){
+                 System.err.println("==> Cannot create streams in connection "+this.uid);
+            }
         }
         
     }
@@ -73,7 +75,9 @@ public class Connection extends Thread{
             out.writeBoolean(b);
         } catch (IOException ex) {
             disconnect();
-            System.err.println("IOException::Couldnt write in client");
+            if(MFServer.DEBUG_CONNECTIONS){
+                System.err.println("==> Couldn't reach client "+uid);
+            }
         }
     }
     public void write(String s) {
@@ -81,7 +85,8 @@ public class Connection extends Thread{
             out.writeUTF(s);
         } catch (IOException ex) {
             disconnect();
-            System.err.println("IOException::Couldnt write in client");
+           if(MFServer.DEBUG_CONNECTIONS){
+                System.err.println("==> Couldn't reach client "+uid);}
         }
     }
     ////////////////////////////////////////////////////////////////////////////
@@ -111,8 +116,12 @@ public class Connection extends Thread{
             default:
                 MFServer.SERVER.addPlayer(this);
                 this.state = ConnectionState.OUT_GAME;
-                System.err.println("Logged succesfully");
-                write(""+uid); // <- provisional, habra que poner la uid aqui
+                write(""+uid); //Enviamos la uid al client
+                
+                //Debugging
+                if(MFServer.DEBUG_CONNECTIONS){
+                    System.err.println("==> Client "+uid+" logged succesfully");
+                }
                 break;               
                 
         }
@@ -136,11 +145,19 @@ public class Connection extends Thread{
     }
 
     void quitQueue() {
+        if(MFServer.DEBUG_CONNECTIONS){
+            System.err.print("==> Client "+uid+" is trying to left queue.");
+        }
         if (MFServer.SERVER.quitQueue(this)){
             this.state = ConnectionState.OUT_GAME;
-            System.out.println("Player "+uid+" left queue.");
+            if(MFServer.DEBUG_CONNECTIONS){
+                    System.err.println("[DONE]");
+            }
             write("1");
             return;
+        }
+        if(MFServer.DEBUG_CONNECTIONS){
+                    System.err.println("[X]");
         }
         write("0");
     }
@@ -152,7 +169,9 @@ public class Connection extends Thread{
     
     // OUTGOING Messages
     public void notifyGameFound(String infoPlayers) {
-        System.err.println("Notifying "+this.uid+" game its starting");
+        if(MFServer.DEBUG_CONNECTIONS){
+            System.err.println("==> Notifying connection "+uid+" game found.");
+        }
         this.state = ConnectionState.LOADING;
         //write(protocol.GAME_FOUND);
         write(infoPlayers); //Provisional
@@ -201,11 +220,18 @@ public class Connection extends Thread{
     
     public void disconnect(){
         
-        System.out.println("Client "+uid+" disconnected");
+        if(MFServer.DEBUG_CONNECTIONS){
+            System.err.print("==> Client '"+uid+"' disconnected, trying to close socket...");
+        }
         try {
             socket.close();
+            if(MFServer.DEBUG_CONNECTIONS){
+                System.err.println("[DONE]");
+            }
         } catch (IOException ex) {
-            System.err.println("Cannot close the connection socket.");
+            if(MFServer.DEBUG_CONNECTIONS){
+                System.err.println("[X]");
+            }
         }
         switch (state){
             case OUT_GAME:
@@ -217,6 +243,9 @@ public class Connection extends Thread{
             case QUEUE:
                 MFServer.SERVER.onDisconnectClient(this);
                 break;
+            case LOADING:
+                game.connectionIsReady(this);
+                MFServer.SERVER.onDisconnectClient(this);
             case IN_GAME:
                 //game.disconnect(this);
                 MFServer.SERVER.onDisconnectClient(this);

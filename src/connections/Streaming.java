@@ -6,6 +6,7 @@ package connections;
 
 import game.GameEngine;
 import static java.lang.Thread.sleep;
+import server.MFServer;
 
 /**
  *
@@ -32,8 +33,9 @@ import static java.lang.Thread.sleep;
                         if (!(p.state == Connection.ConnectionState.IN_GAME)) ammount+=1;
                     }
                     if (ammount==game.players.length){
-                        System.err.println("No players connected");
-                        System.out.println("Closing game");
+                        if (MFServer.DEBUG_GAMES){
+                            System.err.println("==> GAME "+/*game.uid*/": Not players connected... Closing game");
+                        }
                         game.state = GameEngine.GameState.FINISHED;
                     }
                 }
@@ -49,7 +51,9 @@ import static java.lang.Thread.sleep;
                 try {
                     sleep(STREAMING_PING);
                 } catch (InterruptedException ex) {
-                    System.err.println("Interrupted!");
+                    if (MFServer.DEBUG_GAMES){
+                        System.err.println("==> GAME "+/*game.uid*/": Streaming sleep interrupted.");
+                    }
                 }
             }
         }

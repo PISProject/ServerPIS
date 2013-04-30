@@ -50,7 +50,7 @@ public class Actor {
     }
     
     // Constructor provisional para enemigos
-    public Actor(int uid, int hp, int attack, int speed){
+    public Actor(int uid, int hp, int attack, double speed){
         this.type = ActorType.VILLAIN;
         this.speed = speed;
         this.attackDamage = attack;
