@@ -48,9 +48,8 @@ public class MonsterTest extends Thread{
     public Actor createMonster(int UID, Scenario scenario){ //Este podria ser un metodo abstracto
         this.uid = UID;
         this.scenario = scenario;
-        
-        this.start();
-        
+        alive = true;
+        this.start();        
         return new Actor(uid, ATTACK_DAMAGE, HP, SPEED);
     }
 
@@ -61,6 +60,7 @@ public class MonsterTest extends Thread{
     public void run() {
         int clock;
         while(alive){
+            System.err.println("ESTOY VIVO!");
             clock = 0;
             if (clock == 29 && state == MonsterState.WALKING_AROUND){
                 randomMovementAngle = Math.random()*180;

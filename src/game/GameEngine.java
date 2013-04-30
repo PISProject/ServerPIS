@@ -68,6 +68,7 @@ public class GameEngine extends Thread{
 
     public void startGameThread() {
         state = GameState.RUNNING;
+        this.start();
         System.out.println("Starting streaming");
         streaming.start(); // Aqui empieza a correr el Streaming
         
