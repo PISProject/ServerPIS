@@ -5,6 +5,7 @@
 package game;
 
 import connections.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,14 +102,36 @@ public class Scenario {
      * @param PARAM
      * @return 
      */
+    private static final int LOWEST_HEALTH=1;
     public int lookForNearbyHero(int uid, int dist, int PARAM) {
+        
+        ArrayList<Integer> lista = new ArrayList<>();
         double x = actores.get(uid).posX;
         double y = actores.get(uid).posY;
 
         Actor a;
         for (Map.Entry actor : actores.entrySet()){
             a = (Actor)actor.getValue();
-            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) return a.uid;
+            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) lista.add(uid);
+            
+            //Empezamos la busqueda de parametros dentro de los actores que estan en rango
+            int health=Integer.MAX_VALUE, a_health;
+            int f_uid=0;
+            
+            if (PARAM == LOWEST_HEALTH){ //Retorna el actor con menos vida de los que estan en rango
+                for (int i = 0; i < lista.size(); i++) {
+                    a_health = actores.get(lista.get(i)).health;
+                    if (health > a_health && a_health > 0){
+                        f_uid = lista.get(i);
+                        health = actores.get(uid).health;
+                    }
+                    return f_uid;
+                }
+            } 
+            
+            else{ // Retorna un actor aleatorio de los que estan en rango
+                return lista.get(((int)Math.random()*10)%(lista.size()-1));
+            }
         }
         return -1;
     }
