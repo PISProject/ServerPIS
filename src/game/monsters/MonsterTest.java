@@ -67,9 +67,9 @@ public class MonsterTest extends Thread{
                 randomMovementAngle = Math.random()*180;
                 
             }
-            if (clock == 29 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
+            /*if (clock == 29 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
                 state = (state == MonsterState.FOLLOWING_TARGET)? MonsterState.WALKING_AROUND: MonsterState.LOOKING_FOR_TARGET;
-            }
+            }*/
             switch(state){
                 case LOOKING_FOR_TARGET:
                     target = scenario.lookForNearbyHero(uid, 3, 0);
