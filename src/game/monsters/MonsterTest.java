@@ -61,19 +61,23 @@ public class MonsterTest extends Thread{
     public void run() {
         int clock;
         while(alive){
-            System.err.println("ESTOY VIVO!");
             clock = 0;
             if (clock == 29 && state == MonsterState.WALKING_AROUND){
-                randomMovementAngle = Math.random()*180;
+                randomMovementAngle = Math.random()*360;
                 
             }
-            /*if (clock == 29 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
+            if (clock == 29 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
                 state = (state == MonsterState.FOLLOWING_TARGET)? MonsterState.WALKING_AROUND: MonsterState.LOOKING_FOR_TARGET;
-            }*/
+            }
             switch(state){
                 case LOOKING_FOR_TARGET:
                     target = scenario.lookForNearbyHero(uid, 3, 0);
-                    state = MonsterState.FOLLOWING_TARGET;
+                    if (target != -1){
+                        state = MonsterState.FOLLOWING_TARGET;
+                    }
+                    else{
+                        state =MonsterState.WALKING_AROUND;
+                    }
                     break;
                 case WALKING_AROUND:
                     
