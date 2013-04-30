@@ -49,7 +49,8 @@ public class MonsterTest extends Thread{
         this.uid = UID;
         this.scenario = scenario;
         alive = true;
-        this.start();        
+        state = MonsterState.WALKING_AROUND;
+        this.start();     
         return new Actor(uid, ATTACK_DAMAGE, HP, SPEED);
     }
 
