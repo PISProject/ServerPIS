@@ -63,11 +63,11 @@ public class MonsterTest extends Thread{
         clock = 0;
         while(alive){
             
-            if (clock == 29 && state == MonsterState.WALKING_AROUND){
+            if (clock == 100 && state == MonsterState.WALKING_AROUND){
                 randomMovementAngle = Math.random()*360;
                 
             }
-            if (clock == 29 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
+            if (clock == 100 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
                 state = (state == MonsterState.FOLLOWING_TARGET)? MonsterState.WALKING_AROUND: MonsterState.LOOKING_FOR_TARGET;
             }
             switch(state){
@@ -91,7 +91,7 @@ public class MonsterTest extends Thread{
             }
             //
             clock++;
-            clock %= 30;
+            clock %= 101;
             //
             
             try {
