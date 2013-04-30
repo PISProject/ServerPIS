@@ -37,7 +37,7 @@ public class MonsterTest extends Thread{
     private int target; //uid del target
     private boolean alive;
     private double randomMovementAngle;
-    private double stateChangeChance = 0.001; //Cada segundo
+    private double stateChangeChance = 0.5; //Cada segundo
     //
     
     
