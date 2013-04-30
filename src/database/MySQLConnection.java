@@ -55,6 +55,7 @@ public class MySQLConnection {
                 
             return true;
         }catch(SQLException ex){
+            ex.printStackTrace();
             // No deberia de pasar.
             return false;
         }
