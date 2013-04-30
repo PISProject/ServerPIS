@@ -23,7 +23,7 @@ public class MonsterTest extends Thread{
     
     private final int HP = 100;
     private final int ATTACK_DAMAGE=10;
-    private final int SPEED = 1;
+    private final double SPEED = 0.3;
     private final int MODEL = 1;
     
     // --
@@ -37,7 +37,7 @@ public class MonsterTest extends Thread{
     private int target; //uid del target
     private boolean alive;
     private double randomMovementAngle;
-    private double stateChangeChance = 0.01; //Cada segundo
+    private double stateChangeChance = 0.5; //Cada segundo
     //
     
     
@@ -48,9 +48,9 @@ public class MonsterTest extends Thread{
     public Actor createMonster(int UID, Scenario scenario){ //Este podria ser un metodo abstracto
         this.uid = UID;
         this.scenario = scenario;
-        
-        this.start();
-        
+        alive = true;
+        state = MonsterState.WALKING_AROUND;
+        this.start();     
         return new Actor(uid, ATTACK_DAMAGE, HP, SPEED);
     }
 
@@ -60,29 +60,39 @@ public class MonsterTest extends Thread{
     @Override
     public void run() {
         int clock;
+        clock = 0;
         while(alive){
-            clock = 0;
-            if (clock == 29 && state == MonsterState.WALKING_AROUND){
+            
+            if (clock == 100 && state == MonsterState.WALKING_AROUND){
                 randomMovementAngle = Math.random()*360;
                 
             }
-            if (clock == 29 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
+            if (clock == 100 && Math.random() < stateChangeChance && state != MonsterState.LOOKING_FOR_TARGET) {
                 state = (state == MonsterState.FOLLOWING_TARGET)? MonsterState.WALKING_AROUND: MonsterState.LOOKING_FOR_TARGET;
             }
             switch(state){
                 case LOOKING_FOR_TARGET:
-                    target = scenario.lookForNearbyHero(uid, 3, 0);
-                    state = MonsterState.FOLLOWING_TARGET;
+                    target = scenario.lookForNearbyHero(uid, 10, 0);
+                    if (target != -1){
+                        state = MonsterState.FOLLOWING_TARGET;
+                        System.err.println("Target found! starting to follow "+target);
+                    }
+                    else{
+                        state =MonsterState.WALKING_AROUND;
+                    }
                     break;
                 case WALKING_AROUND:
+                    
                     scenario.moveTo(uid, (int)randomMovementAngle);
+                    break;
                 case FOLLOWING_TARGET:
                     scenario.moveToTarget(uid, target);
+                    break;
                     
             }
             //
             clock++;
-            clock %= 30;
+            clock %= 101;
             //
             
             try {
