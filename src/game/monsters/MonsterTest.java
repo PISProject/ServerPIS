@@ -37,7 +37,7 @@ public class MonsterTest extends Thread{
     private int target; //uid del target
     private boolean alive;
     private double randomMovementAngle;
-    private double stateChangeChance = 0.01; //Cada segundo
+    private double stateChangeChance = 0.001; //Cada segundo
     //
     
     
@@ -72,7 +72,7 @@ public class MonsterTest extends Thread{
             }
             switch(state){
                 case LOOKING_FOR_TARGET:
-                    target = scenario.lookForNearbyHero(uid, 3, 0);
+                    target = scenario.lookForNearbyHero(uid, 10, 0);
                     if (target != -1){
                         state = MonsterState.FOLLOWING_TARGET;
                         System.err.println("Target found! starting to follow "+target);
