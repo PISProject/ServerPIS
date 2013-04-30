@@ -76,9 +76,12 @@ public class MonsterTest extends Thread{
                     state = MonsterState.FOLLOWING_TARGET;
                     break;
                 case WALKING_AROUND:
+                    
                     scenario.moveTo(uid, (int)randomMovementAngle);
+                    break;
                 case FOLLOWING_TARGET:
                     scenario.moveToTarget(uid, target);
+                    break;
                     
             }
             //
