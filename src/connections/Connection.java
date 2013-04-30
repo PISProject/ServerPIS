@@ -243,9 +243,7 @@ public class Connection extends Thread{
             case QUEUE:
                 MFServer.SERVER.onDisconnectClient(this);
                 break;
-            case LOADING:
-                game.connectionIsReady(this);
-                MFServer.SERVER.onDisconnectClient(this);
+
             case IN_GAME:
                 //game.disconnect(this);
                 MFServer.SERVER.onDisconnectClient(this);
