@@ -60,8 +60,9 @@ public class MonsterTest extends Thread{
     @Override
     public void run() {
         int clock;
+        clock = 0;
         while(alive){
-            clock = 0;
+            
             if (clock == 29 && state == MonsterState.WALKING_AROUND){
                 randomMovementAngle = Math.random()*360;
                 
