@@ -63,6 +63,7 @@ public class Scenario {
         Actor a1,a2;
         a1 = actores.get(uid);
         a2 = actores.get(t_uid);
+        System.out.println(a1.posX+","+a2.posY);
         moveTo(uid, (int)(Math.atan2(a2.posY-a1.posY, a2.posX-a1.posX)*180/Math.PI));
     }
     
@@ -112,8 +113,10 @@ public class Scenario {
         Actor a;
         for (Map.Entry actor : actores.entrySet()){
             a = (Actor)actor.getValue();
-            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) lista.add(uid);
-            
+            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()){
+                lista.add(uid);
+            }
+        }
             //Empezamos la busqueda de parametros dentro de los actores que estan en rango
             int health=Integer.MAX_VALUE, a_health;
             int f_uid=0;
@@ -127,13 +130,12 @@ public class Scenario {
                     }
                     return f_uid;
                 }
-            } 
+            }
             
             else{ // Retorna un actor aleatorio de los que estan en rango
-                return lista.get(((int)Math.random()*10)%(lista.size()-1));
+                if (lista.size()>0) return lista.get(((int)Math.random()*100)%(lista.size()));
             }
-        }
-        return -1;
+         return -1;
     }
 
     void addMonster(Actor c_creature) {

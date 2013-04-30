@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author kirtash
  */
 class GameQueue {
-    public static final int QUEUE_SIZE = 3;
+    public static final int QUEUE_SIZE = 2;
     private final ArrayList<Connection> players = new ArrayList<>();
     
     public GameQueue(){
