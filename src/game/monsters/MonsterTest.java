@@ -23,7 +23,7 @@ public class MonsterTest extends Thread{
     
     private final int HP = 100;
     private final int ATTACK_DAMAGE=10;
-    private final int SPEED = 1;
+    private final double SPEED = 0.3;
     private final int MODEL = 1;
     
     // --
