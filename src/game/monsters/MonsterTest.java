@@ -6,6 +6,7 @@ package game.monsters;
 
 import game.Actor;
 import game.Scenario;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.MFServer;
@@ -42,6 +43,7 @@ public class MonsterTest extends Thread{
     private boolean alive;
     private double rand_movedir;
     private double stchange_rate = 0.01; //Cada segundo
+    private int vision_range = 10;
     //
     
     
@@ -111,7 +113,8 @@ public class MonsterTest extends Thread{
     /////////////////////////////////////////////////////////////////
    
     private void lookForATarget(){
-        target = scenario.lookForNearbyHero(uid, 10, 0);
+        // Take a look around for targetable players
+        ArrayList<Actor> targetable = scenario.lookForNearbyHero(uid, uid);
         if (target != -1){
           state = MonsterState.FOLLOWING_TARGET;
           
