@@ -6,7 +6,6 @@ package game.monsters;
 
 import game.Actor;
 import game.Scenario;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.MFServer;
@@ -27,7 +26,7 @@ public class MonsterTest extends Thread{
     private final int attack_damage=10;
     private final double speed = 0.3;
     private final int model = 1;
-    private double changedir_prob = 0.333;
+    private double changedir_prob = 0.01;
     
     // --
     
@@ -43,7 +42,6 @@ public class MonsterTest extends Thread{
     private boolean alive;
     private double rand_movedir;
     private double stchange_rate = 0.01; //Cada segundo
-    private int vision_range = 10;
     //
     
     
@@ -73,7 +71,7 @@ public class MonsterTest extends Thread{
             
             // Gestion de cambio de estado
             if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
-                state = (state == MonsterState.FOLLOWING_TARGET)? MonsterState.WALKING_AROUND : MonsterState.FOLLOWING_TARGET;
+                state = (state == MonsterState.LOOKING_FOR_TARGET)? MonsterState.WALKING_AROUND : MonsterState.LOOKING_FOR_TARGET;
                 if (MFServer.DEBUG_MONSTERS){
                     
                     System.err.print("==> [MONSTER "+uid+"] Switching state");
@@ -113,8 +111,7 @@ public class MonsterTest extends Thread{
     /////////////////////////////////////////////////////////////////
    
     private void lookForATarget(){
-        // Take a look around for targetable players
-        ArrayList<Actor> targetable = scenario.lookForNearbyHero(uid, uid);
+        target = scenario.lookForNearbyHero(uid, 10, 0);
         if (target != -1){
           state = MonsterState.FOLLOWING_TARGET;
           
