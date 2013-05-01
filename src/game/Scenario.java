@@ -48,12 +48,11 @@ public class Scenario {
     }
 
     public void moveTo(int uid, int angle) {
-        angle -= 90; //<- Este factor hay que cambiarlo,
         float x, y;
         Actor a = actores.get(uid);
         double speed = a.speed;
-        y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
-        x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
+        y = a.posY+(float) (Math.sin(Math.toRadians(toAngle(angle)))*speed);
+        x = a.posX+(float) (Math.cos(Math.toRadians(toAngle(angle)))*speed);
         if (!checkCollision(uid,x, y)){
             a.moveTo(x,y);
         }
@@ -63,7 +62,7 @@ public class Scenario {
         Actor a1,a2;
         a1 = actores.get(uid);
         a2 = actores.get(t_uid);
-        moveTo(uid, (int)(Math.atan2(a2.posY-a1.posY, a2.posX-a1.posX)*180/Math.PI));
+        moveTo(uid, toAngle((int)Math.toDegrees(Math.atan2(a2.posX-a1.posX, a2.posY-a1.posY))));
     }
     
     public void attack(int uid, int range){
@@ -102,42 +101,31 @@ public class Scenario {
      * @param PARAM
      * @return 
      */
-    private static final int LOWEST_HEALTH=1;
-    public int lookForNearbyHero(int uid, int dist, int PARAM) {
+    public ArrayList<Actor> lookForNearbyHero(int uid, int dist) {
         
-        ArrayList<Integer> lista = new ArrayList<>();
+        ArrayList<Actor> lista = new ArrayList<>();
         double x = actores.get(uid).posX;
         double y = actores.get(uid).posY;
 
         Actor a;
         for (Map.Entry actor : actores.entrySet()){
             a = (Actor)actor.getValue();
-            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) lista.add(uid);
-            
-            //Empezamos la busqueda de parametros dentro de los actores que estan en rango
-            int health=Integer.MAX_VALUE, a_health;
-            int f_uid=0;
-            
-            if (PARAM == LOWEST_HEALTH){ //Retorna el actor con menos vida de los que estan en rango
-                for (int i = 0; i < lista.size(); i++) {
-                    a_health = actores.get(lista.get(i)).health;
-                    if (health > a_health && a_health > 0){
-                        f_uid = lista.get(i);
-                        health = actores.get(uid).health;
-                    }
-                    return f_uid;
-                }
-            } 
-            
-            else{ // Retorna un actor aleatorio de los que estan en rango
-                return lista.get(((int)Math.random()*10)%(lista.size()-1));
+            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) {
+                lista.add(a);
             }
-        }
-        return -1;
+    
+            
+                
+            }
+        return lista;
     }
+        
 
     void addMonster(Actor c_creature) {
         actores.put(c_creature.uid, c_creature);
     }
-    
+ 
+    int toAngle(int angle){ // <- Esta funcion se debe a que el angulo que envia el joystick no esta bien
+        return angle -= 90;
+    }
 }
