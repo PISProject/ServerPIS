@@ -7,10 +7,8 @@ package game;
 import connections.Connection;
 import connections.Streaming;
 import game.models.Game;
+import game.monsters.Monster;
 import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import game.monsters.MonsterTest;
 import server.MFServer;
 
 /**
@@ -76,7 +74,7 @@ public class GameEngine extends Thread{
         }
         streaming.start(); // Aqui empieza a correr el Streaming
         
-        scenario.addMonster(new MonsterTest().createMonster(100,scenario));
+        scenario.addMonster(new Monster().createMonster(100,scenario));
         //clock = new Timer();
         
     }   
@@ -99,7 +97,7 @@ public class GameEngine extends Thread{
     @Override
     public void run() { // Este run se encargara de gstionar los cambios en el juego
         if (scenario.monsterCount == 0){
-            scenario.addMonster(new MonsterTest().createMonster(100,scenario));
+            scenario.addMonster(new Monster().createMonster(100,scenario));
             
             /*try {
                 MonsterTest m = (MonsterTest)Class.forName(s).newInstance();

@@ -9,6 +9,7 @@ import database.MySQLConnection;
 import game.GameEngine;
 import game.models.Game;
 import game.models.GameTest;
+import game.monsters.Monsters;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -73,16 +74,23 @@ public class MFServer {
         
         try {
             //Intentamos crear la base de datos
+            if(MFServer.DEBUG_SERVER){
+                System.err.print("==> [SERVER] Trying to create database ...");
+            }
             login = new LoginManager(new MySQLConnection());
         } catch (SQLException ex) {
             if(MFServer.DEBUG_SERVER){
-                System.err.println("==> [SERVER]Cannot stablish connection with database! Leaving the system [EXIT]");
+                System.err.println("[X] :: SQL Exception");
             }
             System.exit(1);
         } catch (ClassNotFoundException ex) {
+            if(MFServer.DEBUG_SERVER){
+                System.err.println("[X] :: MySQL Driver not found!");
+            }
         }
         threadGroup = new ThreadGroup("g");
-        
+        Monsters m = new Monsters();
+        int i = m.readFromXML();
         startServer();
         
     }
@@ -107,6 +115,7 @@ public class MFServer {
 
     private void startServer() {
         ACCEPT_CONNECTIONS = true;
+
         listener.start();
     }
     
@@ -152,10 +161,11 @@ public class MFServer {
      @Override
      public void run() {
          try {
-             while(true){
-                 if (MFServer.DEBUG_SERVER){
+            if (MFServer.DEBUG_SERVER){
                      System.err.println("==> [SERVER] Waiting connection...");
-                 }
+            }
+             while(true){
+
                  
                  Socket socket = ss.accept();
                  new Connection(socket, login);
@@ -166,7 +176,7 @@ public class MFServer {
              }
          } catch (IOException ex) {
             if (MFServer.DEBUG_SERVER){
-                System.err.println("==> [SERVER] Error while creating a new client socket.");
+                System.err.println("==> [SERVER] Error while creating a new client socket. Listener it's now down.");
             }
          }
 
