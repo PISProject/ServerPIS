@@ -38,11 +38,16 @@ public class MonsterModel {
     
     public MonsterModel(String xmlPath) {
         try {
-            
-            // Empezamos a cargar el modelo.
-            
-          ArrayList<String> monsters = new ArrayList<>();
-        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+xmlPath);
+            readXMLFile(xmlPath);
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    private void readXMLFile(String xmlString) throws IOException, ParserConfigurationException, SAXException{
+        ArrayList<String> monsters = new ArrayList<>();
+        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+xmlString);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(fXmlFile);
@@ -71,14 +76,10 @@ public class MonsterModel {
                 
                 
                 /*
-                 * TODO: Optimizar el codigo, esto es unn truño... pero funciona.
+                 * TODO: Optimizar el codigo, esto es un truño..
                  */
 
 
-        }
-          System.out.println(name+speed+hp+model+changedir_prob+stchange_rate+attack_damage);
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            
         }
     }
 }
