@@ -16,6 +16,7 @@ import server.MFServer;
  */
 public class GameEngine extends Thread{
     public enum GameState {LOADING, RUNNING, FINISHED};
+    public int game_id;
     public Scenario scenario;
     public GameState state;
     public Game game;
@@ -24,8 +25,8 @@ public class GameEngine extends Thread{
     Streaming streaming;
     int ready = 0;
     Timer clock;
-    public GameEngine(Connection[] game, Game t_game) {
-        
+    public GameEngine(int id, Connection[] game, Game t_game) {
+        this.game_id = id;
         scenario = new Scenario(game);
         
         //Inicializamos la lista de players
@@ -75,7 +76,11 @@ public class GameEngine extends Thread{
         
         //clock = new Timer();
         
-    }   
+    }
+    
+    public void endGame(){
+        MFServer.SERVER.endGame(game_id);
+    }
     
     
     /*

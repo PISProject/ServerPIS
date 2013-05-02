@@ -13,10 +13,8 @@ import game.monsters.Monsters;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -41,6 +39,7 @@ public class MFServer {
     public static MFServer SERVER;
     public static boolean ACCEPT_CONNECTIONS = false;
 
+    public static int game_id =0;
     //INET Att
     public int PORT = 5050;
     public ConnectionListener listener;
@@ -51,7 +50,7 @@ public class MFServer {
     public LoginManager login;
     
     //Listas//
-    public ArrayList<GameEngine> games;
+    public ConcurrentHashMap<Integer,GameEngine> games;
     public ConcurrentHashMap<Integer,Connection> clients;
 
     
@@ -59,13 +58,10 @@ public class MFServer {
     public int connectionUid=0; //Provisional mientras no esta implementado el Login
    
     // Buffer de strings para la interficie grafica
-    public ServerAPI serverAPI;
     
     public MFServer(){
-        serverAPI = new ServerAPI();
-        serverAPI.print("as");
-        /*System.err.println("===================SERVER DEVELOPED BY");
-        games = new ArrayList<>();
+        System.err.println("===================SERVER DEVELOPED BY");
+        games = new ConcurrentHashMap<>();
         clients = new ConcurrentHashMap<>();
         queue = new GameQueue();
         
@@ -108,7 +104,7 @@ public class MFServer {
                 System.err.println("==>[XML] Cannot load monsters! :: Closing server!");
                 System.exit(1);
         }
-        startServer();*/
+        startServer();
         
     }
     
@@ -127,7 +123,8 @@ public class MFServer {
     }  
     
      private void startGame(Connection[] game) {
-         games.add(new GameEngine(game, (Game) (new GameTest()))); //Provisional, en adelante los usuarios podran escoger la partida
+         game_id++;
+         games.put(game_id,new GameEngine(game_id, game, (Game) (new GameTest()))); //Provisional, en adelante los usuarios podran escoger la partida
      }   
 
     private void startServer() {
@@ -153,6 +150,10 @@ public class MFServer {
         return (clients.get(id) != null);
     }
     
+    public void endGame(int uid){
+        games.remove(uid);
+    }
+    
     
     
     
@@ -174,14 +175,14 @@ public class MFServer {
          public ConnectionListener() throws IOException{ 
             ss = new ServerSocket(PORT);
          }
-
+         
      @Override
      public void run() {
          try {
             if (MFServer.DEBUG_SERVER){
                      System.err.println("==> [SERVER] Waiting connection...");
             }
-             while(true){
+             while(ACCEPT_CONNECTIONS){
 
                  
                  Socket socket = ss.accept();
