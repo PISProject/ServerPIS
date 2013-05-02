@@ -13,6 +13,7 @@ import game.monsters.Monsters;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,9 +58,13 @@ public class MFServer {
     private GameQueue queue;
     public int connectionUid=0; //Provisional mientras no esta implementado el Login
    
-
+    // Buffer de strings para la interficie grafica
+    public ServerAPI serverAPI;
     
     public MFServer(){
+        serverAPI = new ServerAPI();
+        serverAPI.print("as");
+        /*System.err.println("===================SERVER DEVELOPED BY");
         games = new ArrayList<>();
         clients = new ConcurrentHashMap<>();
         queue = new GameQueue();
@@ -103,7 +108,7 @@ public class MFServer {
                 System.err.println("==>[XML] Cannot load monsters! :: Closing server!");
                 System.exit(1);
         }
-        startServer();
+        startServer();*/
         
     }
     
