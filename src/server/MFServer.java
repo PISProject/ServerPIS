@@ -16,6 +16,9 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -31,6 +34,7 @@ public class MFServer {
     public static final boolean DEBUG_CONNECTIONS = true;
     public static final boolean DEBUG_MYSQL = true;
     public static final boolean DEBUG_GAMES = true;
+    public static final boolean DEBUG_XML = true;
     public static final boolean DEBUG_SCENARIO = true;
     
     public static MFServer SERVER;
@@ -47,7 +51,7 @@ public class MFServer {
     
     //Listas//
     public ArrayList<GameEngine> games;
-    public HashMap<Integer,Connection> clients;
+    public ConcurrentHashMap<Integer,Connection> clients;
 
     
     private GameQueue queue;
@@ -57,7 +61,7 @@ public class MFServer {
     
     public MFServer(){
         games = new ArrayList<>();
-        clients = new HashMap<>();
+        clients = new ConcurrentHashMap<>();
         queue = new GameQueue();
         
         //Intentamos crear el connectionListener
@@ -80,17 +84,25 @@ public class MFServer {
             login = new LoginManager(new MySQLConnection());
         } catch (SQLException ex) {
             if(MFServer.DEBUG_SERVER){
-                System.err.println("[X] :: SQL Exception");
+                System.err.println("[X] :: SQL Exception :: Closing server");
+                System.exit(1);
             }
             System.exit(1);
         } catch (ClassNotFoundException ex) {
             if(MFServer.DEBUG_SERVER){
-                System.err.println("[X] :: MySQL Driver not found!");
+                System.err.println("[X] :: MySQL Driver not found! :: Closing server");
+                System.exit(1);
             }
         }
         threadGroup = new ThreadGroup("g");
         Monsters m = new Monsters();
-        int i = m.readFromXML();
+        try{
+            m.readFromXML();
+        } catch( IOException | ParserConfigurationException | SAXException e){
+            if (MFServer.DEBUG_XML)
+                System.err.println("==>[XML] Cannot load monsters! :: Closing server!");
+                System.exit(1);
+        }
         startServer();
         
     }

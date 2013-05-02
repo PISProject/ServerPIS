@@ -6,8 +6,8 @@ package game;
 
 import connections.Connection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -15,11 +15,11 @@ import java.util.Map;
  */
 public class Scenario {
     public int monsterCount;
-    public HashMap<Integer, Actor> actores;
+    public ConcurrentHashMap<Integer, Actor> actores;
     
     public Scenario(Connection [] connections){
         monsterCount = 0;
-        actores = new HashMap<>();
+        actores = new ConcurrentHashMap<>();
 
         for (Connection c: connections) {
             actores.put(c.uid, new Actor(c.uid));
@@ -65,7 +65,7 @@ public class Scenario {
         moveTo(uid, toAngle((int)Math.toDegrees(Math.atan2(a2.posX-a1.posX, a2.posY-a1.posY))));
     }
     
-    public void attack(int uid, int range){
+    public void attack(int uid, double range){
         /* Funcion de ataqueProvisional*/
         Actor attacker = actores.get(uid);
         for(Map.Entry actor : actores.entrySet()) {

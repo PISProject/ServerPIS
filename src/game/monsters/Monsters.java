@@ -5,20 +5,22 @@
 package game.monsters;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
  * @author kirtash
  */
-public class Monsters {
+public class Monsters{
     private static final String MONSTERS_PATH = "/src/resources/monsters/monsters.xml";
     
     HashMap<String,MonsterModel> monster_list;
@@ -26,9 +28,7 @@ public class Monsters {
         monster_list = new HashMap<>();
     }
     
-    public int readFromXML(){
-      try {
-          ArrayList<String> monsters = new ArrayList<>();
+    public int readFromXML() throws ParserConfigurationException, SAXException, IOException{
         File fXmlFile = new File(new File("").getAbsolutePath()+MONSTERS_PATH);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -47,17 +47,12 @@ public class Monsters {
 
                         Element eElement = (Element) nNode;
                         //Añadimos el 'path' de cada uno de los monstruos encontrados
-                        MonsterModel m = new MonsterModel(eElement.getElementsByTagName("path").item(0).getTextContent());
-                        monster_list.put(eElement.getElementsByTagName("name").item(0).getTextContent(), m);
+                        monster_list.put(eElement.getAttribute("name"), new MonsterModel(eElement.getAttribute("path")));
 
 
                 }
             }
-          System.out.println(monsters);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-      return 1;
+        System.out.println(monster_list);
+        return 1;
     }
 }

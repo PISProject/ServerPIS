@@ -21,31 +21,31 @@ import org.xml.sax.SAXException;
  * @author kirtash
  */
 public class MonsterModel {
-    private String name;
-    private int hp;
-    private int attack_damage;
-    private double speed;
-    private int model;
-    private double changedir_prob;
+    public String name;
+    public int hp;
+    public int attack_damage;
+    public double speed;
+    public int model;
+    public double changedir_prob;
     
     
     // PARAMETROS DE COMPORTAMIENTO
 
-    private int target; //uid del target
-    private double rand_movedir;
-    private double stchange_rate; //Cada segundo
+    public int target; //uid del target
+    public double rand_movedir;
+    public double stchange_rate; //Cada segundo
     
     
     public MonsterModel(String xmlPath) {
         try {
-            readXMLFile(xmlPath);
+            readFromXML(xmlPath);
         } catch (IOException | ParserConfigurationException | SAXException e) {
             e.printStackTrace();
         }
     }
     
     
-    private void readXMLFile(String xmlString) throws IOException, ParserConfigurationException, SAXException{
+    private void readFromXML(String xmlString) throws IOException, ParserConfigurationException, SAXException{
         ArrayList<String> monsters = new ArrayList<>();
         File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+xmlString);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -72,7 +72,6 @@ public class MonsterModel {
                 changedir_prob = Float.parseFloat(((Element)eElement.getElementsByTagName("behavior").item(0)).getAttribute("changedir"));
                 stchange_rate = Float.parseFloat(((Element)eElement.getElementsByTagName("behavior").item(0)).getAttribute("stchangerate"));
                 attack_damage = Integer.parseInt(((Element)eElement.getElementsByTagName("skills").item(0)).getAttribute("attack"));
-                //hp = Integer.parseInt(eElement.getElementsByTagName("attributes").item(1).getTextContent());
                 
                 
                 /*
