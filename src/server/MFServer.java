@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -70,8 +69,8 @@ public class MFServer {
             listener = new ConnectionListener();
         }catch(IOException ex){
             //No ha podido ser
-            if(MFServer.DEBUG_SERVER){
-                System.err.println("==> [SERVER] Listener could not be created! Leaving system [EXIT]");
+            if(MFServer.DEBUG_SERVER){ 
+               System.err.println("==> [SERVER] Listener could not be created! Leaving system [EXIT]");
             }
             
             System.exit(1);
@@ -92,7 +91,7 @@ public class MFServer {
         } catch (ClassNotFoundException ex) {
             if(MFServer.DEBUG_SERVER){
                 System.err.println("[X] :: MySQL Driver not found! :: Closing server");
-                System.exit(1);
+                //System.exit(1);
             }
         }
         threadGroup = new ThreadGroup("g");

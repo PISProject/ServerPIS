@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import server.XMLParser;
 
 /**
  *
@@ -22,14 +23,27 @@ import org.xml.sax.SAXException;
  */
 public class Monsters{
     private static final String MONSTERS_PATH = "/src/resources/monsters/monsters.xml";
-    
+    HashMap<String,String[]> monster_loader = new HashMap<>();
     HashMap<String,MonsterModel> monster_list;
     public Monsters(){
         monster_list = new HashMap<>();
+        /*
+         * Inicializamos el Hashmap para cargar los monstruos
+         */
+        
+        
+        monster_loader.put("monster",new String[]{"name","path"});
+        
     }
     
     public int readFromXML() throws ParserConfigurationException, SAXException, IOException{
-        File fXmlFile = new File(new File("").getAbsolutePath()+MONSTERS_PATH);
+        XMLParser parser = new XMLParser();
+        System.out.println(parser.readFromXML(MONSTERS_PATH, "monsters", monster_loader));
+        
+        
+        return 1;
+        
+        /*File fXmlFile = new File(new File("").getAbsolutePath()+MONSTERS_PATH);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(fXmlFile);
@@ -54,5 +68,5 @@ public class Monsters{
             }
         System.out.println(monster_list);
         return 1;
-    }
+    */}
 }
