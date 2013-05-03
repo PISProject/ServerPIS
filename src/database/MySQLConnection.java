@@ -29,7 +29,7 @@ public class MySQLConnection {
         //Establecemos la conexion con MySQL
         db = DriverManager.getConnection(LOCALHOST+DB_NAME, USER, PASSWORD);
         if (MFServer.DEBUG_MYSQL){
-            System.err.println("==> MySQL Connection stablished");
+            System.err.println("[DONE]");
         }
         query = new String();
     }
