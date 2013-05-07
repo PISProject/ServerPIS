@@ -66,7 +66,7 @@ public class MFServer {
      *
      */
     public MFServer(){
-        System.err.println("===================SERVER DEVELOPED BY");
+        System.err.println("===================SERVER DEVELOPED BY PABLO MARTINEZ ======================");
         games = new ConcurrentHashMap<>();
         clients = new ConcurrentHashMap<>();
         queue = new GameQueue();
@@ -86,7 +86,7 @@ public class MFServer {
         try {
             //Intentamos crear la base de datos
             if(MFServer.DEBUG_SERVER){
-                System.err.print("==> [SERVER] Trying to create database ...");
+                System.err.print("==> [SERVER] Connecting to database ...");
             }
             login = new LoginManager(new MySQLConnection());
         } catch (SQLException ex) {
@@ -105,11 +105,13 @@ public class MFServer {
         monsters = new Monsters();
         
         try{
+            System.err.print("==> [SERVER] Loading monsters ..");
             xmlParser = new XMLParser();
             monsters = xmlParser.parseMonsterList(MONSTERS_PATH);
+            System.err.println("[DONE]");
         } catch( IOException | ParserConfigurationException | SAXException e){
             if (MFServer.DEBUG_XML){
-                System.err.println("==>[XML] Cannot load monsters! :: Closing server!");
+                System.err.println("[X] :: Closing server");
                 e.printStackTrace();
                 System.exit(1);
             }
