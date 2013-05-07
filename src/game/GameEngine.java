@@ -7,6 +7,8 @@ package game;
 import connections.Connection;
 import connections.Streaming;
 import game.models.Game;
+import game.monsters.Monster;
+import game.monsters.Monsters;
 import java.util.Timer;
 import server.MFServer;
 
@@ -16,6 +18,7 @@ import server.MFServer;
  */
 public class GameEngine extends Thread{
     public enum GameState {LOADING, RUNNING, FINISHED};
+    public Monsters monsters;
     public int game_id;
     public Scenario scenario;
     public GameState state;
@@ -26,6 +29,7 @@ public class GameEngine extends Thread{
     int ready = 0;
     Timer clock;
     public GameEngine(int id, Connection[] game, Game t_game) {
+        this.monsters = MFServer.SERVER.monsters;
         this.game_id = id;
         scenario = new Scenario(game);
         
@@ -100,7 +104,7 @@ public class GameEngine extends Thread{
     @Override
     public void run() { // Este run se encargara de gstionar los cambios en el juego
         if (scenario.monsterCount == 0){
-            
+            scenario.addMonster(new Monster().createMonster(100, scenario, monsters.getMonsterModel("troll")));
             /*try {
                 MonsterTest m = (MonsterTest)Class.forName(s).newInstance();
                 

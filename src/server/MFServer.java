@@ -51,6 +51,7 @@ public class MFServer {
     //Listas//
     public ConcurrentHashMap<Integer,GameEngine> games;
     public ConcurrentHashMap<Integer,Connection> clients;
+    public Monsters monsters;
 
     
     private GameQueue queue;
@@ -58,6 +59,9 @@ public class MFServer {
    
     // Buffer de strings para la interficie grafica
     
+    /**
+     *
+     */
     public MFServer(){
         System.err.println("===================SERVER DEVELOPED BY");
         games = new ConcurrentHashMap<>();
@@ -95,9 +99,9 @@ public class MFServer {
             }
         }
         threadGroup = new ThreadGroup("g");
-        Monsters m = new Monsters();
+        monsters = new Monsters();
         try{
-            m.readFromXML();
+            monsters.readFromXML();
         } catch( IOException | ParserConfigurationException | SAXException e){
             if (MFServer.DEBUG_XML)
                 System.err.println("==>[XML] Cannot load monsters! :: Closing server!");
