@@ -5,6 +5,7 @@
 package game.models;
 
 import game.monsters.Monster;
+import java.util.ArrayList;
 
 /**
  * La clase game es la superclase que contiene todos los tipos de partidas.
@@ -21,9 +22,10 @@ public class Game {
     public int id;
     public int numplayers;
     public int n_hordes;
-    
+    public ArrayList<Horde> hordes;
 
     public Game() {
+        hordes = new ArrayList<>();
     }
     
     

@@ -13,4 +13,7 @@ import java.util.HashMap;
 public class Games {
     public static HashMap<Integer,Game> GAME_LIST;
     
+    public Games(){
+        GAME_LIST = new HashMap<>();
+    }
 }

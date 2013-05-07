@@ -1,11 +1,12 @@
 package game.models;
 
-import game.monsters.Monster;
 import java.util.ArrayList;
 
 public class Horde {
-    public ArrayList<Monster> list;
+    public ArrayList<String> list;
     public int time;
-    
+    public Horde(){
+        list = new ArrayList<>();
+    }
     
 }

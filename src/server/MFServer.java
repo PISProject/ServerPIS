@@ -7,12 +7,15 @@ package server;
 import connections.Connection;
 import database.MySQLConnection;
 import game.GameEngine;
+import game.models.Games;
 import game.monsters.Monsters;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -53,6 +56,7 @@ public class MFServer {
     public ConcurrentHashMap<Integer,GameEngine> games;
     public ConcurrentHashMap<Integer,Connection> clients;
     public Monsters monsters;
+    public Games game_models;
 
     private XMLParser xmlParser;
     private GameQueue queue;
@@ -64,7 +68,18 @@ public class MFServer {
      *
      */
     public MFServer(){
-        System.err.println("===================SERVER DEVELOPED BY PABLO MARTINEZ ======================");
+        System.err.println("=============================================");
+        System.err.println("================= MFServer ==================");
+        System.err.println("=============================================");
+        System.err.println("=Project developed by                       =");
+        System.err.println("=**Aaron Negrin                             =");
+        System.err.println("=**Albert Folch                             =");
+        System.err.println("=**Pablo Martinez                           =");
+        System.err.println("=**Xavi Moreno                              =");
+        System.err.println("=============================================");      
+        System.err.println(""); 
+  
+        
         games = new ConcurrentHashMap<>();
         clients = new ConcurrentHashMap<>();
         queue = new GameQueue();
@@ -101,19 +116,39 @@ public class MFServer {
         }
         threadGroup = new ThreadGroup("g");
         monsters = new Monsters();
-        
-        try{
-            System.err.print("==> [SERVER] Loading monsters ..");
+        try {
             xmlParser = new XMLParser();
-            monsters = xmlParser.parseMonsterList(MONSTERS_PATH);
-            System.err.println("[DONE]");
-        } catch( IOException | ParserConfigurationException | SAXException e){
-            if (MFServer.DEBUG_XML){
-                System.err.println("[X] :: Closing server");
-                e.printStackTrace();
-                System.exit(1);
+            try{
+                System.err.print("==> [SERVER] Loading monsters ..");
+                monsters = xmlParser.parseMonsterList(MONSTERS_PATH);
+                System.err.println("[DONE]");
+            } catch( IOException | ParserConfigurationException | SAXException e){
+                if (MFServer.DEBUG_XML){
+                    System.err.println("[X] :: Closing server");
+                    e.printStackTrace();
+                    System.exit(1);
+                }
             }
+            try{
+                System.err.print("==> [SERVER] Loading games ..");
+                game_models = new Games();
+                xmlParser.parseGameList(GAMES_PATH);
+                System.err.println(" [DONE]");
+            } catch (IOException | ParserConfigurationException | SAXException e){
+                if (MFServer.DEBUG_XML){
+                    System.err.println("[X] :: Closing server");
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+            }
+            
+            
+        } catch (ParserConfigurationException ex) {
+            
         }
+        
+        
+
         startServer();
         
     }

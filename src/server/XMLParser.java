@@ -6,6 +6,7 @@ package server;
 
 import game.models.Game;
 import game.models.Games;
+import game.models.Horde;
 import game.monsters.MonsterModel;
 import game.monsters.Monsters;
 import java.io.File;
@@ -118,7 +119,7 @@ public class XMLParser {
          * como seria 'monster' en el caso de monsters.xml
          */
         NodeList elements;
-        NodeList nList = doc.getElementsByTagName("games");
+        NodeList nList = doc.getElementsByTagName("game");
 
         //Iteramos por la lista resultante
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -139,13 +140,13 @@ public class XMLParser {
 
     private Game parseGame(String file_path) throws ParserConfigurationException, SAXException, IOException{
         Game g = new Game();
-        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+file_path);
+        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/games/"+file_path);
         Document doc = dBuilder.parse(fXmlFile);
 
         doc.getDocumentElement().normalize();
 
         //Hacemos una busqueda de todos los elementos bajo el tag 'monster'
-        NodeList nList = doc.getElementsByTagName("monster");
+        NodeList nList = doc.getElementsByTagName("game");
 
         //Iteramos por la lista resultante
 
@@ -153,25 +154,43 @@ public class XMLParser {
         if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
                 Element eElement = (Element) nNode;
+                Element e2;
                 //Añadimos el 'path' de cada uno de los monstruos encontrados
 
-                g.name = eElement.getAttribute("name");
                 
-                eElement = (Element) eElement.getElementsByTagName("basics").item(0);
-                g.id = Integer.parseInt(eElement.getAttribute("id"));
-                g.numplayers = Integer.parseInt(eElement.getAttribute("health"));
-                g.scenario = Integer.parseInt(eElement.getAttribute("looktype"));
-                g.n_hordes = Integer.parseInt(eElement.getAttribute("changedir"));
+                // Cojemos la informacion bajo el tag 'basics'
+                e2 = (Element) eElement.getElementsByTagName("basics").item(0);
+                
+                g.name = e2.getAttribute("name");
+                g.id = Integer.parseInt(e2.getAttribute("id"));
+                g.numplayers = Integer.parseInt(e2.getAttribute("numplayers"));
+                g.scenario = Integer.parseInt(e2.getAttribute("scenario"));
+                
+                
+                //Cojemos la informacion bajo el tag 'hordes'
+                e2 = (Element) eElement.getElementsByTagName("hordes").item(0);
+                g.n_hordes = Integer.parseInt(e2.getAttribute("number"));
+                
+                
+                //Sacamos una lista de los elementos contenidos en el tag 'horde'
                 nList = doc.getElementsByTagName("horde");
-                int numOfHordes = Integer.ParseInt(())
+                
+                //Nuevo elemento Horde
+                Horde h;
                 for (int i = 0; i < nList.getLength(); i++) {
-                    nNode = nList.item(i);
-                    NodeList n = nNode.get;
-                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                        for (int j = 0; j < ; j++) {
-                            
-                        }
+                    //Creamos una nueva horda por cada elemento.
+                    h = new Horde();
+                    e2 = (Element)nList.item(i);
+                    h.time = Integer.parseInt(e2.getAttribute("time"));
+                    
+                    //Creamos una segunda lista de nodos para recorrer 'monster'
+                    NodeList n2 = ((Element)nList.item(i)).getElementsByTagName("monster");
+                    for (int j = 0; j < n2.getLength(); j++) {
+                        e2 = (Element) n2.item(j);
+                        h.list.add(e2.getAttribute("name"));
                     }
+                    g.hordes.add(h);
+                }
                     
             }
                 
@@ -179,8 +198,6 @@ public class XMLParser {
                  * TODO: Optimizar el codigo, esto es un truño..
                  */
 
-
-        }
         return g;
     }
 }
