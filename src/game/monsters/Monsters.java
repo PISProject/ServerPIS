@@ -18,9 +18,9 @@ import server.XMLParser;
 public class Monsters{
     private static final String MONSTERS_PATH = "/src/resources/monsters/monsters.xml";
     HashMap<String,String[]> monster_loader = new HashMap<>();
-    HashMap<String,MonsterModel> monster_list;
+    public static HashMap<String,MonsterModel> MONSTER_LIST;
     public Monsters(){
-        monster_list = new HashMap<>();
+        MONSTER_LIST = new HashMap<>();
         /*
          * Inicializamos el Hashmap para cargar los monstruos
          */
@@ -35,11 +35,11 @@ public class Monsters{
         ArrayList<String> alist = parser.parseXMLData(MONSTERS_PATH, "monsters", monster_loader);
         int i = alist.size();
         while (i>0){
-            monster_list.put(alist.remove(0), new MonsterModel(alist.remove(0)));
+            MONSTER_LIST.put(alist.remove(0), new MonsterModel(alist.remove(0)));
             i-=2;
         }
         
-        System.out.println(monster_list);
+        System.out.println(MONSTER_LIST);
         return 1;
         
         /*File fXmlFile = new File(new File("").getAbsolutePath()+MONSTERS_PATH);
@@ -69,7 +69,7 @@ public class Monsters{
         return 1;
     */}
     
-    public MonsterModel getMonsterModel(String name){
-        return monster_list.get(name);
+    public static MonsterModel getMonsterModel(String name){
+        return MONSTER_LIST.get(name);
     }
 }

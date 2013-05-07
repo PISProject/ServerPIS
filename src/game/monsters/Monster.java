@@ -67,6 +67,10 @@ public class Monster extends Thread{
         state = defaultstate;    
         return new Actor(UID, attack_damage, hp, speed);
     }
+    public void kill(){
+        alive = false;
+    }
+    
     private void attack(){
         scenario.attack(uid, attack_range);
     }

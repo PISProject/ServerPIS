@@ -9,6 +9,7 @@ import connections.Streaming;
 import game.models.Game;
 import game.monsters.Monster;
 import game.monsters.Monsters;
+import java.util.ArrayList;
 import java.util.Timer;
 import server.MFServer;
 
@@ -17,19 +18,20 @@ import server.MFServer;
  * @author kirtash
  */
 public class GameEngine extends Thread{
+
+
     public enum GameState {LOADING, RUNNING, FINISHED};
-    public Monsters monsters;
     public int game_id;
     public Scenario scenario;
     public GameState state;
     public Game game;
     public Connection [] players;
+    private ArrayList<Monster> monsters;
     public Scenario s;
     Streaming streaming;
     int ready = 0;
     Timer clock;
     public GameEngine(int id, Connection[] game, Game t_game) {
-        this.monsters = MFServer.SERVER.monsters;
         this.game_id = id;
         scenario = new Scenario(game);
         
@@ -84,11 +86,15 @@ public class GameEngine extends Thread{
     }
     
     public void endGame(){
-        scenario.killAll();
+        destroyMonsters();
         MFServer.SERVER.endGame(game_id);
     }
     
-    
+    private void destroyMonsters() {
+        for (Monster m: monsters){
+            m.kill();
+        }
+    }
     /*
     public void disconnect(Connection aThis) {
         for (Player p:players){
@@ -107,17 +113,20 @@ public class GameEngine extends Thread{
     public void run() { // Este run se encargara de gstionar los cambios en el juego
         //if (scenario.monsterCount == 0)
             Monster m = new Monster();
-            Actor a = m.createMonster(100, scenario, monsters.getMonsterModel("Troll"));
+            monsters.add(m);
+            Actor a = m.createMonster(100, scenario, Monsters.getMonsterModel("Troll"));
             scenario.addMonster(a);// Solo para testing
             m.start();
             
             m = new Monster();
-            a = m.createMonster(101, scenario, monsters.getMonsterModel("Troll"));
+            monsters.add(m);
+            a = m.createMonster(101, scenario, Monsters.getMonsterModel("Troll"));
             scenario.addMonster(a);// Solo para testing
             m.start();
             
             m = new Monster();
-            a = m.createMonster(102, scenario, monsters.getMonsterModel("Troll"));
+            monsters.add(m);
+            a = m.createMonster(102, scenario, Monsters.getMonsterModel("Troll"));
             scenario.addMonster(a);// Solo para testing
             m.start();
             /*try {
