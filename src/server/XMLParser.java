@@ -4,15 +4,12 @@
  */
 package server;
 
-import game.monsters.MonsterModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,8 +34,23 @@ public class XMLParser {
         dBuilder = dbFactory.newDocumentBuilder();
     }
     
-    
-    public ArrayList<String> readFromXML(String file_path, String element, HashMap<String, String[]> map) throws ParserConfigurationException, SAXException, IOException{
+    /**
+     * ejemplo:
+     * File :: ~/file_path
+     * 
+     * <element>
+     *  <map.getKey(firstElement) map.getValue()[0]="..." map.getValue()[1]="..."/>
+     * </element>
+     * 
+     * @param file_path
+     * @param element
+     * @param map
+     * @return
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException 
+     */
+    public ArrayList<String> parseXMLData(String file_path, String element, HashMap<String, String[]> map) throws ParserConfigurationException, SAXException, IOException{
         ArrayList<String> retlist = new ArrayList<>();
         NodeList elements;
         fXmlFile = new File(new File("").getAbsolutePath()+file_path);
@@ -65,21 +77,13 @@ public class XMLParser {
                      * el HashMap. Lo leeremos todo como Strings.
                      */
                     Element eElement = (Element) nNode;
-                    //Añadimos el 'path' de cada uno de los monstruos encontrados
-                    Iterator it = map.entrySet().iterator();
-                    /*
-                     * Para todas las entradas del hashmap...
-                     */
-                    while (it.hasNext()){
-                        Map.Entry ent = (Map.Entry)it.next();
+                    for (Map.Entry ent : map.entrySet()) {
                         
                         elements = eElement.getElementsByTagName((String)ent.getKey());
                         String [] lista = (String [])ent.getValue();
                         for (int i = 0; i < elements.getLength(); i++) {
                             for (int j = 0; j < lista.length; j++) {
-                                System.out.println(elements.getLength());
                                 retlist.add((String)((Element)elements.item(i)).getAttribute(lista[j]));
-                                
                             }
                         }
                     }

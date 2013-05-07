@@ -6,6 +6,7 @@ package game.monsters;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,9 +39,14 @@ public class Monsters{
     
     public int readFromXML() throws ParserConfigurationException, SAXException, IOException{
         XMLParser parser = new XMLParser();
-        System.out.println(parser.readFromXML(MONSTERS_PATH, "monsters", monster_loader));
+        ArrayList<String> alist = parser.parseXMLData(MONSTERS_PATH, "monsters", monster_loader);
+        int i = alist.size();
+        while (i>0){
+            monster_list.put(alist.remove(0), new MonsterModel(alist.remove(0)));
+            i-=2;
+        }
         
-        
+        System.out.println(monster_list);
         return 1;
         
         /*File fXmlFile = new File(new File("").getAbsolutePath()+MONSTERS_PATH);
