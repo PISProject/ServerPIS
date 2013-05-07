@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<game>
+    <game id = "1" numplayers = "3" name = "game1" time= "5">
+    <hordes number = "3"/>
+        <horde number = "1">
+            <monster name = "Troll"/>
+            <monster name = "Orc"/>
+            <monster name = "Orc2"/>
+        </horde>
+        <horde number = "2">
+            <monster name = "Troll"/>
+            <monster name = "Orc"/>
+        </horde>
+        <horde number = "3">
+            <monster name = "Troll"/>
+            <monster name = "Orc"/>
+        </horde>
+    </horde>
+</game>

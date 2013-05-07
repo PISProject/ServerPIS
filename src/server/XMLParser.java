@@ -4,12 +4,10 @@
  */
 package server;
 
+import game.monsters.MonsterModel;
+import game.monsters.Monsters;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,35 +24,17 @@ import org.xml.sax.SAXException;
 public class XMLParser {
     DocumentBuilderFactory dbFactory;
     DocumentBuilder dBuilder;
-    Document doc;
-    File fXmlFile;
     
     public XMLParser() throws ParserConfigurationException{
         dbFactory = DocumentBuilderFactory.newInstance();
         dBuilder = dbFactory.newDocumentBuilder();
     }
     
-    /**
-     * ejemplo:
-     * File :: ~/file_path
-     * 
-     * <element>
-     *  <map.getKey(firstElement) map.getValue()[0]="..." map.getValue()[1]="..."/>
-     * </element>
-     * 
-     * @param file_path
-     * @param element
-     * @param map
-     * @return
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException 
-     */
-    public ArrayList<String> parseXMLData(String file_path, String element, HashMap<String, String[]> map) throws ParserConfigurationException, SAXException, IOException{
-        ArrayList<String> retlist = new ArrayList<>();
-        NodeList elements;
-        fXmlFile = new File(new File("").getAbsolutePath()+file_path);
-        doc = dBuilder.parse(fXmlFile);
+    public Monsters parseMonsterList(String file_path) throws ParserConfigurationException, SAXException, IOException{
+        Monsters monsters = new Monsters();
+
+        File fXmlFile = new File(new File("").getAbsolutePath()+file_path);
+        Document doc = dBuilder.parse(fXmlFile);
 
         
         doc.getDocumentElement().normalize();
@@ -64,8 +44,8 @@ public class XMLParser {
          * que es el que contiene los elementos fundamentales del archivo
          * como seria 'monster' en el caso de monsters.xml
          */
-        
-        NodeList nList = doc.getElementsByTagName(element);
+        NodeList elements;
+        NodeList nList = doc.getElementsByTagName("monster");
 
         //Iteramos por la lista resultante
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -77,20 +57,47 @@ public class XMLParser {
                      * el HashMap. Lo leeremos todo como Strings.
                      */
                     Element eElement = (Element) nNode;
-                    for (Map.Entry ent : map.entrySet()) {
-                        
-                        elements = eElement.getElementsByTagName((String)ent.getKey());
-                        String [] lista = (String [])ent.getValue();
-                        for (int i = 0; i < elements.getLength(); i++) {
-                            for (int j = 0; j < lista.length; j++) {
-                                retlist.add((String)((Element)elements.item(i)).getAttribute(lista[j]));
-                            }
-                        }
-                    }
+                    Monsters.MONSTER_LIST.put(eElement.getAttribute("name"), parseMonster(eElement.getAttribute("path")));
+                    
                 }
             }
-        return retlist;
+        return monsters;
 }
     
+     public MonsterModel parseMonster(String file_path) throws ParserConfigurationException, SAXException, IOException{
+        MonsterModel m = new MonsterModel();
+        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+file_path);
+        Document doc = dBuilder.parse(fXmlFile);
+
+        doc.getDocumentElement().normalize();
+
+        //Hacemos una busqueda de todos los elementos bajo el tag 'monster'
+        NodeList nList = doc.getElementsByTagName("monster");
+
+        //Iteramos por la lista resultante
+
+        Node nNode = nList.item(0);
+        if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                Element eElement = (Element) nNode;
+                //Añadimos el 'path' de cada uno de los monstruos encontrados
+
+                m.name = eElement.getAttribute("name");
+                m.speed = Double.parseDouble(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("speed"));
+                m.hp = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("health"));
+                m.model = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("looktype"));
+                m.changedir_prob = Float.parseFloat(((Element)eElement.getElementsByTagName("behavior").item(0)).getAttribute("changedir"));
+                m.stchange_rate = Float.parseFloat(((Element)eElement.getElementsByTagName("behavior").item(0)).getAttribute("stchangerate"));
+                m.attack_damage = Integer.parseInt(((Element)eElement.getElementsByTagName("skills").item(0)).getAttribute("attack"));
+                
+                
+                /*
+                 * TODO: Optimizar el codigo, esto es un truño..
+                 */
+
+
+        }
+        return m;
+     }
 }
     

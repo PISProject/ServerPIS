@@ -35,6 +35,9 @@ public class MFServer {
     public static final boolean DEBUG_XML = true;
     public static final boolean DEBUG_SCENARIO = true;
     
+    
+    private static final String MONSTERS_PATH = "/src/resources/monsters/monsters.xml";
+    private static final String GAMES_PATH = "/src/resources/games/games.xml";
     public static MFServer SERVER;
     public static boolean ACCEPT_CONNECTIONS = false;
 
@@ -53,7 +56,7 @@ public class MFServer {
     public ConcurrentHashMap<Integer,Connection> clients;
     public Monsters monsters;
 
-    
+    private XMLParser xmlParser;
     private GameQueue queue;
     public int connectionUid=0; //Provisional mientras no esta implementado el Login
    
@@ -89,7 +92,7 @@ public class MFServer {
         } catch (SQLException ex) {
             if(MFServer.DEBUG_SERVER){
                 System.err.println("[X] :: SQL Exception :: Closing server");
-                System.exit(1);
+                //System.exit(1);
             }
             System.exit(1);
         } catch (ClassNotFoundException ex) {
@@ -100,12 +103,16 @@ public class MFServer {
         }
         threadGroup = new ThreadGroup("g");
         monsters = new Monsters();
+        
         try{
-            monsters.readFromXML();
+            xmlParser = new XMLParser();
+            monsters = xmlParser.parseMonsterList(MONSTERS_PATH);
         } catch( IOException | ParserConfigurationException | SAXException e){
-            if (MFServer.DEBUG_XML)
+            if (MFServer.DEBUG_XML){
                 System.err.println("==>[XML] Cannot load monsters! :: Closing server!");
+                e.printStackTrace();
                 System.exit(1);
+            }
         }
         startServer();
         
