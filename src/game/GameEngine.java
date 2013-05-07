@@ -32,6 +32,7 @@ public class GameEngine extends Thread{
     int ready = 0;
     Timer clock;
     public GameEngine(int id, Connection[] game, Game t_game) {
+        monsters = new ArrayList<>();
         this.game_id = id;
         scenario = new Scenario(game);
         
@@ -79,7 +80,7 @@ public class GameEngine extends Thread{
                 System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
         }
         streaming.start(); // Aqui empieza a correr el Streaming
-         this.start();
+        this.start();
         
         //clock = new Timer();
         
@@ -115,18 +116,6 @@ public class GameEngine extends Thread{
             Monster m = new Monster();
             monsters.add(m);
             Actor a = m.createMonster(100, scenario, Monsters.getMonsterModel("Troll"));
-            scenario.addMonster(a);// Solo para testing
-            m.start();
-            
-            m = new Monster();
-            monsters.add(m);
-            a = m.createMonster(101, scenario, Monsters.getMonsterModel("Troll"));
-            scenario.addMonster(a);// Solo para testing
-            m.start();
-            
-            m = new Monster();
-            monsters.add(m);
-            a = m.createMonster(102, scenario, Monsters.getMonsterModel("Troll"));
             scenario.addMonster(a);// Solo para testing
             m.start();
             /*try {
