@@ -107,7 +107,6 @@ public class GameEngine extends Thread{
         //if (scenario.monsterCount == 0)
             Monster m = new Monster();
             Actor a = m.createMonster(ready, scenario, monsters.getMonsterModel("Troll"));
-            if (a==null) System.out.println("NO ENCONTRADO");
             scenario.addMonster(a);// Solo para testing
             m.start();
             
