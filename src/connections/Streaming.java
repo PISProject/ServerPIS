@@ -46,6 +46,7 @@ import server.MFServer;
                 for (Connection p: game.players) {
                     if(p.state == Connection.ConnectionState.IN_GAME) p.pushMapToClient(s);
                 }
+                System.out.println(s);
 
                 // El threa d se va a dormir durante un tiempo de refresco = t;
                 try {

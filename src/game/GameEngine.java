@@ -53,7 +53,7 @@ public class GameEngine extends Thread{
         streaming = new Streaming(this);
         // GameThread acaba, hasta que todas las conexiones esten listas.
         
-        //this.start();
+        this.start();
     }
 
     
@@ -83,6 +83,7 @@ public class GameEngine extends Thread{
     }
     
     public void endGame(){
+        scenario.killAll();
         MFServer.SERVER.endGame(game_id);
     }
     
@@ -103,9 +104,14 @@ public class GameEngine extends Thread{
 
     @Override
     public void run() { // Este run se encargara de gstionar los cambios en el juego
-        if (scenario.monsterCount == 0){
+        //if (scenario.monsterCount == 0)
+            Monster m = new Monster();
+            Actor a = m.createMonster(ready, scenario, monsters.getMonsterModel("Troll"));
+            if (a==null) System.out.println("NO ENCONTRADO");
+            scenario.addMonster(a);// Solo para testing
+            m.start();
             
-            scenario.addMonster(new Monster().createMonster(100, scenario, monsters.getMonsterModel("troll")));// Solo para testing
+            
             /*try {
                 MonsterTest m = (MonsterTest)Class.forName(s).newInstance();
                 
@@ -115,7 +121,7 @@ public class GameEngine extends Thread{
             } catch (IllegalAccessException ex) {
                 Logger.getLogger(GameEngine.class.getName()).log(Level.SEVERE, null, ex);
             }*/
-        }
+        //}
     }
 
 }
