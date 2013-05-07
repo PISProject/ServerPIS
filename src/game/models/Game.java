@@ -17,12 +17,13 @@ public class Game {
     public int estimatedTime;
     public int scenario;
     public String [] monsters;
+    public String name;
+    public int id;
+    public int numplayers;
+    public int n_hordes;
     
-    
-    public Game(String [] monsters, int scenario, int estimatedTime){
-        this.monsters = monsters;
-        this.scenario = scenario;
-        this.estimatedTime = estimatedTime;
+
+    public Game() {
     }
     
     

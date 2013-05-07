@@ -7,8 +7,6 @@ package server;
 import connections.Connection;
 import database.MySQLConnection;
 import game.GameEngine;
-import game.models.Game;
-import game.models.GameTest;
 import game.monsters.Monsters;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -136,7 +134,11 @@ public class MFServer {
     
      private void startGame(Connection[] game) {
          game_id++;
-         games.put(game_id,new GameEngine(game_id, game, (Game) (new GameTest()))); //Provisional, en adelante los usuarios podran escoger la partida
+         System.err.println("NO IMPLEMENTADO!");
+         /*
+          * Falta implementar el inicio de la partida.
+          */
+         //games.put(game_id,new GameEngine(game_id, game, new Game())); //Provisional, en adelante los usuarios podran escoger la partida
      }   
 
     private void startServer() {

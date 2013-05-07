@@ -4,6 +4,8 @@
  */
 package server;
 
+import game.models.Game;
+import game.models.Games;
 import game.monsters.MonsterModel;
 import game.monsters.Monsters;
 import java.io.File;
@@ -99,5 +101,87 @@ public class XMLParser {
         }
         return m;
      }
+     
+     
+        public Monsters parseGameList(String file_path) throws ParserConfigurationException, SAXException, IOException{
+        Monsters monsters = new Monsters();
+
+        File fXmlFile = new File(new File("").getAbsolutePath()+file_path);
+        Document doc = dBuilder.parse(fXmlFile);
+
+        
+        doc.getDocumentElement().normalize();
+
+        /*
+         * Hacemos una busqueda de todos los elementos bajo el tag 'element', 
+         * que es el que contiene los elementos fundamentales del archivo
+         * como seria 'monster' en el caso de monsters.xml
+         */
+        NodeList elements;
+        NodeList nList = doc.getElementsByTagName("games");
+
+        //Iteramos por la lista resultante
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    /*
+                     * Ahora, para cada uno de los nodos bajo el tag 'element' 
+                     * hemos de obtener los atributos que vienen determinados en
+                     * el HashMap. Lo leeremos todo como Strings.
+                     */
+                    Element eElement = (Element) nNode;
+                    Games.GAME_LIST.put(Integer.parseInt(eElement.getAttribute("id")), parseGame(eElement.getAttribute("path")));
+                    
+                }
+            }
+        return monsters;
+}
+
+    private Game parseGame(String file_path) throws ParserConfigurationException, SAXException, IOException{
+        Game g = new Game();
+        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+file_path);
+        Document doc = dBuilder.parse(fXmlFile);
+
+        doc.getDocumentElement().normalize();
+
+        //Hacemos una busqueda de todos los elementos bajo el tag 'monster'
+        NodeList nList = doc.getElementsByTagName("monster");
+
+        //Iteramos por la lista resultante
+
+        Node nNode = nList.item(0);
+        if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                Element eElement = (Element) nNode;
+                //Añadimos el 'path' de cada uno de los monstruos encontrados
+
+                g.name = eElement.getAttribute("name");
+                
+                eElement = (Element) eElement.getElementsByTagName("basics").item(0);
+                g.id = Integer.parseInt(eElement.getAttribute("id"));
+                g.numplayers = Integer.parseInt(eElement.getAttribute("health"));
+                g.scenario = Integer.parseInt(eElement.getAttribute("looktype"));
+                g.n_hordes = Integer.parseInt(eElement.getAttribute("changedir"));
+                nList = doc.getElementsByTagName("horde");
+                int numOfHordes = Integer.ParseInt(())
+                for (int i = 0; i < nList.getLength(); i++) {
+                    nNode = nList.item(i);
+                    NodeList n = nNode.get;
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                        for (int j = 0; j < ; j++) {
+                            
+                        }
+                    }
+                    
+            }
+                
+                /*
+                 * TODO: Optimizar el codigo, esto es un truño..
+                 */
+
+
+        }
+        return g;
+    }
 }
     
