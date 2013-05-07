@@ -53,7 +53,7 @@ public class GameEngine extends Thread{
         streaming = new Streaming(this);
         // GameThread acaba, hasta que todas las conexiones esten listas.
         
-        this.start();
+       
     }
 
     
@@ -77,6 +77,7 @@ public class GameEngine extends Thread{
                 System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
         }
         streaming.start(); // Aqui empieza a correr el Streaming
+         this.start();
         
         //clock = new Timer();
         
@@ -106,11 +107,19 @@ public class GameEngine extends Thread{
     public void run() { // Este run se encargara de gstionar los cambios en el juego
         //if (scenario.monsterCount == 0)
             Monster m = new Monster();
-            Actor a = m.createMonster(ready, scenario, monsters.getMonsterModel("Troll"));
+            Actor a = m.createMonster(100, scenario, monsters.getMonsterModel("Troll"));
             scenario.addMonster(a);// Solo para testing
             m.start();
             
+            m = new Monster();
+            a = m.createMonster(101, scenario, monsters.getMonsterModel("Troll"));
+            scenario.addMonster(a);// Solo para testing
+            m.start();
             
+            m = new Monster();
+            a = m.createMonster(102, scenario, monsters.getMonsterModel("Troll"));
+            scenario.addMonster(a);// Solo para testing
+            m.start();
             /*try {
                 MonsterTest m = (MonsterTest)Class.forName(s).newInstance();
                 

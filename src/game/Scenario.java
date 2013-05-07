@@ -53,9 +53,9 @@ public class Scenario {
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(toAngle(angle)))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(toAngle(angle)))*speed);
-        if (!checkCollision(uid,x, y)){
+       // if (!checkCollision(uid,x, y)){
             a.moveTo(x,y);
-        }
+        //}
     }
     
     public void moveToTarget(int uid, int t_uid){
