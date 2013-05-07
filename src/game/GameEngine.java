@@ -104,7 +104,8 @@ public class GameEngine extends Thread{
     @Override
     public void run() { // Este run se encargara de gstionar los cambios en el juego
         if (scenario.monsterCount == 0){
-            scenario.addMonster(new Monster().createMonster(100, scenario, monsters.getMonsterModel("troll")));
+            
+            scenario.addMonster(new Monster().createMonster(100, scenario, monsters.getMonsterModel("troll")));// Solo para testing
             /*try {
                 MonsterTest m = (MonsterTest)Class.forName(s).newInstance();
                 
