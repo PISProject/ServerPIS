@@ -7,6 +7,7 @@ package server;
 import connections.Connection;
 import database.MySQLConnection;
 import game.GameEngine;
+import game.models.Game;
 import game.models.Games;
 import game.monsters.Monsters;
 import java.io.IOException;
@@ -14,8 +15,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -55,11 +54,11 @@ public class MFServer {
     //Listas//
     public ConcurrentHashMap<Integer,GameEngine> games;
     public ConcurrentHashMap<Integer,Connection> clients;
+    private ConcurrentHashMap<Integer,GameQueue> queues;
     public Monsters monsters;
     public Games game_models;
-
     private XMLParser xmlParser;
-    private GameQueue queue;
+
     public int connectionUid=0; //Provisional mientras no esta implementado el Login
    
     // Buffer de strings para la interficie grafica
@@ -68,21 +67,21 @@ public class MFServer {
      *
      */
     public MFServer(){
-        System.err.println("=============================================");
-        System.err.println("================= MFServer ==================");
-        System.err.println("=============================================");
-        System.err.println("=Project developed by                       =");
-        System.err.println("=**Aaron Negrin                             =");
-        System.err.println("=**Albert Folch                             =");
-        System.err.println("=**Pablo Martinez                           =");
-        System.err.println("=**Xavi Moreno                              =");
-        System.err.println("=============================================");      
-        System.err.println(""); 
+        System.out.println("||==========================================||");
+        System.out.println("||=============== MFServer =================||");
+        System.out.println("||==========================================||");
+        System.out.println("||Project developed by                      ||");
+        System.out.println("||**Aaron Negrin                            ||");
+        System.out.println("||**Albert Folch                            ||");
+        System.out.println("||**Pablo Martinez                          ||");
+        System.out.println("||**Xavi Moreno                             ||");
+        System.out.println("||==========================================||");      
+        System.out.println(""); 
   
         
         games = new ConcurrentHashMap<>();
         clients = new ConcurrentHashMap<>();
-        queue = new GameQueue();
+
         
         //Intentamos crear el connectionListener
         try{
@@ -90,7 +89,7 @@ public class MFServer {
         }catch(IOException ex){
             //No ha podido ser
             if(MFServer.DEBUG_SERVER){ 
-               System.err.println("==> [SERVER] Listener could not be created! Leaving system [EXIT]");
+               System.out.println("==> [SERVER] Listener could not be created! Leaving system [EXIT]");
             }
             
             System.exit(1);
@@ -99,56 +98,62 @@ public class MFServer {
         try {
             //Intentamos crear la base de datos
             if(MFServer.DEBUG_SERVER){
-                System.err.print("==> [SERVER] Connecting to database ...");
+                System.out.print("==> [SERVER] Connecting to database ...");
             }
             login = new LoginManager(new MySQLConnection());
+            System.out.println("[DONE]");
         } catch (SQLException ex) {
             if(MFServer.DEBUG_SERVER){
-                System.err.println("[X] :: SQL Exception :: Closing server");
+                System.out.println("[X] :: SQL Exception :: Closing server");
                 //System.exit(1);
             }
             System.exit(1);
         } catch (ClassNotFoundException ex) {
             if(MFServer.DEBUG_SERVER){
-                System.err.println("[X] :: MySQL Driver not found! :: Closing server");
+                System.out.println("[X] :: MySQL Driver not found! :: Closing server");
                 //System.exit(1);
             }
         }
         threadGroup = new ThreadGroup("g");
         monsters = new Monsters();
         try {
+            System.out.print("==> [SERVER] Creating XML Parser ..");
             xmlParser = new XMLParser();
+            System.out.println("[DONE]");
             try{
-                System.err.print("==> [SERVER] Loading monsters ..");
+                System.out.print("==> [SERVER] Loading monsters ..");
                 monsters = xmlParser.parseMonsterList(MONSTERS_PATH);
-                System.err.println("[DONE]");
+                System.out.println("[DONE]");
             } catch( IOException | ParserConfigurationException | SAXException e){
                 if (MFServer.DEBUG_XML){
-                    System.err.println("[X] :: Closing server");
-                    e.printStackTrace();
+                    System.out.println("[X] :: Closing server");
                     System.exit(1);
                 }
             }
             try{
-                System.err.print("==> [SERVER] Loading games ..");
+                System.out.print("==> [SERVER] Loading games ..");
                 game_models = new Games();
                 xmlParser.parseGameList(GAMES_PATH);
-                System.err.println(" [DONE]");
+                System.out.println(" [DONE]");
             } catch (IOException | ParserConfigurationException | SAXException e){
                 if (MFServer.DEBUG_XML){
-                    System.err.println("[X] :: Closing server");
+                    System.out.println("[X] :: Closing server");
                     e.printStackTrace();
                     System.exit(1);
                 }
             }
-            
-            
         } catch (ParserConfigurationException ex) {
-            
+            System.out.println("[X] :: Cannot create parser");
         }
         
-        
-
+        System.out.print("==> [SERVER] Creating game queues ..");
+        queues = new ConcurrentHashMap<>();
+        Game g;
+        for (int i: Games.GAME_LIST.keySet()) {
+            g = Games.GAME_LIST.get(i);
+            queues.put(g.id, new GameQueue(g.id,g.numplayers));
+        }
+        System.out.println("[DONE]");
         startServer();
         
     }
@@ -157,24 +162,14 @@ public class MFServer {
         clients.put(con.uid,con);
     }
     
-    public void joinQueue(Connection aThis) {
-        Connection [] game = queue.join(aThis);
-        if (game != null){
-            if (MFServer.DEBUG_GAMES){
-                System.err.println("==> [SERVER]Starting new game!");
-            }
-            startGame(game);
-        }
-    }  
+    public void joinQueue(int id, Connection con) {
+        queues.get(id).join(con);
+    }
     
-     private void startGame(Connection[] game) {
-         game_id++;
-         System.err.println("NO IMPLEMENTADO!");
-         /*
-          * Falta implementar el inicio de la partida.
-          */
-         //games.put(game_id,new GameEngine(game_id, game, new Game())); //Provisional, en adelante los usuarios podran escoger la partida
-     }   
+    public void createGame(int game_type, Connection [] g){
+        game_id++;
+        games.put(game_id, new GameEngine(game_id, g, game_models.getGame(game_type)));
+    }
 
     private void startServer() {
         ACCEPT_CONNECTIONS = true;
@@ -182,16 +177,16 @@ public class MFServer {
         listener.start();
     }
     
-    public boolean quitQueue(Connection con){
-        return queue.quit(con);
+    public boolean quitQueue(int game_type, Connection con){
+        return queues.get(game_type).quit(con);
     }
+    
+    
+    
     public void onDisconnectClient(Connection con) {
-        if (queue.isConnectionInQueue(con)){
-            queue.quit(con);
-        }
         clients.remove(con.uid);
         if(MFServer.DEBUG_SERVER){
-            System.err.println("==> [SERVER] Client "+con.uid+" left.");
+            System.out.println("==> [SERVER] Client "+con.uid+" left.");
         }
     }
 
@@ -229,7 +224,7 @@ public class MFServer {
      public void run() {
          try {
             if (MFServer.DEBUG_SERVER){
-                     System.err.println("==> [SERVER] Waiting connection...");
+                     System.out.println("==> [SERVER] Waiting connection...");
             }
              while(ACCEPT_CONNECTIONS){
 
@@ -238,12 +233,12 @@ public class MFServer {
                  new Connection(socket, login);
                  
                 if (MFServer.DEBUG_SERVER){
-                     System.err.println("==> [SERVER] New incoming connection detected.");
+                     System.out.println("==> [SERVER] New incoming connection detected.");
                  }
              }
          } catch (IOException ex) {
             if (MFServer.DEBUG_SERVER){
-                System.err.println("==> [SERVER] Error while creating a new client socket. Listener it's now down.");
+                System.out.println("==> [SERVER] Error while creating a new client socket. Listener it's now down.");
             }
          }
 

@@ -27,6 +27,8 @@ public class Connection extends Thread{
     public int uid;
     public String name;
     
+    
+    private int game_type_joining;
     private Socket socket;
     private GameEngine game;
     private Scenario scenario;
@@ -140,15 +142,16 @@ public class Connection extends Thread{
     ////////////////////////////////////////////////////////////////////////////
     // OUT_GAME Methods
     ////////////////////////////////////////////////////////////////////////////
-    void joinQueue() {
-        MFServer.SERVER.joinQueue(this);
+    void joinQueue(int game_type) {
+        this.game_type_joining = game_type;
+        MFServer.SERVER.joinQueue(game_type_joining, this);
     }
 
     void quitQueue() {
         if(MFServer.DEBUG_CONNECTIONS){
             System.err.print("==> Client "+uid+" is trying to left queue.");
         }
-        if (MFServer.SERVER.quitQueue(this)){
+        if (MFServer.SERVER.quitQueue(game_type_joining,this)){
             this.state = ConnectionState.OUT_GAME;
             if(MFServer.DEBUG_CONNECTIONS){
                     System.err.println("[DONE]");
@@ -241,6 +244,7 @@ public class Connection extends Thread{
                 game.connectionIsReady(this);
                 MFServer.SERVER.onDisconnectClient(this);
             case QUEUE:
+                MFServer.SERVER.quitQueue(game_type_joining, this);
                 MFServer.SERVER.onDisconnectClient(this);
                 break;
 

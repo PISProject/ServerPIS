@@ -16,4 +16,8 @@ public class Games {
     public Games(){
         GAME_LIST = new HashMap<>();
     }
+    
+    public Game getGame(int i){
+        return GAME_LIST.get(i);
+    }
 }

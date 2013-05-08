@@ -58,7 +58,7 @@ public class Protocol {
         else if (client.state == Connection.ConnectionState.OUT_GAME){
             switch (func) {
                 case JOIN_QUEUE:
-                    client.joinQueue();
+                    client.joinQueue(Integer.parseInt(args[0]));
                     break;
                 case QUIT_QUEUE:
                     client.quitQueue();
