@@ -151,7 +151,7 @@ public class MFServer {
         Game g;
         for (int i: Games.GAME_LIST.keySet()) {
             g = Games.GAME_LIST.get(i);
-            queues.put(g.id, new GameQueue(g.id,g.numplayers));
+            queues.put(g.game_type, new GameQueue(g.game_type,g.numplayers));
         }
         System.out.println("[DONE]");
         startServer();
