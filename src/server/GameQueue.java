@@ -19,6 +19,7 @@ class GameQueue {
     
     public GameQueue(int game_type, int game_size){
         this.game_size = game_size;
+        this.game_type = game_type;
     }
     
     // Metodo que junta a los cuatro players. Es un metodo sincronizado para que
