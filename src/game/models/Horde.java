@@ -8,5 +8,12 @@ public class Horde {
     public Horde(){
         list = new ArrayList<>();
     }
+    public boolean hasNext(){
+        return list.size()>0;
+    }
     
+    public String getNextMonster(){
+        return list.remove(0);
+        
+    }
 }

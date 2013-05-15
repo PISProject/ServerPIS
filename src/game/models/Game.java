@@ -4,7 +4,6 @@
  */
 package game.models;
 
-import game.monsters.Monster;
 import java.util.ArrayList;
 
 /**

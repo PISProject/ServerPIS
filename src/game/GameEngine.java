@@ -7,31 +7,32 @@ package game;
 import connections.Connection;
 import connections.Streaming;
 import game.models.Game;
+import game.models.Horde;
 import game.monsters.Monster;
 import game.monsters.Monsters;
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 import server.MFServer;
 
-/**
- *
- * @author kirtash
- */
-public class GameEngine extends Thread{
+public class GameEngine{
 
 
     public enum GameState {LOADING, RUNNING, FINISHED};
     public int game_id;
+    public int monster_id = 1000;
     public Scenario scenario;
     public GameState state;
     public Game game;
     public Connection [] players;
     private ArrayList<Monster> monsters;
+    private int hordeCount;
     public Scenario s;
     Streaming streaming;
     int ready = 0;
-    Timer clock;
+    private Timer clock;
     public GameEngine(int id, Connection[] game, Game t_game) {
+        hordeCount = 0;
         monsters = new ArrayList<>();
         this.game_id = id;
         scenario = new Scenario(game);
@@ -46,13 +47,17 @@ public class GameEngine extends Thread{
         for (Connection c: game) {
             c.setGame(this);
             c.setScenario(scenario);
-            info+=c.uid+","+c.name+"*";
+            
+            info+=c.uid+","+c.name+/*","+c.player_model+*/"*";
+        
         }
         // Notificamos a todas las conexiones que se ha creado un juego y que tienen
         // que empezar a cargar
         for(Connection c: game){
             c.notifyGameFound(info);
         }
+        
+        
         streaming = new Streaming(this);
         // GameThread acaba, hasta que todas las conexiones esten listas.
         
@@ -60,7 +65,7 @@ public class GameEngine extends Thread{
     }
 
     
-    // Cuando una conexion esta lista para inciar la partida, notifica al servidor.
+    // Cuando una conexion est        clock.a lista para inciar la partida, notifica al servidor.
     public synchronized void connectionIsReady(Connection aThis) {
         ready++;
         if (MFServer.DEBUG_CONNECTIONS || MFServer.DEBUG_GAMES){
@@ -73,20 +78,52 @@ public class GameEngine extends Thread{
             startGameThread();
         }
     }
+    
+    public void respawn(int uid){
+        scenario.addHeroe(uid);
+    }
 
     public void startGameThread() {
+        // Creamos los timers para las hordas.
+        clock = new Timer();
+        for (int i = 0; i < game.n_hordes; i++) {
+            clock.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    summonHorde();
+                }
+            }, game.hordes.get(i).time);
+        }
         state = GameState.RUNNING;
         if (MFServer.DEBUG_GAMES){
                 System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
         }
         streaming.start(); // Aqui empieza a correr el Streaming
-        this.start();
-        
         //clock = new Timer();
         
     }
     
+    public void playerDead(int id){
+        new RespawnTask(clock, id);
+    }
+    
+    public void summonHorde(){
+        if (MFServer.SERVER.DEBUG_GAMES){
+            System.out.println("==> [GAME] Summonning "+hordeCount+" horde.");
+        }
+        Horde horde = game.hordes.get(hordeCount);
+        hordeCount++;
+        while(horde.hasNext()){
+            Monster m = new Monster();
+            Actor a = m.createMonster(monster_id, scenario, Monsters.getMonsterModel(horde.getNextMonster()));
+            scenario.addMonster(a);
+            m.start();
+        }
+    }
+    
     public void endGame(){
+        clock.cancel();
         destroyMonsters();
         MFServer.SERVER.endGame(game_id);
     }
@@ -110,24 +147,18 @@ public class GameEngine extends Thread{
     // La clase Streaming es la que enviara constantemente el mapa a todos los
     // jugadores de la partida, lo hara incondicionalmente cada 100ms.
 
-    @Override
-    public void run() { // Este run se encargara de gstionar los cambios en el juego
-        //if (scenario.monsterCount == 0)
-            Monster m = new Monster();
-            monsters.add(m);
-            Actor a = m.createMonster(100, scenario, Monsters.getMonsterModel("Troll"));
-            scenario.addMonster(a);// Solo para testing
-            m.start();
-            /*try {
-                MonsterTest m = (MonsterTest)Class.forName(s).newInstance();
-                
-            } catch (ClassNotFoundException ex) {
-            } catch (InstantiationException ex) {
-                Logger.getLogger(GameEngine.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IllegalAccessException ex) {
-                Logger.getLogger(GameEngine.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-        //}
-    }
 
+    public class RespawnTask extends TimerTask{
+        private int uid;
+        private long TIME_TO_RESPAWN;
+        public RespawnTask(Timer clock, int id){
+            this.uid = id;
+            clock.schedule(this, TIME_TO_RESPAWN);
+        }
+
+        @Override
+        public void run() {
+            respawn(uid);
+        }
+    }
 }
