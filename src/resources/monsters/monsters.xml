@@ -3,5 +3,4 @@
 <monsters>
     <monster name = "Troll" path="troll.xml"/>
     <monster name = "Orc" path="orc.xml"/>
-    <monster name = "Orc2" path="orc.xml"/>
 </monsters>
