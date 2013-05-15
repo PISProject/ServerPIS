@@ -34,6 +34,7 @@ public class GameEngine{
     public GameEngine(int id, Connection[] game, Game t_game) {
         hordeCount = 0;
         monsters = new ArrayList<>();
+        this.game = t_game;
         this.game_id = id;
         scenario = new Scenario(game);
         
