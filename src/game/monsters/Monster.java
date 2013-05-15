@@ -7,6 +7,9 @@ package game.monsters;
 import game.Actor;
 import game.Scenario;
 import static java.lang.Thread.sleep;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import server.MFServer;
 
 /**
@@ -19,6 +22,7 @@ public class Monster extends Thread{
     public Monster(){
         //---- Para poder cargar el monstruo hay que utilizar el metodo createMonster(-,-,-)
     }
+
     private enum MonsterState {LOOKING_FOR_TARGET, FOLLOWING_TARGET, WALKING_AROUND, DEAD,};
     
     private boolean created = false;
@@ -82,7 +86,7 @@ public class Monster extends Thread{
     }
     
     private void lookForATarget(){
-        /*target = scenario.lookForNearbyHero(uid,10);*/
+        target = lookForNearbyHero(uid,10);
         if (target != -1){
           state = MonsterState.FOLLOWING_TARGET;
           
@@ -100,6 +104,20 @@ public class Monster extends Thread{
         }      
     }
     
+    private int lookForNearbyHero(int uid, int i) {
+        ConcurrentHashMap<Integer,Actor> a = scenario.actores;
+        Actor me = a.get(uid);
+        for(Map.Entry m : a.entrySet()){
+            if (!((int)m.getKey()== uid) && isInRange(me,(Actor) m.getValue(),i)){
+                return (int)m.getKey();
+            }
+        }
+        return -1;
+    }
+    private boolean isInRange(Actor a1, Actor a2, int range){
+        return (Math.abs(a1.posX-a2.posX) < range && Math.abs(a1.posY-a2.posY)< range);
+    }
+    
     
     //////////////////// IA del monstruo ////////////////////////
     @Override
@@ -112,13 +130,13 @@ public class Monster extends Thread{
                 randnum = Math.random();
 
                 // Gestion de cambio de estado
-                /*if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
+                if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
                     state = (state == MonsterState.LOOKING_FOR_TARGET)? MonsterState.WALKING_AROUND : MonsterState.LOOKING_FOR_TARGET;
                     if (MFServer.DEBUG_MONSTERS){
 
                         System.err.print("==> [MONSTER "+uid+"] Switching state");
                     }
-                }*/
+                }
 
                 switch(state){
                     case LOOKING_FOR_TARGET:
