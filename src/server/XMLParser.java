@@ -61,7 +61,6 @@ public class XMLParser {
                      */
                     Element eElement = (Element) nNode;
                     Monsters.MONSTER_LIST.put(eElement.getAttribute("name"), parseMonster(eElement.getAttribute("path")));
-                    
                 }
             }
         return monsters;
@@ -104,8 +103,8 @@ public class XMLParser {
      }
      
      
-        public Monsters parseGameList(String file_path) throws ParserConfigurationException, SAXException, IOException{
-        Monsters monsters = new Monsters();
+        public void parseGameList(String file_path) throws ParserConfigurationException, SAXException, IOException{
+        //Monsters monsters = new Monsters();
 
         File fXmlFile = new File(new File("").getAbsolutePath()+file_path);
         Document doc = dBuilder.parse(fXmlFile);
@@ -135,7 +134,7 @@ public class XMLParser {
                     
                 }
             }
-        return monsters;
+        //return monsters;
 }
 
     private Game parseGame(String file_path) throws ParserConfigurationException, SAXException, IOException{

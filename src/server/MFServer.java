@@ -55,7 +55,6 @@ public class MFServer {
     public ConcurrentHashMap<Integer,GameEngine> games;
     public ConcurrentHashMap<Integer,Connection> clients;
     private ConcurrentHashMap<Integer,GameQueue> queues;
-    public Monsters monsters;
     public Games game_models;
     private XMLParser xmlParser;
 
@@ -115,14 +114,13 @@ public class MFServer {
             }
         }
         threadGroup = new ThreadGroup("g");
-        monsters = new Monsters();
         try {
             System.out.print("==> [SERVER] Creating XML Parser ..");
             xmlParser = new XMLParser();
             System.out.println("[DONE]");
             try{
                 System.out.print("==> [SERVER] Loading monsters ..");
-                monsters = xmlParser.parseMonsterList(MONSTERS_PATH);
+                xmlParser.parseMonsterList(MONSTERS_PATH);
                 System.out.println("[DONE]");
             } catch( IOException | ParserConfigurationException | SAXException e){
                 if (MFServer.DEBUG_XML){
@@ -154,6 +152,7 @@ public class MFServer {
             queues.put(g.game_type, new GameQueue(g.game_type,g.numplayers));
         }
         System.out.println("[DONE]");
+        
         startServer();
         
     }
@@ -168,7 +167,7 @@ public class MFServer {
     
     public void createGame(int game_type, Connection [] g){
         game_id++;
-        games.put(game_id, new GameEngine(game_id, g, game_models.getGame(game_type)));
+        games.put(game_id, new GameEngine(game_id, g, Games.GAME_LIST.get(game_type)));
     }
 
     private void startServer() {

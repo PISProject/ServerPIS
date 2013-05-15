@@ -11,7 +11,6 @@ import java.util.HashMap;
  * @author kirtash
  */
 public class Monsters{
-    HashMap<String,String[]> monster_loader = new HashMap<>();
     public static HashMap<String,MonsterModel> MONSTER_LIST;
     
     public Monsters(){
