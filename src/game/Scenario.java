@@ -51,8 +51,8 @@ public class Scenario {
         float x, y;
         Actor a = actores.get(uid);
         double speed = a.speed;
-        y = a.posY+(float) (Math.sin(Math.toRadians(toAngle(angle)))*speed);
-        x = a.posX+(float) (Math.cos(Math.toRadians(toAngle(angle)))*speed);
+        y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
+        x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
        if (!checkCollision(uid,x, y)){
             a.moveTo(x,y);
         }
