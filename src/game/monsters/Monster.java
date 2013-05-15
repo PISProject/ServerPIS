@@ -89,7 +89,7 @@ public class Monster extends Thread{
         Actor a1,a2;
         a1 = scenario.actores.get(uid);
         a2 = scenario.actores.get(t_uid);
-        scenario.moveTo(uid, (int)Math.toDegrees(Math.atan((a2.posX-a1.posX)/(a2.posY-a1.posY))));
+        scenario.moveTo(uid, ((int)Math.toDegrees(Math.atan((a2.posX-a1.posX)/(a2.posY-a1.posY))))+180);
     }
     
     private void lookForATarget(){
