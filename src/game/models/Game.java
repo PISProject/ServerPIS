@@ -18,7 +18,7 @@ public class Game {
     public int scenario;
     public String [] monsters;
     public String name;
-    public int id;
+    public int game_type;
     public int numplayers;
     public int n_hordes;
     public ArrayList<Horde> hordes;
