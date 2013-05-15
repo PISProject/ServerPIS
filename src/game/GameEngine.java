@@ -32,6 +32,7 @@ public class GameEngine{
     int ready = 0;
     private Timer clock;
     public GameEngine(int id, Connection[] game, Game t_game) {
+        System.out.println(t_game);
         hordeCount = 0;
         monsters = new ArrayList<>();
         this.game = t_game;
