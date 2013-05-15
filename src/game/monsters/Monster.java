@@ -150,12 +150,12 @@ public class Monster extends Thread{
                         lookForATarget();
                         break;
                     case WALKING_AROUND:
-                        if (randnum<changedir_prob){
+                        /*if (randnum<changedir_prob){
                             rand_movedir = Math.random()*180;
                             if (MFServer.DEBUG_MONSTERS){
                                 System.err.println("==> [MONSTER "+uid+"] New direction: "+rand_movedir);
                             }
-                        }
+                        }*/
                         scenario.moveTo(uid, (int)rand_movedir);
                         break;
                     case FOLLOWING_TARGET:
