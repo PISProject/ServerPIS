@@ -58,13 +58,6 @@ public class Scenario {
         }
     }
     
-    public void moveToTarget(int uid, int t_uid){
-        Actor a1,a2;
-        a1 = actores.get(uid);
-        a2 = actores.get(t_uid);
-        moveTo(uid, toAngle((int)Math.toDegrees(Math.atan2(a2.posX-a1.posX, a2.posY-a1.posY))));
-    }
-    
     public void attack(int uid, double range){
         /* Funcion de ataqueProvisional*/
         Actor attacker = actores.get(uid);

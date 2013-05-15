@@ -85,6 +85,13 @@ public class Monster extends Thread{
         return (Math.abs(a.posX-a_this.posX) < attack_range && Math.abs(a.posY-a_this.posY) < attack_range);
     }
     
+    public void moveToTarget(int uid, int t_uid){
+        Actor a1,a2;
+        a1 = scenario.actores.get(uid);
+        a2 = scenario.actores.get(t_uid);
+        scenario.moveTo(uid, (int)Math.atan2(a2.posX-a1.posX, a2.posY-a1.posY));
+    }
+    
     private void lookForATarget(){
         target = lookForNearbyHero(uid,10);
         if (target != -1){
@@ -152,7 +159,7 @@ public class Monster extends Thread{
                         scenario.moveTo(uid, (int)rand_movedir);
                         break;
                     case FOLLOWING_TARGET:
-                        scenario.moveToTarget(uid, target);
+                        moveToTarget(uid, target);
                         break;
 
                 }
