@@ -6,8 +6,6 @@
         <horde number = "1" time = "10000">
             <monster name = "Troll"/>
             <monster name = "Orc"/>
-            <monster name = "Orc2"/>
-            <monster name = "Orc2"/>
         </horde>
         <horde number = "2" time = "14000">
             <monster name = "Troll"/>
