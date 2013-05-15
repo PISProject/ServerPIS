@@ -149,7 +149,7 @@ public class MFServer {
         Game g;
         for (int i: Games.GAME_LIST.keySet()) {
             g = Games.GAME_LIST.get(i);
-            System.err.println(g.game_type);
+            queues.put(g.game_type, new GameQueue(g.game_type,g.numplayers));
         }
         System.out.println("[DONE]");
         
@@ -167,10 +167,7 @@ public class MFServer {
     
     public void createGame(int game_type, Connection [] g){
         game_id++;
-        Game ga = Games.GAME_LIST.get(game_type);
-        System.out.println(ga.game_type);
-        games.put(game_id, new GameEngine(game_id, g, ga));
-        
+        games.put(game_id, new GameEngine(game_id, g, Games.GAME_LIST.get(game_type)));
     }
 
     private void startServer() {
