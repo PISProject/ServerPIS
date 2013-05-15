@@ -117,6 +117,7 @@ public class GameEngine{
         Horde horde = game.hordes.get(hordeCount);
         hordeCount++;
         while(horde.hasNext()){
+            System.out.println("==> [GAME] Summoning new monster");
             Monster m = new Monster();
             Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(horde.getNextMonster()));
             scenario.addMonster(a);
