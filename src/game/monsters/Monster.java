@@ -108,7 +108,7 @@ public class Monster extends Thread{
         ConcurrentHashMap<Integer,Actor> a = scenario.actores;
         Actor me = a.get(uid);
         for(Map.Entry m : a.entrySet()){
-            if (!((int)m.getKey()== uid) && isInRange(me,(Actor) m.getValue(),i)){
+            if (!((int)m.getKey()== uid) && ((Actor)m.getValue()).isHero() && isInRange(me,(Actor) m.getValue(),i)){
                 return (int)m.getKey();
             }
         }
