@@ -111,9 +111,7 @@ public class GameEngine{
     public void startGameThread() {
         //==> Programamos las hordas
         clock = new Timer();
-        System.out.println(game.n_hordes);
         for (int i = 0; i < game.n_hordes; i++) {
-            System.err.println("Yo");
             clock.schedule(new TimerTask() {
 
                 @Override
@@ -178,6 +176,8 @@ public class GameEngine{
     
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
         if(MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Ending game");
+        /* TODO Enviar informacion al cliente */
+        this.state = GameState.FINISHED;
         clock.cancel();
         destroyMonsters();
         MFServer.SERVER.endGame(game_id);
