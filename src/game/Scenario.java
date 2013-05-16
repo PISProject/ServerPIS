@@ -118,10 +118,6 @@ public class Scenario {
         actores.put(c_creature.uid, c_creature);
     }
  
-    int toAngle(int angle){ // <- Esta funcion se debe a que el angulo que envia el joystick no esta bien
-        return angle -= 90;
-    }
-
     void killAll() {
         //for(Actor)
     }

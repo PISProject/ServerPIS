@@ -92,6 +92,10 @@ public class Monster extends Thread{
         scenario.moveTo(uid, ((int)Math.toDegrees(Math.atan((a2.posX-a1.posX)/(a2.posY-a1.posY)))));
     }
     
+    private void attackTarget(){
+        if (isInRange(scenario.actores.get(uid), scenario.actores.get(target), (int)attack_range));
+    }
+    
     private void lookForATarget(){
         target = lookForNearbyHero(uid,10);
         if (target != -1){
