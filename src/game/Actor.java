@@ -105,5 +105,5 @@ public class Actor {
     
     public boolean isHero(){
         return (type == ActorType.HERO);
-    }
+    }    
 }

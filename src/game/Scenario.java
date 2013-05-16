@@ -15,11 +15,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Scenario {
     public int monsterCount;
     public ConcurrentHashMap<Integer, Actor> actores;
+    public GameEngine eng;
     
-    public Scenario(Connection [] connections){
+    public Scenario(GameEngine eng, Connection [] connections){
         monsterCount = 0;
         actores = new ConcurrentHashMap<>();
-
+        this.eng = eng;
         for (Connection c: connections) {
             actores.put(c.uid, new Actor(c.uid));
             
@@ -68,7 +69,8 @@ public class Scenario {
                 //Los parametros 10,10 son el area que definimos para el ataque
                 //TODO: Poner el range del ataque en el Actor
                 if(a.isAttacked(attacker,0)==1){ //0 es ataque basico
-                    //Tratar muerte
+                    /* Aqui se trata la muerte del personaje*/
+                    onDie(a);
                 }
             }
         }
@@ -87,17 +89,6 @@ public class Scenario {
         
     }
 
-    /**
-     * Param se refiere a que tipo de busqueda tiene que realizar.
-     * 
-     * @param uid
-     * @param dist 
-     * @param PARAM
-     * @return 
-     */
-
-        
-
     void addMonster(Actor c_creature) {
         actores.put(c_creature.uid, c_creature);
     }
@@ -105,5 +96,12 @@ public class Scenario {
     /*???*/
     void killAll() {
         //for(Actor)
+    }
+
+    private void onDie(Actor a) {
+    if (a.isHero()){
+        eng.onPlayerDeath(a.uid);
+        }
+    actores.remove(a.uid);
     }
 }

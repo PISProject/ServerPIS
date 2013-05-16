@@ -16,16 +16,17 @@ import java.util.TimerTask;
 import server.MFServer;
 
 public class GameEngine{
-
-
+    private final long TIME_TO_RESPAWN= 30000;
     public enum GameState {LOADING, RUNNING, FINISHED};
     public int game_id;
+    public long time_limit;
     public int monster_id = 1000;
     public Scenario scenario;
     public GameState state;
     public Game game;
     public Connection [] players;
     private ArrayList<Monster> monsters;
+    private ArrayList<Integer> dead_players;
     private int hordeCount;
     public Scenario s;
     Streaming streaming;
@@ -36,12 +37,13 @@ public class GameEngine{
     
     
     public GameEngine(int id, Connection[] game, Game t_game) {
-        System.out.println(t_game);
+        dead_players = new ArrayList<>();
+        time_limit = t_game.estimatedTime;
         hordeCount = 0;
         monsters = new ArrayList<>();
         this.game = t_game;
         this.game_id = id;
-        scenario = new Scenario(game);
+        scenario = new Scenario(this, game);
         
         //Inicializamos la lista de players
         players = new Connection[game.length];
@@ -86,11 +88,16 @@ public class GameEngine{
     }
     
     public void respawn(int uid){
+        /* Notificamos al cliente que vuelve a vivir */
+        
+        // ToDo
+        
+        /* Lo volvemos a colocar en el escenario*/
         scenario.addHeroe(uid);
     }
 
     public void startGameThread() {
-        // Creamos los timers para las hordas.
+        //==> Programamos las hordas y el final de partida
         clock = new Timer();
         for (int i = 0; i < game.n_hordes; i++) {
             clock.schedule(new TimerTask() {
@@ -101,6 +108,16 @@ public class GameEngine{
                 }
             }, game.hordes.get(i).time);
         }
+
+        //==> Programamos el final de partida
+        clock.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                endGame();
+            }
+        }, time_limit);
+        
         state = GameState.RUNNING;
         if (MFServer.DEBUG_GAMES){
                 System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
@@ -110,19 +127,13 @@ public class GameEngine{
         
     }
     
-    public void playerDead(int id){
-        new RespawnTask(clock, id);
-    }
-    
     public void summonHorde(){
-        if (MFServer.SERVER.DEBUG_GAMES){
-            System.out.println("==> [GAME] Summonning "+hordeCount+" horde.");
-        }
+        if (MFServer.SERVER.DEBUG_GAMES) System.out.println("==> [GAME] Summonning "+hordeCount+" horde.");
         Horde horde = game.hordes.get(hordeCount);
         hordeCount++;
         while(horde.hasNext()){
             String s = horde.getNextMonster();
-            System.out.println("==> [GAME] Summoning new monster of type ->"+s);
+            if (MFServer.SERVER.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+s);
             Monster m = new Monster();
             Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(s));
             scenario.addMonster(a);
@@ -130,7 +141,23 @@ public class GameEngine{
         }
     }
     
-    public void endGame(){
+    void onPlayerDeath(int uid) {
+        /* Notificamos al cliente que ha muerto*/
+        
+        // TODO
+        
+        /* Programamos su reaparicion */
+        dead_players.add(uid);
+        clock.schedule(new TimerTask() {
+            
+            @Override
+            public void run() {
+                respawn(dead_players.get(0));
+            }
+        }, null);
+    }
+    
+    public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
         clock.cancel();
         destroyMonsters();
         MFServer.SERVER.endGame(game_id);
@@ -151,22 +178,6 @@ public class GameEngine{
         System.err.println("Player "+aThis.uid+" disconnected!");
     }*/
 
-    
-    // La clase Streaming es la que enviara constantemente el mapa a todos los
-    // jugadores de la partida, lo hara incondicionalmente cada 100ms.
 
 
-    public class RespawnTask extends TimerTask{
-        private int uid;
-        private long TIME_TO_RESPAWN;
-        public RespawnTask(Timer clock, int id){
-            this.uid = id;
-            clock.schedule(this, TIME_TO_RESPAWN);
-        }
-
-        @Override
-        public void run() {
-            respawn(uid);
-        }
-    }
 }
