@@ -45,6 +45,7 @@ public class MFServer {
     
     private static final String MONSTERS_PATH = "/src/resources/monsters/monsters.xml";
     private static final String GAMES_PATH = "/src/resources/games/games.xml";
+    private static final String HEROS_PATH = "/src/resources/heros/heros.xml";
     public static MFServer SERVER;
     public static boolean ACCEPT_CONNECTIONS = false;
 
@@ -143,7 +144,17 @@ public class MFServer {
             } catch (IOException | ParserConfigurationException | SAXException e){
                 if (MFServer.DEBUG_XML){
                     System.out.println("[X] :: Closing server");
-                    e.printStackTrace();
+                    System.exit(1);
+                }
+            }
+            try{
+                System.out.print("==> [SERVER] Loading heros ..");
+                xmlParser.parseHeroList(HEROS_PATH);
+                System.out.println("[DONE]");
+            } catch( IOException | ParserConfigurationException | SAXException e){
+                e.printStackTrace();
+                if (MFServer.DEBUG_XML){
+                    System.out.println("[X] :: Closing server");
                     System.exit(1);
                 }
             }

@@ -16,12 +16,14 @@ package game.heroes;
  * @author PabloMartinez
  */
 public class HeroModel {
-    public int model; // Esta sera la ID del modelo
+    public String name;
+    public int looktype; // Esta sera la ID del modelo
     public float speed;
-    public int attack_damage;
-    public int defense;
     public int max_health;
     public int max_mana;
+    
+    public int attack_damage;
+    public int defense;
     
     
     

@@ -12,6 +12,7 @@
 
 package server;
 
+import game.heroes.HeroModel;
 import game.heroes.Heros;
 import game.models.Game;
 import game.models.Games;
@@ -76,7 +77,9 @@ public class XMLParser {
     
      public MonsterModel parseMonster(String file_path) throws ParserConfigurationException, SAXException, IOException{
         MonsterModel m = new MonsterModel();
+        
         File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+file_path);
+        
         Document doc = dBuilder.parse(fXmlFile);
 
         doc.getDocumentElement().normalize();
@@ -125,7 +128,7 @@ public class XMLParser {
          * como seria 'monster' en el caso de monsters.xml
          */
         NodeList elements;
-        NodeList nList = doc.getElementsByTagName("hero");
+        NodeList nList = doc.getElementsByTagName("heros");
 
         //Iteramos por la lista resultante
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -137,20 +140,21 @@ public class XMLParser {
                      * el HashMap. Lo leeremos todo como Strings.
                      */
                     Element eElement = (Element) nNode;
-                    Heros.HEROS_LIST.put(eElement.getAttribute("name"), parseMonster(eElement.getAttribute("file")));
+                    Heros.HEROS_LIST.put(eElement.getAttribute("name"), parseHero(eElement.getAttribute("file")));
                 }
             }
 }
     
-     public MonsterModel parseHero(String file_path) throws ParserConfigurationException, SAXException, IOException{
-        MonsterModel m = new MonsterModel();
-        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/monsters/"+file_path);
+     public HeroModel parseHero(String file_path) throws ParserConfigurationException, SAXException, IOException{
+        HeroModel m = new HeroModel();
+        File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/heros/"+file_path);
+        
         Document doc = dBuilder.parse(fXmlFile);
 
         doc.getDocumentElement().normalize();
 
         //Hacemos una busqueda de todos los elementos bajo el tag 'monster'
-        NodeList nList = doc.getElementsByTagName("monster");
+        NodeList nList = doc.getElementsByTagName("hero");
 
         //Iteramos por la lista resultante
 
@@ -160,14 +164,14 @@ public class XMLParser {
                 Element eElement = (Element) nNode;
                 //Añadimos el 'path' de cada uno de los monstruos encontrados
 
-                m.name = eElement.getAttribute("name");
-                m.speed = Double.parseDouble(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("speed"));
-                m.hp = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("health"));
-                m.model = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("looktype"));
-                m.changedir_prob = Float.parseFloat(((Element)eElement.getElementsByTagName("behavior").item(0)).getAttribute("changedir"));
-                m.stchange_rate = Float.parseFloat(((Element)eElement.getElementsByTagName("behavior").item(0)).getAttribute("stchangerate"));
-                m.attack_damage = Integer.parseInt(((Element)eElement.getElementsByTagName("skills").item(0)).getAttribute("attack"));
+                m.name = ((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("name");
+                m.looktype = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("looktype"));
+                m.max_health = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("life"));
+                m.max_health = Integer.parseInt(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("mana"));
+                m.speed = Float.parseFloat(((Element)eElement.getElementsByTagName("attributes").item(0)).getAttribute("speed"));
                 
+                m.attack_damage = Integer.parseInt(((Element)eElement.getElementsByTagName("attack").item(0)).getAttribute("damage"));
+                m.defense = Integer.parseInt(((Element)eElement.getElementsByTagName("attack").item(0)).getAttribute("defense"));                
                 
                 /*
                  * TODO: Optimizar el codigo, esto es un truño..

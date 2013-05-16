@@ -12,17 +12,16 @@
 
 package game.heroes;
 
-import game.monsters.MonsterModel;
 import java.util.HashMap;
 
 public class Heros{
-    public static HashMap<String,MonsterModel> HEROS_LIST;
+    public static HashMap<String,HeroModel> HEROS_LIST;
     
     public Heros(){
         HEROS_LIST = new HashMap<>();
     }
     
-    public static MonsterModel getMonsterModel(String name){
+    public static HeroModel getMonsterModel(String name){
         return HEROS_LIST.get(name);
     }
 }
