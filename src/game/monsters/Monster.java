@@ -130,7 +130,7 @@ public class Monster extends Thread{
         Actor a1,a2;
         a1 = scenario.actores.get(uid);
         a2 = scenario.actores.get(t_uid);
-        int angle =(int) Math.toDegrees(Math.atan2((a2.posX-a1.posX),(a2.posY-a1.posY)));
+        int angle =(int) Math.toDegrees(Math.atan2((a2.posY-a1.posY),(a2.posX-a1.posX)));
         angle = (360-angle)%360;
         return scenario.moveTo(uid, angle);
         
@@ -193,7 +193,6 @@ public class Monster extends Thread{
         if (created){
             while(alive){
                 randnum = Math.random();
-
                 // Gestion de cambio de estado
                 if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
                     state = (state == MonsterState.LOOKING_FOR_TARGET)? MonsterState.WALKING_AROUND : MonsterState.LOOKING_FOR_TARGET;
@@ -207,25 +206,25 @@ public class Monster extends Thread{
                     case LOOKING_FOR_TARGET:
                         lookForATarget();
                         break;
-                    case WALKING_AROUND:
+                    case WALKING_AROUND:/*
                         if (randnum<changedir_prob){
-                            rand_movedir = Math.random()*180;
+                            rand_movedir = Math.random()*360;
                             if (MFServer.DEBUG_MONSTERS){
                                 System.err.println("==> [MONSTER "+uid+"] New direction: "+rand_movedir);
                             }
                         }
-                        scenario.moveTo(uid, (int)rand_movedir);
+                        scenario.moveTo(uid, (int)rand_movedir);*/
                         break;
                     case FOLLOWING_TARGET:
                         // Si colisionamos y estamos en rango de ataque con el objetivo atacamos
                         int st = moveToTarget(uid, target);
-                        if(st == -1 && isTargetInAttackRange()) {
+                        /*if(st == -1 && isTargetInAttackRange()) {
                             attack();
                         }
                         // Si hay colision 
                         else if (st == 0){
                             state = MonsterState.WALKING_AROUND;
-                        }
+                        }*/
                         
                         break;
 
