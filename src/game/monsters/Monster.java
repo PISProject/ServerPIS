@@ -206,25 +206,25 @@ public class Monster extends Thread{
                     case LOOKING_FOR_TARGET:
                         lookForATarget();
                         break;
-                    case WALKING_AROUND:/*
+                    case WALKING_AROUND:
                         if (randnum<changedir_prob){
                             rand_movedir = Math.random()*360;
                             if (MFServer.DEBUG_MONSTERS){
                                 System.err.println("==> [MONSTER "+uid+"] New direction: "+rand_movedir);
                             }
                         }
-                        scenario.moveTo(uid, (int)rand_movedir);*/
+                        scenario.moveTo(uid, (int)rand_movedir);
                         break;
                     case FOLLOWING_TARGET:
                         // Si colisionamos y estamos en rango de ataque con el objetivo atacamos
                         int st = moveToTarget(uid, target);
-                        /*if(st == -1 && isTargetInAttackRange()) {
+                        if(st == -1 && isTargetInAttackRange()) {
                             attack();
                         }
                         // Si hay colision 
                         else if (st == 0){
                             state = MonsterState.WALKING_AROUND;
-                        }*/
+                        }
                         
                         break;
 
