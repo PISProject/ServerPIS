@@ -110,6 +110,9 @@ public class Scenario {
     if (a.isHero()){
         eng.onPlayerDeath(a.uid);
         }
+    else {
+        eng.onMonsterDeath(a.uid);
+    }
     actores.remove(a.uid);
     }
 }

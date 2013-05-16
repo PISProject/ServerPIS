@@ -18,8 +18,10 @@ import game.models.Horde;
 import game.monsters.Monster;
 import game.monsters.Monsters;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 import server.MFServer;
 
 /**
@@ -35,7 +37,7 @@ public class GameEngine{
     public GameState state;
     public Game game;
     public Connection [] players;
-    private ArrayList<Monster> monsters;
+    private ConcurrentHashMap<Integer, Monster> monsters;
     private ArrayList<Integer> dead_players;
     private int hordeCount;
     public Scenario s;
@@ -50,7 +52,7 @@ public class GameEngine{
         dead_players = new ArrayList<>();
         time_limit = t_game.estimatedTime;
         hordeCount = 0;
-        monsters = new ArrayList<>();
+        monsters = new ConcurrentHashMap<>();
         this.game = t_game;
         this.game_id = id;
         scenario = new Scenario(this, game);
@@ -147,9 +149,15 @@ public class GameEngine{
             if (MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+s);
             Monster m = new Monster();
             Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(monstername));
+            monsters.put(monster_id,m);
             scenario.addMonster(a);
             m.start();
         }
+    }
+    void onMonsterDeath(int uid){
+        monsters.get(uid).monsterDeath();
+        monsters.remove(uid);
+                
     }
     
     void onPlayerDeath(int uid) {
@@ -176,8 +184,8 @@ public class GameEngine{
     }
     
     private void destroyMonsters() {
-        for (Monster m: monsters){
-            m.monsterDeath();
+        for (Map.Entry m: monsters.entrySet()){
+            ((Monster)m.getValue()).monsterDeath();
         }
     }
     /*

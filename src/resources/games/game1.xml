@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- El tiempo tiene que estar en ms-->
 <game>
-    <basics name = "game1" id = "1" scenario = "1" numplayers = "2" time= "36000"/>
-    <hordes number = "3">
+    <basics name = "game1" id = "1" scenario = "1" numplayers = "2" time= "12000"/>
+    <hordes number = "2">
         <horde number = "1" time = "10000">
             <monster name = "Troll"/>
+            <monster name = "Orc"/>
 
         </horde>
         <horde number = "2" time = "14000">
-            <!--<monster name = "Troll"/>-->
-
-        </horde>
-        <horde number = "3" time = "16000">
-
-            <!--<monster name = "Orc"/>-->
+            <monster name = "Orc"/>
         </horde>
     </hordes>
 </game>
