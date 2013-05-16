@@ -12,6 +12,7 @@
 
 package server;
 
+import game.heroes.Heros;
 import game.models.Game;
 import game.models.Games;
 import game.models.Horde;
@@ -41,7 +42,7 @@ public class XMLParser {
         dBuilder = dbFactory.newDocumentBuilder();
     }
     
-    public Monsters parseMonsterList(String file_path) throws ParserConfigurationException, SAXException, IOException{
+    public void parseMonsterList(String file_path) throws ParserConfigurationException, SAXException, IOException{
         Monsters monsters = new Monsters();
 
         File fXmlFile = new File(new File("").getAbsolutePath()+file_path);
@@ -70,8 +71,7 @@ public class XMLParser {
                     Element eElement = (Element) nNode;
                     Monsters.MONSTER_LIST.put(eElement.getAttribute("name"), parseMonster(eElement.getAttribute("path")));
                 }
-            }
-        return monsters;
+        }
 }
     
      public MonsterModel parseMonster(String file_path) throws ParserConfigurationException, SAXException, IOException{
@@ -110,7 +110,7 @@ public class XMLParser {
         return m;
      }
      
-     public Monsters parseHeroList(String file_path) throws ParserConfigurationException, SAXException, IOException{
+     public void parseHeroList(String file_path) throws ParserConfigurationException, SAXException, IOException{
         Monsters monsters = new Monsters();
 
         File fXmlFile = new File(new File("").getAbsolutePath()+file_path);
@@ -125,7 +125,7 @@ public class XMLParser {
          * como seria 'monster' en el caso de monsters.xml
          */
         NodeList elements;
-        NodeList nList = doc.getElementsByTagName("monster");
+        NodeList nList = doc.getElementsByTagName("hero");
 
         //Iteramos por la lista resultante
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -137,10 +137,9 @@ public class XMLParser {
                      * el HashMap. Lo leeremos todo como Strings.
                      */
                     Element eElement = (Element) nNode;
-                    Monsters.MONSTER_LIST.put(eElement.getAttribute("name"), parseMonster(eElement.getAttribute("path")));
+                    Heros.HEROS_LIST.put(eElement.getAttribute("name"), parseMonster(eElement.getAttribute("file")));
                 }
             }
-        return monsters;
 }
     
      public MonsterModel parseHero(String file_path) throws ParserConfigurationException, SAXException, IOException{
