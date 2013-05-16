@@ -111,6 +111,7 @@ public class GameEngine{
         clock = new Timer();
         System.out.println(game.n_hordes);
         for (int i = 0; i < game.n_hordes; i++) {
+            System.err.println("Yo");
             clock.schedule(new TimerTask() {
 
                 @Override
@@ -139,14 +140,13 @@ public class GameEngine{
     }
     
     public void summonHorde(){
-        if (MFServer.SERVER.DEBUG_GAMES) System.out.println("==> [GAME] Summonning "+hordeCount+" horde.");
+        if (MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Summonning "+hordeCount+" horde.");
         Horde horde = game.hordes.get(hordeCount);
         hordeCount++;
-        while(horde.hasNext()){
-            String s = horde.getNextMonster();
-            if (MFServer.SERVER.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+s);
+        for (String monstername: horde.list){
+            if (MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+s);
             Monster m = new Monster();
-            Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(s));
+            Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(monstername));
             scenario.addMonster(a);
             m.start();
         }
