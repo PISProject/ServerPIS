@@ -30,7 +30,11 @@ public class GameEngine{
     public Scenario s;
     Streaming streaming;
     int ready = 0;
+    
+    /* El reloj de la partida */
     private Timer clock;
+    
+    
     public GameEngine(int id, Connection[] game, Game t_game) {
         System.out.println(t_game);
         hordeCount = 0;
@@ -117,9 +121,10 @@ public class GameEngine{
         Horde horde = game.hordes.get(hordeCount);
         hordeCount++;
         while(horde.hasNext()){
-            System.out.println("==> [GAME] Summoning new monster");
+            String s = horde.getNextMonster();
+            System.out.println("==> [GAME] Summoning new monster of type ->"+s);
             Monster m = new Monster();
-            Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(horde.getNextMonster()));
+            Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(s));
             scenario.addMonster(a);
             m.start();
         }
@@ -133,7 +138,7 @@ public class GameEngine{
     
     private void destroyMonsters() {
         for (Monster m: monsters){
-            m.kill();
+            m.monsterDeath();
         }
     }
     /*

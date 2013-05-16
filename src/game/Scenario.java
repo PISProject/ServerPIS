@@ -5,7 +5,6 @@
 package game;
 
 import connections.Connection;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -96,30 +95,14 @@ public class Scenario {
      * @param PARAM
      * @return 
      */
-    public ArrayList<Actor> lookForNearbyHero(int uid, int dist) {
-        
-        ArrayList<Actor> lista = new ArrayList<>();
-        double x = actores.get(uid).posX;
-        double y = actores.get(uid).posY;
 
-        Actor a;
-        for (Map.Entry actor : actores.entrySet()){
-            a = (Actor)actor.getValue();
-            if (Math.abs(a.posX-x)<dist && Math.abs(a.posY-y)<dist && a.uid != uid && a.isHero()) {
-                lista.add(a);
-            }
-    
-            
-                
-            }
-        return lista;
-    }
         
 
     void addMonster(Actor c_creature) {
         actores.put(c_creature.uid, c_creature);
     }
- 
+    
+    /*???*/
     void killAll() {
         //for(Actor)
     }

@@ -7,8 +7,9 @@ package game.monsters;
 import game.Actor;
 import game.Scenario;
 import static java.lang.Thread.sleep;
-import java.util.ArrayList;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import server.MFServer;
 
@@ -17,6 +18,7 @@ import server.MFServer;
  * @author kirtash
  */
 public class Monster extends Thread{
+    private static long EXHAUST_TIME = 1000;
 
     
     public Monster(){
@@ -37,6 +39,8 @@ public class Monster extends Thread{
     private double changetarget_prob;
     private double attack_exhaust;
     private double attack_range;
+    private boolean exhausted;
+    private Timer exhaustion;
     // --
     
     // PARAMETROS DE PARTIDA
@@ -69,14 +73,43 @@ public class Monster extends Thread{
         alive = true;
         this.created = true;
         state = defaultstate;    
+        exhaustion = new Timer();
         return new Actor(UID, attack_damage, hp, speed);
+        
     }
-    public void kill(){
+    
+    /*
+     * addExhaust() -- Añadimos el tiempo de exhaust, necesario entre ataque y
+     * ataque.
+     */
+    public void addExhaust(){
+        exhaustion.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                exhausted = false;
+            }
+        }, EXHAUST_TIME);
+    }
+    
+    /*
+     * monsterDeath() -- Gestion de lo que pasa cuando un monstruo muere.
+     */
+    public void monsterDeath(){
         alive = false;
     }
     
-    private void attack(){
-        scenario.attack(uid, attack_range);
+    /*
+     * attack() -- El monstruo ataca, comprobamos que haya pasado el intervalo
+     * de exhaust.
+     */
+    private boolean attack(){
+        if (!exhausted){
+            scenario.attack(uid, attack_range);
+            exhausted = true;
+            return exhausted;
+        }
+        return false;
     }
     private boolean isTargetInAttackRange(){
         Actor a_this = scenario.actores.get(uid);
@@ -94,7 +127,7 @@ public class Monster extends Thread{
         return scenario.moveTo(uid, angle);
         
     }
-    
+ 
     private void attackTarget(){
         if (isInRange(scenario.actores.get(uid), scenario.actores.get(target), (int)attack_range));
     }
@@ -118,16 +151,26 @@ public class Monster extends Thread{
         }      
     }
     
-    private int lookForNearbyHero(int uid, int i) {
+    /*
+     * lookForNearbyHero(uid1,dist) -- Buscamos heroes que se encuentren a una
+     * distancia < 'dist'.
+     */
+    private int lookForNearbyHero(int uid, int dist) {
+        /* Buscamos el mas cercano */
         ConcurrentHashMap<Integer,Actor> a = scenario.actores;
         Actor me = a.get(uid);
         for(Map.Entry m : a.entrySet()){
-            if (!((int)m.getKey()== uid) && ((Actor)m.getValue()).isHero() && isInRange(me,(Actor) m.getValue(),i)){
+            if (!((int)m.getKey()== uid) && ((Actor)m.getValue()).isHero() && isInRange(me,(Actor) m.getValue(),dist)){
                 return (int)m.getKey();
             }
         }
         return -1;
     }
+    
+    /*
+     * isInRange(a1,a2,range) -- Comprueba si dos actores se encuentran, o no,
+     * a una distancia <= range.
+     */
     private boolean isInRange(Actor a1, Actor a2, int range){
         return (Math.abs(a1.posX-a2.posX) < range && Math.abs(a1.posY-a2.posY)< range);
     }
@@ -185,6 +228,9 @@ public class Monster extends Thread{
                 //
 
                 try {
+                    /* El tiempo de actuacion del Thread es igual al delay entre
+                     * las conexiones, para que no se aprecie.
+                     */
                     sleep(100);
                 } catch (InterruptedException ex) {
                 }

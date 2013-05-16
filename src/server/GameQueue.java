@@ -47,10 +47,5 @@ class GameQueue {
     
     private void startGame(Connection[] game) {
         MFServer.SERVER.createGame(game_type,game);
-         System.err.println("NO IMPLEMENTADO!");
-         /*
-          * Falta implementar el inicio de la partida.
-          */
-         //games.put(game_id,new GameEngine(game_id, game, new Game())); //Provisional, en adelante los usuarios podran escoger la partida
      }   
 }
