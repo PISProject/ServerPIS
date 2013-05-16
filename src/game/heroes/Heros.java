@@ -10,29 +10,19 @@
  * 
  ******************************************************************************/
 
-package game.models;
+package game.heroes;
 
-import java.util.ArrayList;
+import game.monsters.MonsterModel;
+import java.util.HashMap;
 
-/**
- * @author PabloMartinez
- */
-public class Game {
+public class Heros{
+    public static HashMap<String,MonsterModel> HEROS_LIST;
     
-    public int estimatedTime;
-    public int scenario;
-    public String [] monsters;
-    public String name;
-    public int game_type;
-    public int numplayers;
-    public int n_hordes;
-    public ArrayList<Horde> hordes;
-
-    public Game() {
-        hordes = new ArrayList<>();
+    public Heros(){
+        HEROS_LIST = new HashMap<>();
     }
     
-    
-    
-    
+    public static MonsterModel getMonsterModel(String name){
+        return HEROS_LIST.get(name);
+    }
 }

@@ -9,30 +9,24 @@
  * Pablo Martínez Martínez, Albert Folch, Xavi Moreno y Aaron Negrín.
  * 
  ******************************************************************************/
-
-package game.models;
-
-import java.util.ArrayList;
+package game.heroes;
 
 /**
+ *
  * @author PabloMartinez
  */
-public class Game {
-    
-    public int estimatedTime;
-    public int scenario;
-    public String [] monsters;
-    public String name;
-    public int game_type;
-    public int numplayers;
-    public int n_hordes;
-    public ArrayList<Horde> hordes;
-
-    public Game() {
-        hordes = new ArrayList<>();
-    }
+public class HeroModel {
+    public int model; // Esta sera la ID del modelo
+    public float speed;
+    public int attack_damage;
+    public int defense;
+    public int max_health;
+    public int max_mana;
     
     
     
     
+    /*
+     * Haria falta añadir referencias a los hechizos que puede usar.
+     */
 }

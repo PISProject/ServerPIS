@@ -1,7 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/*******************************************************************************
+ * Machango Fight, the Massive Multiplayer Online.
+ * Server Application
+ * 
+ * Curso 2012-2013
+ * 
+ * Este software ha sido desarrollado integramente para la asignatura 'Projecte
+ * Integrat de Software' en la Universidad de Barcelona por los estudiantes
+ * Pablo Martínez Martínez, Albert Folch, Xavi Moreno y Aaron Negrín.
+ * 
+ ******************************************************************************/
+
 package server;
 
 import connections.Connection;
@@ -9,7 +17,6 @@ import database.MySQLConnection;
 import game.GameEngine;
 import game.models.Game;
 import game.models.Games;
-import game.monsters.Monsters;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,7 +27,7 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author kirtash
+ * @author PabloMartinez
  */
 public class MFServer {
     public static void main(String[] args) {

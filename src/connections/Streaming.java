@@ -1,7 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/*******************************************************************************
+ * Machango Fight, the Massive Multiplayer Online.
+ * Server Application
+ * 
+ * Curso 2012-2013
+ * 
+ * Este software ha sido desarrollado integramente para la asignatura 'Projecte
+ * Integrat de Software' en la Universidad de Barcelona por los estudiantes
+ * Pablo Martínez Martínez, Albert Folch, Xavi Moreno y Aaron Negrín.
+ * 
+ ******************************************************************************/
+
 package connections;
 
 import game.GameEngine;
@@ -10,7 +18,7 @@ import server.MFServer;
 
 /**
  *
- * @author kirtash
+ * @author PabloMartinez
  */
     public class Streaming extends Thread{
         private long STREAMING_PING = 100; // Intervalo de tiempo entre cada envio

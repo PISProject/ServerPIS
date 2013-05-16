@@ -1,12 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/*******************************************************************************
+ * Machango Fight, the Massive Multiplayer Online.
+ * Server Application
+ * 
+ * Curso 2012-2013
+ * 
+ * Este software ha sido desarrollado integramente para la asignatura 'Projecte
+ * Integrat de Software' en la Universidad de Barcelona por los estudiantes
+ * Pablo Martínez Martínez, Albert Folch, Xavi Moreno y Aaron Negrín.
+ * 
+ ******************************************************************************/
+
 package connections;
 
 /**
  *
- * @author kirtash
+ * @author PabloMartinez
  */
 public class Protocol {
     public static final String DISCONNECT = "0";

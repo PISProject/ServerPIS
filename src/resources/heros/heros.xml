@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<heros>
+    <hero name="knight" file="knight.xml"/>
+    <hero name="mage" file="mage.xml"/>
+    <hero name="necromancer" file="necromancer.xml"/>
+    
+</heros>
