@@ -241,6 +241,7 @@ public class XMLParser {
                 g.game_type = Integer.parseInt(e2.getAttribute("id"));
                 g.numplayers = Integer.parseInt(e2.getAttribute("numplayers"));
                 g.scenario = Integer.parseInt(e2.getAttribute("scenario"));
+                g.estimatedTime = Integer.parseInt(e2.getAttribute("time"));
                 
                 
                 //Cojemos la informacion bajo el tag 'hordes'

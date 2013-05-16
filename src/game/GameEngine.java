@@ -169,7 +169,7 @@ public class GameEngine{
     }
     
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
-        if(MFServer.SERVER.DEBUG_GAMES) System.out.println("==> [GAME] Ending game");
+        if(MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Ending game");
         clock.cancel();
         destroyMonsters();
         MFServer.SERVER.endGame(game_id);
