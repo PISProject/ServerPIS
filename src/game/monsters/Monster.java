@@ -85,13 +85,14 @@ public class Monster extends Thread{
         return (Math.abs(a.posX-a_this.posX) < attack_range && Math.abs(a.posY-a_this.posY) < attack_range);
     }
     
-    public void moveToTarget(int uid, int t_uid){
+    public int moveToTarget(int uid, int t_uid){
         Actor a1,a2;
         a1 = scenario.actores.get(uid);
         a2 = scenario.actores.get(t_uid);
         int angle =(int) Math.toDegrees(Math.atan2((a2.posX-a1.posX),(a2.posY-a1.posY)));
         angle = (360-angle)%360;
-        scenario.moveTo(uid, angle);
+        return scenario.moveTo(uid, angle);
+        
     }
     
     private void attackTarget(){
@@ -156,16 +157,25 @@ public class Monster extends Thread{
                         lookForATarget();
                         break;
                     case WALKING_AROUND:
-                        /*if (randnum<changedir_prob){
+                        if (randnum<changedir_prob){
                             rand_movedir = Math.random()*180;
                             if (MFServer.DEBUG_MONSTERS){
                                 System.err.println("==> [MONSTER "+uid+"] New direction: "+rand_movedir);
                             }
-                        }*/
+                        }
                         scenario.moveTo(uid, (int)rand_movedir);
                         break;
                     case FOLLOWING_TARGET:
-                        moveToTarget(uid, target);
+                        // Si colisionamos y estamos en rango de ataque con el objetivo atacamos
+                        int st = moveToTarget(uid, target);
+                        if(st == -1 && isTargetInAttackRange()) {
+                            attack();
+                        }
+                        // Si hay colision 
+                        else if (st == 0){
+                            state = MonsterState.WALKING_AROUND;
+                        }
+                        
                         break;
 
                 }

@@ -47,7 +47,7 @@ public class Scenario {
        actores.put(uid, new Actor());
     }
 
-    public void moveTo(int uid, int angle) {
+    public int moveTo(int uid, int angle) {
         float x, y;
         Actor a = actores.get(uid);
         double speed = a.speed;
@@ -55,7 +55,9 @@ public class Scenario {
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
        if (!checkCollision(uid,x, y)){
             a.moveTo(x,y);
+            return 0;
         }
+       return -1;
     }
     
     public void attack(int uid, double range){
