@@ -14,6 +14,7 @@ package connections;
 
 import game.GameEngine;
 import game.Scenario;
+import game.models.Games;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,8 +27,6 @@ import server.MFServer;
  * @author kirtash
  */
 public class Connection extends Thread{
-
-
 
  
     public enum ConnectionState{NOT_LOGGED,OUT_GAME,QUEUE,LOADING, READY, IN_GAME,DISCONNECTED};
@@ -171,6 +170,15 @@ public class Connection extends Thread{
                     System.err.println("[X]");
         }
         write("0");
+    }
+    
+    //OUTGOING Messages
+    void getScenarios() {
+        String s = Games.parseGames();
+        //
+        System.out.println(s);
+        //
+        write(s);
     }
     
     

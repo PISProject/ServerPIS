@@ -25,6 +25,7 @@ public class Protocol {
     public static final String MOVE_TO = "5";
     public static final String LOGIN = "6";
     public static final String REGISTER = "7";
+    public static final String GET_SCENARIOS = "8";
     
     private Connection client;
 
@@ -71,6 +72,8 @@ public class Protocol {
                 case QUIT_QUEUE:
                     client.quitQueue();
                     break;
+                case GET_SCENARIOS:
+                    client.getScenarios();
             }
         }
         else if (client.state == Connection.ConnectionState.LOADING){
