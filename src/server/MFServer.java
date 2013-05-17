@@ -147,6 +147,7 @@ public class MFServer {
                     System.exit(1);
                 }
             }
+            /*
             try{
                 System.out.print("==> [SERVER] Loading heros ..");
                 xmlParser.parseHeroList(HEROS_PATH);
@@ -157,7 +158,7 @@ public class MFServer {
                     System.out.println("[X] :: Closing server");
                     System.exit(1);
                 }
-            }
+            }*/
         } catch (ParserConfigurationException ex) {
             System.out.println("[X] :: Cannot create parser");
         }
