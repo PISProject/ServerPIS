@@ -46,10 +46,14 @@ public class Scenario {
            map+=a.uid+","+a.model+","+a.health+","+a.posX+","+a.posY+"*";
         }
         map+= "/";
-        int j = attackPool.size();
-        for(int i = 0; i <j; i++){
-            Attack pro = attackPool.poll();
-            map+=pro.type+","+pro.caster+"*";
+        if (!attackPool.isEmpty()){
+            int j = attackPool.size();
+            for(int i = 0; i <j; i++){
+                Attack pro = attackPool.poll();
+                map+=pro.type+","+pro.caster+"*";
+                System.out.println(pro.type+","+pro.caster);
+            }
+           
         }
         return map;
     }
