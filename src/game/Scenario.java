@@ -45,12 +45,14 @@ public class Scenario {
             Actor a = (Actor)actor.getValue(); 
            map+=a.uid+","+a.model+","+a.health+","+a.posX+","+a.posY+"*";
         }
+        System.out.println(map);
         map+= "/";
         int j = attackPool.size();
         for(int i = 0; i <j; i++){
             Attack pro = attackPool.poll();
             map+=pro.type+","+pro.caster+"*";
         }
+        System.out.println(map);
         return map;
     }
 
