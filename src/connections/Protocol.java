@@ -26,6 +26,7 @@ public class Protocol {
     public static final String LOGIN = "6";
     public static final String REGISTER = "7";
     public static final String GET_SCENARIOS = "8";
+    public static final String ATTACK = "9";
     
     private Connection client;
 
@@ -88,6 +89,8 @@ public class Protocol {
                 case MOVE_TO:
                     client.moveTo(Integer.parseInt(args[0]));
                     break;
+                case ATTACK:
+                    client.attack();
             }
         }
     }

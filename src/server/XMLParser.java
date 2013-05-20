@@ -114,7 +114,7 @@ public class XMLParser {
      }
      
      public void parseHeroList(String file_path) throws ParserConfigurationException, SAXException, IOException{
-        Monsters monsters = new Monsters();
+        Heros heros = new Heros();
 
         File fXmlFile = new File(new File("").getAbsolutePath()+file_path);
         Document doc = dBuilder.parse(fXmlFile);

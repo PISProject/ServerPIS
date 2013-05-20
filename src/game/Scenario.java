@@ -15,6 +15,7 @@ package game;
 import connections.Connection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
@@ -24,10 +25,12 @@ public class Scenario {
     public int monsterCount;
     public ConcurrentHashMap<Integer, Actor> actores;
     public GameEngine eng;
+    public ConcurrentLinkedQueue<Attack> attackPool;
     
     public Scenario(GameEngine eng, Connection [] connections){
         monsterCount = 0;
         actores = new ConcurrentHashMap<>();
+        attackPool = new ConcurrentLinkedQueue<>();
         this.eng = eng;
         for (Connection c: connections) {
             actores.put(c.uid, new Actor(c.uid));
@@ -40,9 +43,14 @@ public class Scenario {
         String map = "";
         for (Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue(); 
-           map+=a.uid+","+a.posX+","+a.posY+"*";
+           map+=a.uid+","+a.type+","+","+a.health+","+a.posX+","+a.posY+"*";
         }
-        map = map.substring(0, map.length()-1);
+        map+= "/";
+        int j = attackPool.size();
+        for(int i = 0; i <j; i++){
+            Attack pro = attackPool.poll();
+            map+=pro.type+","+pro.caster+"*";
+        }
         return map;
     }
 
@@ -68,14 +76,14 @@ public class Scenario {
        return -1;
     }
     
-    public void attack(int uid, double range){
+    public void attack(Attack attack){
         /* Funcion de ataqueProvisional*/
-        Actor attacker = actores.get(uid);
+        attackPool.add(attack);
+        Actor attacker = actores.get(attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
-            if (Math.abs(attacker.getPos()[0]-a.getPos()[0])< range && Math.abs(attacker.getPos()[1]-a.getPos()[1])< range){
-                //Los parametros 10,10 son el area que definimos para el ataque
-                //TODO: Poner el range del ataque en el Actor
+            if (Math.abs(attacker.getPos()[0]-a.getPos()[0])< attack.range && Math.abs(attacker.getPos()[1]-a.getPos()[1])< attack.range){
+                
                 if(a.isAttacked(attacker,0)==1){ //0 es ataque basico
                     /* Aqui se trata la muerte del personaje*/
                     onDie(a);

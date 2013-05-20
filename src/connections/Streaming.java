@@ -48,7 +48,7 @@ import server.MFServer;
                     }
                 }
                 // Parseamos el escenario...
-                String s = game.scenario.parseScenario();
+                String s = "0|"+game.scenario.parseScenario();
                 
                 // ...y lo enviamos a todas las conexiones
                 for (Connection p: game.players) {

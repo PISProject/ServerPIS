@@ -13,6 +13,7 @@
 package game.monsters;
 
 import game.Actor;
+import game.Attack;
 import game.Scenario;
 import static java.lang.Thread.sleep;
 import java.util.Map;
@@ -113,7 +114,7 @@ public class Monster extends Thread{
      */
     private boolean attack(){
         if (!exhausted){
-            scenario.attack(uid, attack_range);
+            scenario.attack(new Attack(uid, 1 /*Este es el tipo de ataque*/, (int)attack_range));
             exhausted = true;
             return exhausted;
         }

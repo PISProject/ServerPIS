@@ -12,6 +12,7 @@
 
 package connections;
 
+import game.Attack;
 import game.GameEngine;
 import game.Scenario;
 import game.models.Games;
@@ -230,6 +231,9 @@ public class Connection extends Thread{
         scenario.moveTo(this.uid,angle);
     }
     
+    public void attack(){
+        scenario.attack(new Attack(this.uid, 1, 10));
+    }
     ///////
     // GENERAL Methods
     
