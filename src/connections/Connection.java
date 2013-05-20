@@ -224,6 +224,7 @@ public class Connection extends Thread{
     // IN_GAME Methods
     ////////////////////////////////////////////////////////////////////////////
     public void pushMapToClient(String s) {
+        System.out.println(s);
         write(s);
     }
     
