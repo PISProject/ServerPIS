@@ -131,6 +131,7 @@ public class Monster extends Thread{
         Actor a1,a2;
         a1 = scenario.actores.get(uid);
         a2 = scenario.actores.get(t_uid);
+        if (a1== null || a2 == null) return 0;
         int angle =(int) Math.toDegrees(Math.atan2((a2.posX-a1.posX),(a2.posY-a1.posY)));
         angle = (360-angle)%360;
         return scenario.moveTo(uid, angle+90);

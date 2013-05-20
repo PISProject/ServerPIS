@@ -119,13 +119,13 @@ public class Scenario {
         //for(Actor)
     }
 
-    private void onDie(Actor a) {/*
+    private void onDie(Actor a) {
     if (a.isHero()){
         eng.onPlayerDeath(a.uid);
         }
     else {
         eng.onMonsterDeath(a.uid);
     }
-    actores.remove(a.uid);*/
+    actores.remove(a.uid);
     }
 }
