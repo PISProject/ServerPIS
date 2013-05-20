@@ -43,7 +43,7 @@ public class Scenario {
         String map = "";
         for (Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue(); 
-           map+=a.uid+","+a.type+","+","+a.health+","+a.posX+","+a.posY+"*";
+           map+=a.uid+","+a.model+","+","+a.health+","+a.posX+","+a.posY+"*";
         }
         map+= "/";
         int j = attackPool.size();
