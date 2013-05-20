@@ -91,6 +91,7 @@ public class Protocol {
                     break;
                 case ATTACK:
                     client.attack();
+                    break;
             }
         }
     }

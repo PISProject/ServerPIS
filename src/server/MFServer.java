@@ -34,7 +34,7 @@ public class MFServer {
        SERVER = new MFServer();
     }
     
-    public static final boolean DEBUG_MONSTERS = true;
+    public static final boolean DEBUG_MONSTERS = false;
     public static final boolean DEBUG_SERVER = true;
     public static final boolean DEBUG_CONNECTIONS = true;
     public static final boolean DEBUG_MYSQL = true;

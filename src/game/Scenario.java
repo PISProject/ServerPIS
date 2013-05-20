@@ -82,6 +82,7 @@ public class Scenario {
     
     public void attack(Attack attack){
         /* Funcion de ataqueProvisional*/
+        System.out.println("ATAQUE");
         attackPool.add(attack);
         Actor attacker = actores.get(attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
