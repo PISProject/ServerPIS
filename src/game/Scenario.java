@@ -40,10 +40,10 @@ public class Scenario {
         
     }
     public String parseScenario(){
-        String map = "";
+        String map = "0|";
         for (Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue(); 
-           map+=a.uid+","+a.model+","+","+a.health+","+a.posX+","+a.posY+"*";
+           map+=a.uid+","+a.model+","+a.health+","+a.posX+","+a.posY+"*";
         }
         map+= "/";
         int j = attackPool.size();
