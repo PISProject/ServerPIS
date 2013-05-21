@@ -102,7 +102,7 @@ public class Actor {
     }
     
     int healthChange(int damage){
-        this.health+=damage;
+        this.health-=damage;
         System.err.println(this.health);
         if(this.health>=this.healthMax){ // When the player it's healed
             this.health = this.healthMax;
@@ -116,7 +116,7 @@ public class Actor {
     
     public int isAttacked(Actor attacker, int attackType){
         if (attackType == 0){
-            return this.healthChange(attacker.attackDamage);
+            return this.healthChange(-attacker.attackDamage);
         }
         return 0;
     }
