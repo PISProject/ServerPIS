@@ -24,8 +24,8 @@ public class Attack {
     public Attack(Actor a, int a_type){
 //      Calculamos el centro del ataque
         center = new float[2];
-        center[0] =(a.posY+(float) (Math.sin(Math.toRadians(a.lookangle))*2));
-        center[1]=(a.posX+(float) (Math.cos(Math.toRadians(a.lookangle))*2));
+        center[0] =(a.posX+(float) (Math.sin(Math.toRadians(a.lookangle))*2));
+        center[1] =(a.posY+(float) (Math.cos(Math.toRadians(a.lookangle))*2));
 //        center[0] = a.posX;
 //        center[1] = a.posY;
         
