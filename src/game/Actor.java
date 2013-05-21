@@ -101,8 +101,8 @@ public class Actor {
         this.posY = y;
     }
     
-    int healthChange(int hp){
-        this.health-=hp;
+    int healthChange(int damage){
+        this.health+=damage;
         System.err.println(this.health);
         if(this.health>=this.healthMax){ // When the player it's healed
             this.health = this.healthMax;
