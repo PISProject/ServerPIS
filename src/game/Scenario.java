@@ -128,6 +128,5 @@ public class Scenario {
     else {
         eng.onMonsterDeath(a.uid);
     }
-    actores.remove(a.uid);
     }
 }

@@ -153,8 +153,11 @@ public class GameEngine{
         }
     }
     void onMonsterDeath(int uid){
+        
         monsters.get(uid).monsterDeath();
         monsters.remove(uid);
+        scenario.actores.remove(uid);
+        
                 
     }
     
@@ -172,6 +175,7 @@ public class GameEngine{
                 respawn(dead_players.get(0));
             }
         }, 5000);
+        scenario.actores.remove(uid);
     }
     
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
