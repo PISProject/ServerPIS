@@ -88,7 +88,6 @@ public class Scenario {
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
             if (Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range){
-                System.err.println("HOLA");
                 if(a.isAttacked(attacker,0)==1){ //0 es ataque basico
                     /* Aqui se trata la muerte del personaje*/
                     

@@ -103,7 +103,7 @@ public class Actor {
     
     int healthChange(int hp){
         this.health-=hp;
-        
+        System.err.println(this.health);
         if(this.health>=this.healthMax){ // When the player it's healed
             this.health = this.healthMax;
         } 
