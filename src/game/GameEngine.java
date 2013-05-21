@@ -153,7 +153,7 @@ public class GameEngine{
         }
     }
     void onMonsterDeath(int uid){
-        monsters.get(uid).monsterDeath();
+          monsters.get(uid).monsterDeath();
         monsters.remove(uid);
                 
     }

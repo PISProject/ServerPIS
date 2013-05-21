@@ -128,7 +128,7 @@ public class XMLParser {
          * como seria 'monster' en el caso de monsters.xml
          */
         NodeList elements;
-        NodeList nList = doc.getElementsByTagName("heros");
+        NodeList nList = doc.getElementsByTagName("hero");
 
         //Iteramos por la lista resultante
         for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -148,7 +148,6 @@ public class XMLParser {
      public HeroModel parseHero(String file_path) throws ParserConfigurationException, SAXException, IOException{
         HeroModel m = new HeroModel();
         File fXmlFile = new File(new File("").getAbsolutePath()+"/src/resources/heros/"+file_path);
-        
         Document doc = dBuilder.parse(fXmlFile);
 
         doc.getDocumentElement().normalize();
