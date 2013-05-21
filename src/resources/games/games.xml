@@ -6,5 +6,7 @@
 <games>
     <game id = "1" path = "game1.xml"/>
     <game id = "2" path = "game2.xml"/>
+    <game id = "3" path = "game3.xml"/>
+    <game id = "4" path = "game4.xml"/>
 
 </games>
