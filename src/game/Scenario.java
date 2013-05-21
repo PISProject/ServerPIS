@@ -51,7 +51,7 @@ public class Scenario {
             int j = attackPool.size();
             for(int i = 0; i <j; i++){
                 Attack pro = attackPool.poll();
-                map+=pro.type+","+pro.caster+"*";
+                map+=pro.type+","+pro.caster.uid+"*";
                 System.out.println(pro.type+","+pro.caster);
             }
            
