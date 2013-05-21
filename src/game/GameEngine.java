@@ -168,13 +168,13 @@ public class GameEngine{
         
         /* Programamos su reaparicion */
         dead_players.add(uid);
-        clock.schedule(new TimerTask() {
-            
-            @Override
-            public void run() {
-                respawn(dead_players.get(0));
-            }
-        }, 5000);
+//        clock.schedule(new TimerTask() {
+//            
+//            @Override
+//            public void run() {
+//                respawn(dead_players.get(0));
+//            }
+//        }, 5000);
         scenario.actores.remove(uid);
     }
     
