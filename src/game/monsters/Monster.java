@@ -68,7 +68,7 @@ public class Monster extends Thread{
     //
     
     public Actor createMonster(int UID, Scenario scenario, MonsterModel model){ //Este podria ser un metodo abstracto
-        
+        finished = false;
         // Model stats
         this.hp = model.hp;
         this.attack_damage = model.attack_damage;
@@ -117,7 +117,7 @@ public class Monster extends Thread{
      */
     public boolean monsterDeath(){
         alive = false;
-        while (!finished);
+        while (!finished){}
         return true;
     }
     
