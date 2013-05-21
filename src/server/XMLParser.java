@@ -127,8 +127,7 @@ public class XMLParser {
          * que es el que contiene los elementos fundamentales del archivo
          * como seria 'monster' en el caso de monsters.xml
          */
-        NodeList elements;
-        NodeList nList = doc.getElementsByTagName("heros");
+        NodeList nList = doc.getElementsByTagName("hero");
 
         //Iteramos por la lista resultante
         for (int temp = 0; temp < nList.getLength(); temp++) {
