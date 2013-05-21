@@ -62,6 +62,7 @@ public class Monster extends Thread{
 
     private int target; //uid del target
     private boolean alive;
+    public boolean finished;
     private double rand_movedir;
     private double stchange_rate;
     //
@@ -114,8 +115,10 @@ public class Monster extends Thread{
     /*
      * monsterDeath() -- Gestion de lo que pasa cuando un monstruo muere.
      */
-    public void monsterDeath(){
+    public boolean monsterDeath(){
         alive = false;
+        while (!finished);
+        return true;
     }
     
     /*
@@ -199,6 +202,7 @@ public class Monster extends Thread{
     //////////////////// IA del monstruo ////////////////////////
     @Override
     public void run() {
+        finished = false;
         int clock;
         clock = 0;
         double randnum;
@@ -254,6 +258,7 @@ public class Monster extends Thread{
                 } catch (InterruptedException ex) {
                 } 
             }while(alive);
+           finished = true;
         }
     }
     /////////////////////////////////////////////////////////////////

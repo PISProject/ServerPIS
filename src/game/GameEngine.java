@@ -155,6 +155,7 @@ public class GameEngine{
     void onMonsterDeath(int uid){
         
         monsters.get(uid).monsterDeath();
+        
         monsters.remove(uid);
         scenario.actores.remove(uid);
         
