@@ -59,6 +59,7 @@ public class Actor {
         this.type = ActorType.HERO;
         this.uid = uid;
         
+        this.attackDamage = 10;
         this.posX = (float)Math.random()*20;
         this.posY= (float)Math.random()*20;
     }
