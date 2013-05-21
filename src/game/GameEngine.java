@@ -171,7 +171,7 @@ public class GameEngine{
             public void run() {
                 respawn(dead_players.get(0));
             }
-        }, null);
+        }, 5000);
     }
     
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
