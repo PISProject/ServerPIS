@@ -105,9 +105,9 @@ public class Actor {
     int healthChange(int damage){
         this.health-=damage;
         System.err.println(this.health);
-        if(this.health>=this.healthMax){ // When the player it's healed
-            this.health = this.healthMax;
-        } 
+//        if(this.health>=this.healthMax){ // When the player it's healed
+//            this.health = this.healthMax;
+//        } 
         
         if(this.health<=0){ // When the player recieves damage
             return 0; //Muerto
@@ -115,11 +115,9 @@ public class Actor {
         return 1;
     }
     
-    public int isAttacked(Actor attacker, int attackType){
-        if (attackType == 0){
-            return this.healthChange(-attacker.attackDamage);
-        }
-        return 0;
+    public int isAttacked(Attack a){
+        return this.healthChange(a.caster.attackDamage);
+
     }
     
     public boolean isHero(){

@@ -89,7 +89,7 @@ public class Scenario {
             Actor a = (Actor)actor.getValue();
             if ( a.uid != attack.caster.uid &&(Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range)){
                 System.err.println(attack.caster.uid+" attacks: "+a.uid);
-                if(a.isAttacked(attacker,0)==0){ //0 es ataque basico
+                if(a.isAttacked(attack)==0){ //0 es ataque basico
                     /* Aqui se trata la muerte del personaje*/
                     
                     //attacker.killed_creatures++;
