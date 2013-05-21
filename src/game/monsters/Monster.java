@@ -83,7 +83,17 @@ public class Monster extends Thread{
         this.created = true;
         state = defaultstate;    
         exhaustion = new Timer();
-        return new Actor(UID, attack_damage, hp, speed);
+
+//      Creamos el actor correspondiente al monstruo
+        
+        Actor a = new Actor();
+        a.attackDamage = this.attack_damage;
+        a.health = this.hp;
+        a.speed = this.speed;
+        a.attack_range = this.attack_range;
+        a.uid = UID;
+
+        return a;
         
     }
     
@@ -114,7 +124,7 @@ public class Monster extends Thread{
      */
     private boolean attack(){
         if (!exhausted){
-            scenario.attack(new Attack(uid, 1 /*Este es el tipo de ataque*/, (int)attack_range));
+            scenario.attack(new Attack(scenario.actores.get(uid), 1 /*Este es el tipo de ataque*/));
             exhausted = true;
             return exhausted;
         }

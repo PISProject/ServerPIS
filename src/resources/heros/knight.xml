@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hero>
     <attributes name = "Knight" looktype = "3" life="100" mana = "100" speed = "0.55"/>
-    <attack damage = "50" defense = "15"/>
+    <attack damage = "50" defense = "15" range = "2"/>
 </hero>

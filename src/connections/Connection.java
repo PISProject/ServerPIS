@@ -232,7 +232,7 @@ public class Connection extends Thread{
     }
     
     public void attack(){
-        scenario.attack(new Attack(this.uid, 1, 10));
+        scenario.attack(new Attack(scenario.actores.get(uid), 1));
     }
     ///////
     // GENERAL Methods

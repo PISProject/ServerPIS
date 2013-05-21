@@ -33,6 +33,7 @@ public class Scenario {
         attackPool = new ConcurrentLinkedQueue<>();
         this.eng = eng;
         for (Connection c: connections) {
+         
             actores.put(c.uid, new Actor(c.uid));
             
             
@@ -74,7 +75,7 @@ public class Scenario {
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
        if (!checkCollision(uid,x, y)){
-            a.moveTo(x,y);
+            a.moveTo(angle,x,y);
             return 0;
         }
        return -1;
@@ -82,15 +83,15 @@ public class Scenario {
     
     public void attack(Attack attack){
         /* Funcion de ataqueProvisional*/
-        System.out.println("ATAQUE");
         attackPool.add(attack);
-        Actor attacker = actores.get(attack.caster);
+        Actor attacker = (attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
-            if (Math.abs(attacker.getPos()[0]-a.getPos()[0])< attack.range && Math.abs(attacker.getPos()[1]-a.getPos()[1])< attack.range){
+            if (Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range){
                 
                 if(a.isAttacked(attacker,0)==1){ //0 es ataque basico
                     /* Aqui se trata la muerte del personaje*/
+                    attacker.killed_creatures++;
                     onDie(a);
                 }
             }

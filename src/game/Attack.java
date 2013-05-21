@@ -18,11 +18,19 @@ package game;
  */
 public class Attack {
     public int type;
+    public float[] center;
     public int range;
-    public int caster;
-    public Attack(int caster, int type, int range){
-       this.caster = caster;
-        this.type = type;
-        this.range = range;
+    public Actor caster;
+    public Attack(Actor a, int a_type){
+//      Calculamos el centro del ataque
+        center = new float[2];
+        center[0] =(a.posY+(float) (Math.sin(Math.toRadians(a.lookangle))*1));
+        center[1]=(a.posX+(float) (Math.cos(Math.toRadians(a.lookangle))*1));
+        
+//      Rango provisional
+        range = 1;
+        type = a_type; // No es util de momento
+        caster = a;
+        
     }
 }

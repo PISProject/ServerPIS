@@ -3,5 +3,5 @@
 <monster name="Troll">
     <attributes speed = "0.2" health = "200" looktype = "2"/>
     <behavior changedir = "0.01" stchangerate= "0.02"/>
-    <skills attack ="10" defense = "10"/>
+    <skills attack ="10" defense = "10" range = "2"/>
 </monster>

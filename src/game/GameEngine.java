@@ -68,7 +68,7 @@ public class GameEngine{
             c.setGame(this);
             c.setScenario(scenario);
             
-            info+=c.uid+","+c.name+/*","+c.player_model+*/"*";
+            info+=c.uid+","+c.name+/*",1"+*/"*"; //TODO: Este 1 representa el Modelo, ahora asignamos el mismo modelo a todo el mundo
         
         }
         // Notificamos a todas las conexiones que se ha creado un juego y que tienen

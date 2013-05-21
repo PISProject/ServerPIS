@@ -17,6 +17,8 @@ package game;
  * @author PabloMartinez
  */
 public class Actor {
+
+    
     
     public enum ActorType{HERO, VILLAIN};
     public ActorType type;
@@ -27,6 +29,7 @@ public class Actor {
     public float spawnY;  
     public float posX;
     public float posY;
+    public double lookangle;
     
     //LookType
     public int model;
@@ -37,8 +40,11 @@ public class Actor {
     public int healthMax;
     public int health;
     public double speed = 1;
-
     
+    public double attack_range;
+
+//    Contamos los monstruos que mata
+    public int killed_creatures;
 
     
     public Actor(){
@@ -47,8 +53,8 @@ public class Actor {
         this.spawnX = 0;
         this.spawnY = 0;
     }
-    
-    // Constructor provisional para heroes
+//    
+//    // Constructor provisional para heroes
     public Actor(int uid){
         this.type = ActorType.HERO;
         this.uid = uid;
@@ -57,20 +63,22 @@ public class Actor {
         this.posY= (float)Math.random()*20;
     }
     
-    // Constructor provisional para enemigos
-    public Actor(int uid, int hp, int attack, double speed){
-        this.type = ActorType.VILLAIN;
-        this.speed = speed;
-        this.attackDamage = attack;
-        this.healthMax = hp;
-        this.health = hp;
-        this.uid = uid;
-        this.posX = (float)Math.random()*20;
-        this.posY= (float)Math.random()*20;
-        
-        this.spawnX = 0;
-        this.spawnY = 0;
-    }
+//    // Constructor provisional para enemigos
+//    public Actor(int uid, int hp, int attack, double speed){
+//        this.type = ActorType.VILLAIN;
+//        this.speed = speed;
+//        this.attackDamage = attack;
+//        
+//        
+//        this.healthMax = hp;
+//        this.health = hp;
+//        this.uid = uid;
+//        this.posX = (float)Math.random()*20;
+//        this.posY= (float)Math.random()*20;
+//        
+//        this.spawnX = 0;
+//        this.spawnY = 0;
+//    }
     
     public Float [] getPos(){
         Float [] i = new Float[2];
@@ -86,7 +94,8 @@ public class Actor {
         return i;
     }
 
-    void moveTo(float x, float y) {
+    void moveTo(double look, float x, float y) {
+        this.lookangle = look;
         this.posX = x;
         this.posY = y;
     }
