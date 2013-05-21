@@ -117,7 +117,9 @@ public class Monster extends Thread{
      */
     public boolean monsterDeath(){
         alive = false;
-        while (!finished){}
+        for (int i = 0; i < 1000; i++) {
+           
+        }
         return true;
     }
     
