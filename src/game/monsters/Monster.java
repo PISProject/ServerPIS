@@ -203,7 +203,7 @@ public class Monster extends Thread{
         clock = 0;
         double randnum;
         if (created){
-            while(alive){
+           do{
                 randnum = Math.random();
                 // Gestion de cambio de estado
                 if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
@@ -252,8 +252,8 @@ public class Monster extends Thread{
                      */
                     sleep(100);
                 } catch (InterruptedException ex) {
-                }
-            }
+                } 
+            }while(alive);
         }
     }
     /////////////////////////////////////////////////////////////////

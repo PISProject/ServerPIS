@@ -48,10 +48,11 @@ public class Actor {
 
     
     public Actor(){
-        this.posX = (float)Math.random()*10;
-        this.posY= (float)Math.random()*10;
+        this.posX = (float)Math.random()*20;
+        this.posY= (float)Math.random()*20;
         this.spawnX = 0;
         this.spawnY = 0;
+        this.type = ActorType.VILLAIN;
     }
 //    
 //    // Constructor provisional para heroes
