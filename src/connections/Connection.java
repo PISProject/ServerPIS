@@ -69,7 +69,7 @@ public class Connection extends Thread{
         while (state != ConnectionState.DISCONNECTED){
             try {
                 String entrada = in.readUTF();
-                protocol.parse(entrada);
+;                protocol.parse(entrada);
                 
             } catch (IOException ex) {
                 disconnect();

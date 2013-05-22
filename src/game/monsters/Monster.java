@@ -163,6 +163,8 @@ public class Monster extends Thread{
         int angle =(int) Math.toDegrees(Math.atan2((a2.posX-a1.posX),(a2.posY-a1.posY)));
         angle = (360-angle)%360;
         return scenario.moveTo(uid, angle+90);
+
+        
         
     }
  

@@ -70,9 +70,10 @@ public class Scenario {
        actores.put(uid, new Actor());
     }
 
-    public int moveTo(int uid, int angle) {
+    public int moveTo(int uid, int angle) throws NullPointerException{
         float x, y;
         Actor a = actores.get(uid);
+        if (a == null){ return -2;}
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
