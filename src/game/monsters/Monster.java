@@ -74,6 +74,7 @@ public class Monster extends Thread{
         this.changedir_prob = model.changedir_prob;
         this.rand_movedir = model.rand_movedir;
         this.stchange_rate = model.stchange_rate;
+        this.attack_range = model.range;
         // -- 
         
         this.uid = UID;
@@ -140,7 +141,7 @@ public class Monster extends Thread{
         Actor a_this = scenario.actores.get(uid);
         Actor a = scenario.actores.get(target);
         // Retorna un boleano de si el target entra en el rango de ataque.
-        return (Math.abs(a.posX-a_this.posX) < attack_range && Math.abs(a.posY-a_this.posY) < attack_range);
+        return ((Math.abs(a.posX-a_this.posX)) < attack_range && (Math.abs(a.posY-a_this.posY)) < attack_range);
     }
     
     /**
