@@ -57,7 +57,7 @@ public class Monster extends Thread{
     
     
     // PARAMETROS DE COMPORTAMIENTO
-    private MonsterState defaultstate= MonsterState.WALKING_AROUND;
+    private MonsterState defaultstate= MonsterState.LOOKING_FOR_TARGET;
     private MonsterState state;
 
     private int target; //uid del target
