@@ -140,11 +140,22 @@ public class Monster extends Thread{
         return (Math.abs(a.posX-a_this.posX) < attack_range && Math.abs(a.posY-a_this.posY) < attack_range);
     }
     
+    /**
+     * -2 :: Algun jugador no existe 
+     * -1 :: Colisiona
+     * 0 :: Ha ido bien
+     * @param uid
+     * @param t_uid
+     * @return 
+     */
     public int moveToTarget(int uid, int t_uid){
+        
         Actor a1,a2;
         a1 = scenario.actores.get(uid);
         a2 = scenario.actores.get(t_uid);
-        if (a1== null || a2 == null) return 0;
+        if (a1== null || a2 == null){
+            return 0;
+        }
         int angle =(int) Math.toDegrees(Math.atan2((a2.posX-a1.posX),(a2.posY-a1.posY)));
         angle = (360-angle)%360;
         return scenario.moveTo(uid, angle+90);
@@ -233,14 +244,14 @@ public class Monster extends Thread{
                     case FOLLOWING_TARGET:
                         // Si colisionamos y estamos en rango de ataque con el objetivo atacamos
                         int st = moveToTarget(uid, target);
-                        /*if(st == -1 && isTargetInAttackRange()) {
+                        if(st == -1 && isTargetInAttackRange()) {
                             attack();
                         }
                         // Si hay colision 
-                        else if (st == 0){
+                        else if (st == -2){
                             state = MonsterState.WALKING_AROUND;
                         }
-                        */
+          
                         break;
 
                 }
