@@ -20,6 +20,7 @@ public class MonsterModel {
     public String name;
     public int hp;
     public int attack_damage;
+    public int range;
     public double speed;
     public int model;
     public double changedir_prob;
@@ -30,6 +31,7 @@ public class MonsterModel {
     public int target; //uid del target
     public double rand_movedir;
     public double stchange_rate; //Cada segundo
+
     
     
     public MonsterModel() {

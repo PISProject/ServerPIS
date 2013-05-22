@@ -210,6 +210,7 @@ public class Monster extends Thread{
                 randnum = Math.random();
                 // Gestion de cambio de estado
                 if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
+                    System.out.println("HIHIHIHI");
                     state = (state == MonsterState.LOOKING_FOR_TARGET)? MonsterState.WALKING_AROUND : MonsterState.LOOKING_FOR_TARGET;
                     if (MFServer.DEBUG_MONSTERS){
 
