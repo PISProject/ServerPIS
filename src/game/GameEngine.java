@@ -132,9 +132,9 @@ public class GameEngine{
         
         state = GameState.RUNNING;
         if (MFServer.DEBUG_GAMES){
-                System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
+                System.out.println("==> GAME "+this.game_id+": Starts streaming");
         }
-        streaming.start(); // Aqui empieza a correr el Streaming
+        streaming.startStreaming();// Aqui empieza a correr el Streaming
         //clock = new Timer();
         
     }

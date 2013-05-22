@@ -42,7 +42,7 @@ import server.MFServer;
                     }
                     if (ammount==game.players.length){
                         if (MFServer.DEBUG_GAMES){
-                            System.err.println("==> GAME "+/*game.uid*/": Not players connected... Closing game");
+                            System.err.println("==> GAME "+game.game_id+": Not players connected... Closing game");
                         }
                         game.state = GameEngine.GameState.FINISHED;
                     }
@@ -60,7 +60,7 @@ import server.MFServer;
                     sleep(STREAMING_PING);
                 } catch (InterruptedException ex) {
                     if (MFServer.DEBUG_GAMES){
-                        System.err.println("==> GAME "+/*game.uid*/": Streaming sleep interrupted.");
+                        System.err.println("==> GAME "+game.game_id+": Streaming sleep interrupted.");
                     }
                 }
             }
