@@ -110,6 +110,7 @@ public class Connection extends Thread{
      * partida
      */
     void login(String user, String password){
+
         this.uid = login.login(user, password);
         this.name = login.getPlayerName(uid);
         /*
