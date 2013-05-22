@@ -78,6 +78,7 @@ public class Monster extends Thread{
         
         this.uid = UID;
         this.scenario = scenario;
+        this.exhausted = false;
         alive = true;
         this.created = true;
         state = defaultstate;    
