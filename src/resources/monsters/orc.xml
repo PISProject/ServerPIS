@@ -2,6 +2,6 @@
 
 <monster name="Orc">
     <attributes speed = "0.1" health = "200" looktype = "2"/>
-    <behavior changedir = "0.01" stchangerate= "0.02"/>
+    <behavior changedir = "0.1" stchangerate= "0.2"/>
     <skills attack ="10" defense = "10" range = "2"/>
 </monster>

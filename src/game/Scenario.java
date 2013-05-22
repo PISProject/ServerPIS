@@ -52,6 +52,8 @@ public class Scenario {
             for(int i = 0; i <j; i++){
                 Attack pro = attackPool.poll();
                 map+=pro.type+","+pro.caster.uid+"*";
+                
+                /* Borrar*/
                 System.out.println(pro.type+","+pro.caster);
             }
            

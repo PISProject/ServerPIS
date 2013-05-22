@@ -62,13 +62,11 @@ public class Monster extends Thread{
 
     private int target; //uid del target
     private boolean alive;
-    public boolean finished;
     private double rand_movedir;
     private double stchange_rate;
     //
     
     public Actor createMonster(int UID, Scenario scenario, MonsterModel model){ //Este podria ser un metodo abstracto
-        finished = false;
         // Model stats
         this.hp = model.hp;
         this.attack_damage = model.attack_damage;
@@ -204,7 +202,6 @@ public class Monster extends Thread{
     //////////////////// IA del monstruo ////////////////////////
     @Override
     public void run() {
-        finished = false;
         int clock;
         clock = 0;
         double randnum;
@@ -260,7 +257,6 @@ public class Monster extends Thread{
                 } catch (InterruptedException ex) {
                 } 
             }while(alive);
-           finished = true;
         }
     }
     /////////////////////////////////////////////////////////////////

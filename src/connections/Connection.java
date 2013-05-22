@@ -176,9 +176,6 @@ public class Connection extends Thread{
     //OUTGOING Messages
     void getScenarios() {
         String s = Games.parseGames();
-        //
-        System.out.println(s);
-        //
         write(s);
     }
     
