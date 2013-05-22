@@ -101,6 +101,7 @@ public class Monster extends Thread{
      * ataque.
      */
     public void addExhaust(){
+        exhausted = true;
         exhaustion.schedule(new TimerTask() {
 
             @Override
@@ -127,8 +128,9 @@ public class Monster extends Thread{
      */
     private boolean attack(){
         if (!exhausted){
+            System.err.println("MONSTER ATTACK");
             scenario.attack(new Attack(scenario.actores.get(uid), 1 /*Este es el tipo de ataque*/));
-            exhausted = true;
+            addExhaust();
             return exhausted;
         }
         return false;
