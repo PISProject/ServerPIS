@@ -233,14 +233,14 @@ public class Monster extends Thread{
                     case FOLLOWING_TARGET:
                         // Si colisionamos y estamos en rango de ataque con el objetivo atacamos
                         int st = moveToTarget(uid, target);
-                        if(st == -1 && isTargetInAttackRange()) {
+                        /*if(st == -1 && isTargetInAttackRange()) {
                             attack();
                         }
                         // Si hay colision 
                         else if (st == 0){
                             state = MonsterState.WALKING_AROUND;
                         }
-                        
+                        */
                         break;
 
                 }
