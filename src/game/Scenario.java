@@ -73,7 +73,7 @@ public class Scenario {
     public int moveTo(int uid, int angle) throws NullPointerException{
         float x, y;
         Actor a = actores.get(uid);
-        if ( a == null) return -2;
+        if (a == null){ return -2;}
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
@@ -85,6 +85,7 @@ public class Scenario {
     }
     
     public synchronized void attack(Attack attack){
+        /* Funcion de ataqueProvisional*/
         attackPool.add(attack);
         Actor attacker = (attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
