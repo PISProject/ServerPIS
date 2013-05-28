@@ -33,6 +33,7 @@ public class Scenario {
         attackPool = new ConcurrentLinkedQueue<>();
         this.eng = eng;
         for (Connection c: connections) {
+         
             actores.put(c.uid, new Actor(c.uid));
             
             
@@ -50,7 +51,9 @@ public class Scenario {
             int j = attackPool.size();
             for(int i = 0; i <j; i++){
                 Attack pro = attackPool.poll();
-                map+=pro.type+","+pro.caster+"*";
+                map+=pro.type+","+pro.caster.uid+"*";
+                
+                /* Borrar*/
                 System.out.println(pro.type+","+pro.caster);
             }
            
@@ -67,30 +70,41 @@ public class Scenario {
        actores.put(uid, new Actor());
     }
 
-    public int moveTo(int uid, int angle) {
+    public int moveTo(int uid, int angle) throws NullPointerException{
         float x, y;
         Actor a = actores.get(uid);
+<<<<<<< HEAD
         if ( a == null) return -2;
+=======
+        if (a == null){ return -2;}
+>>>>>>> branch 'master' of https://github.com/PISProject/ServerPIS.git
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
        if (!checkCollision(uid,x, y)){
-            a.moveTo(x,y);
+            a.moveTo(angle,x,y);
             return 0;
         }
        return -1;
     }
     
+<<<<<<< HEAD
     public void attack(Attack attack){
         /* Funcion de ataque provisional*/
+=======
+    public synchronized void attack(Attack attack){
+        /* Funcion de ataqueProvisional*/
+>>>>>>> branch 'master' of https://github.com/PISProject/ServerPIS.git
         attackPool.add(attack);
-        Actor attacker = actores.get(attack.caster);
+        Actor attacker = (attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
-            if (Math.abs(attacker.getPos()[0]-a.getPos()[0])< attack.range && Math.abs(attacker.getPos()[1]-a.getPos()[1])< attack.range){
-                
-                if(a.isAttacked(attacker,0)==1){ //0 es ataque basico
+            if ( a.uid != attacker.uid &&(Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range)){
+                System.err.println(attack.caster.uid+" attacks: "+a.uid);
+                if(a.isAttacked(attack)==0){ //0 es ataque basico
                     /* Aqui se trata la muerte del personaje*/
+                    
+                    //attacker.killed_creatures++;
                     onDie(a);
                 }
             }
@@ -127,6 +141,5 @@ public class Scenario {
     else {
         eng.onMonsterDeath(a.uid);
     }
-    actores.remove(a.uid);
     }
 }
