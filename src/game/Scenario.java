@@ -70,6 +70,7 @@ public class Scenario {
     public int moveTo(int uid, int angle) {
         float x, y;
         Actor a = actores.get(uid);
+        if ( a == null) return -2;
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
@@ -81,8 +82,7 @@ public class Scenario {
     }
     
     public void attack(Attack attack){
-        /* Funcion de ataqueProvisional*/
-        System.out.println("ATAQUE");
+        /* Funcion de ataque provisional*/
         attackPool.add(attack);
         Actor attacker = actores.get(attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
@@ -97,6 +97,7 @@ public class Scenario {
         }
         
     }
+
     public boolean checkCollision(int uid, float x,float y){
         Actor a;
         for (Map.Entry entry : actores.entrySet()) {

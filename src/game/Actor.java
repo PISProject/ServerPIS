@@ -99,9 +99,9 @@ public class Actor {
         } 
         
         if(this.health<=0){ // When the player recieves damage
-            return 0; //Muerto
+            return 0; //Player dies
         }
-        return 1;
+        return 1; // Player live
     }
     
     public int isAttacked(Actor attacker, int attackType){
