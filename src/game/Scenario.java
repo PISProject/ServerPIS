@@ -73,11 +73,7 @@ public class Scenario {
     public int moveTo(int uid, int angle) throws NullPointerException{
         float x, y;
         Actor a = actores.get(uid);
-<<<<<<< HEAD
         if ( a == null) return -2;
-=======
-        if (a == null){ return -2;}
->>>>>>> branch 'master' of https://github.com/PISProject/ServerPIS.git
         double speed = a.speed;
         y = a.posY+(float) (Math.sin(Math.toRadians(angle))*speed);
         x = a.posX+(float) (Math.cos(Math.toRadians(angle))*speed);
@@ -88,13 +84,7 @@ public class Scenario {
        return -1;
     }
     
-<<<<<<< HEAD
-    public void attack(Attack attack){
-        /* Funcion de ataque provisional*/
-=======
     public synchronized void attack(Attack attack){
-        /* Funcion de ataqueProvisional*/
->>>>>>> branch 'master' of https://github.com/PISProject/ServerPIS.git
         attackPool.add(attack);
         Actor attacker = (attack.caster);
         for(Map.Entry actor : actores.entrySet()) {

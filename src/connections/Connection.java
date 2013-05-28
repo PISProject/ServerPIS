@@ -69,7 +69,7 @@ public class Connection extends Thread{
         while (state != ConnectionState.DISCONNECTED){
             try {
                 String entrada = in.readUTF();
-                protocol.parse(entrada);
+;                protocol.parse(entrada);
                 
             } catch (IOException ex) {
                 disconnect();
@@ -110,6 +110,7 @@ public class Connection extends Thread{
      * partida
      */
     void login(String user, String password){
+
         this.uid = login.login(user, password);
         this.name = login.getPlayerName(uid);
         /*
@@ -176,9 +177,6 @@ public class Connection extends Thread{
     //OUTGOING Messages
     void getScenarios() {
         String s = Games.parseGames();
-        //
-        System.out.println(s);
-        //
         write(s);
     }
     
@@ -232,7 +230,7 @@ public class Connection extends Thread{
     }
     
     public void attack(){
-        scenario.attack(new Attack(this.uid, 1, 10));
+        scenario.attack(new Attack(scenario.actores.get(uid), 1));
     }
     ///////
     // GENERAL Methods

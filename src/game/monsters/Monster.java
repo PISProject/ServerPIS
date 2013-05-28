@@ -57,7 +57,7 @@ public class Monster extends Thread{
     
     
     // PARAMETROS DE COMPORTAMIENTO
-    private MonsterState defaultstate= MonsterState.WALKING_AROUND;
+    private MonsterState defaultstate= MonsterState.LOOKING_FOR_TARGET;
     private MonsterState state;
 
     private int target; //uid del target
@@ -67,7 +67,6 @@ public class Monster extends Thread{
     //
     
     public Actor createMonster(int UID, Scenario scenario, MonsterModel model){ //Este podria ser un metodo abstracto
-        
         // Model stats
         this.hp = model.hp;
         this.attack_damage = model.attack_damage;
@@ -75,15 +74,27 @@ public class Monster extends Thread{
         this.changedir_prob = model.changedir_prob;
         this.rand_movedir = model.rand_movedir;
         this.stchange_rate = model.stchange_rate;
+        this.attack_range = model.range;
         // -- 
         
         this.uid = UID;
         this.scenario = scenario;
+        this.exhausted = false;
         alive = true;
         this.created = true;
         state = defaultstate;    
         exhaustion = new Timer();
-        return new Actor(UID, attack_damage, hp, speed);
+
+//      Creamos el actor correspondiente al monstruo
+        
+        Actor a = new Actor();
+        a.attackDamage = this.attack_damage;
+        a.health = this.hp;
+        a.speed = this.speed;
+        a.attack_range = this.attack_range;
+        a.uid = UID;
+
+        return a;
         
     }
     
@@ -92,6 +103,7 @@ public class Monster extends Thread{
      * ataque.
      */
     public void addExhaust(){
+        exhausted = true;
         exhaustion.schedule(new TimerTask() {
 
             @Override
@@ -104,8 +116,12 @@ public class Monster extends Thread{
     /*
      * monsterDeath() -- Gestion de lo que pasa cuando un monstruo muere.
      */
-    public void monsterDeath(){
+    public boolean monsterDeath(){
         alive = false;
+        for (int i = 0; i < 1000; i++) {
+           
+        }
+        return true;
     }
     
     /*
@@ -114,8 +130,9 @@ public class Monster extends Thread{
      */
     private boolean attack(){
         if (!exhausted){
-            scenario.attack(new Attack(uid, 1 /*Este es el tipo de ataque*/, (int)attack_range));
-            exhausted = true;
+            System.err.println("MONSTER ATTACK");
+            scenario.attack(new Attack(scenario.actores.get(uid), 1 /*Este es el tipo de ataque*/));
+            addExhaust();
             return exhausted;
         }
         return false;
@@ -124,10 +141,19 @@ public class Monster extends Thread{
         Actor a_this = scenario.actores.get(uid);
         Actor a = scenario.actores.get(target);
         // Retorna un boleano de si el target entra en el rango de ataque.
-        return (Math.abs(a.posX-a_this.posX) < attack_range && Math.abs(a.posY-a_this.posY) < attack_range);
+        return ((Math.abs(a.posX-a_this.posX)) < attack_range && (Math.abs(a.posY-a_this.posY)) < attack_range);
     }
     
+    /**
+     * -2 :: Algun jugador no existe 
+     * -1 :: Colisiona
+     * 0 :: Ha ido bien
+     * @param uid
+     * @param t_uid
+     * @return 
+     */
     public int moveToTarget(int uid, int t_uid){
+        
         Actor a1,a2;
         a1 = scenario.actores.get(uid);
         a2 = scenario.actores.get(t_uid);
@@ -139,6 +165,8 @@ public class Monster extends Thread{
         int angle =(int) Math.toDegrees(Math.atan2((a2.posX-a1.posX),(a2.posY-a1.posY)));
         angle = (360-angle)%360;
         return scenario.moveTo(uid, angle+90);
+
+        
         
     }
  
@@ -197,10 +225,10 @@ public class Monster extends Thread{
         clock = 0;
         double randnum;
         if (created){
-            while(alive){
+           do{
                 randnum = Math.random();
                 // Gestion de cambio de estado
-                if (randnum < stchange_rate && state != MonsterState.LOOKING_FOR_TARGET){
+                if (randnum < stchange_rate && state == MonsterState.WALKING_AROUND ){
                     state = (state == MonsterState.LOOKING_FOR_TARGET)? MonsterState.WALKING_AROUND : MonsterState.LOOKING_FOR_TARGET;
                     if (MFServer.DEBUG_MONSTERS){
 
@@ -228,10 +256,10 @@ public class Monster extends Thread{
                             attack();
                         }
                         // Si hay colision 
-                        else if (st == 0){
+                        else if (st == -2){
                             state = MonsterState.WALKING_AROUND;
                         }
-                        
+          
                         break;
 
                 }
@@ -246,8 +274,8 @@ public class Monster extends Thread{
                      */
                     sleep(100);
                 } catch (InterruptedException ex) {
-                }
-            }
+                } 
+            }while(alive);
         }
     }
     /////////////////////////////////////////////////////////////////

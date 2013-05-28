@@ -68,7 +68,7 @@ public class GameEngine{
             c.setGame(this);
             c.setScenario(scenario);
             
-            info+=c.uid+","+c.name+/*","+c.player_model+*/"*";
+            info+=c.uid+","+c.name+/*",1"+*/"*"; //TODO: Este 1 representa el Modelo, ahora asignamos el mismo modelo a todo el mundo
         
         }
         // Notificamos a todas las conexiones que se ha creado un juego y que tienen
@@ -132,9 +132,9 @@ public class GameEngine{
         
         state = GameState.RUNNING;
         if (MFServer.DEBUG_GAMES){
-                System.out.println("==> GAME "+/*this.uid+*/": Starts streaming");
+                System.out.println("==> GAME "+this.game_id+": Starts streaming");
         }
-        streaming.start(); // Aqui empieza a correr el Streaming
+        streaming.startStreaming();// Aqui empieza a correr el Streaming
         //clock = new Timer();
         
     }
@@ -153,8 +153,12 @@ public class GameEngine{
         }
     }
     void onMonsterDeath(int uid){
+        System.out.println("\n"+uid+"\n");
         monsters.get(uid).monsterDeath();
+        
         monsters.remove(uid);
+        scenario.actores.remove(uid);
+        
                 
     }
     
@@ -165,13 +169,14 @@ public class GameEngine{
         
         /* Programamos su reaparicion */
         dead_players.add(uid);
-        clock.schedule(new TimerTask() {
-            
-            @Override
-            public void run() {
-                respawn(dead_players.get(0));
-            }
-        }, null);
+//        clock.schedule(new TimerTask() {
+//            
+//            @Override
+//            public void run() {
+//                respawn(dead_players.get(0));
+//            }
+//        }, 5000);
+        scenario.actores.remove(uid);
     }
     
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){

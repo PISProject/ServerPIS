@@ -2,5 +2,5 @@
 
 <hero>
     <attributes name = "Necromancer" looktype = "2" life="100" mana = "100" speed = "0.55"/>
-    <attack damage = "50" defense = "15"/>
+    <attack damage = "50" defense = "15" range = "2"/>
 </hero>
