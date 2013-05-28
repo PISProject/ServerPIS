@@ -156,8 +156,9 @@ public class GameEngine{
         System.out.println("\n"+uid+"\n");
         monsters.get(uid).monsterDeath();
         
-        monsters.remove(uid);
+        
         scenario.actores.remove(uid);
+        monsters.remove(uid);
         
                 
     }
