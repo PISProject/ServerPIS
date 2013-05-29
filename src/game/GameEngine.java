@@ -166,6 +166,9 @@ public class GameEngine{
         System.out.println("Scheduling a new RESPAWN task");
         
         
+        scenario.actores.remove(uid);
+        monsters.remove(uid);
+        
         Timer t = new Timer();
         t.schedule(new TimerTask() {
             
