@@ -77,6 +77,7 @@ public class Monster extends Thread{
         this.rand_movedir = model.rand_movedir;
         this.stchange_rate = model.stchange_rate;
         this.attack_range = model.range;
+        this.model = model.model;
         // -- 
         
         this.uid = UID;
@@ -96,6 +97,7 @@ public class Monster extends Thread{
         a.speed = this.speed;
         a.attack_range = this.attack_range;
         a.uid = UID;
+        a.model = this.model;
 
         return a;
         

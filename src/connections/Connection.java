@@ -113,6 +113,7 @@ public class Connection extends Thread{
 
         this.uid = login.login(user, password);
         this.name = login.getPlayerName(uid);
+        System.out.println(name);
         /*
          * El cliente tiene que leer para Integer.parseInt(in.readUTF())>0 y <0.
          */
