@@ -60,6 +60,7 @@ public class Actor {
 //    
 //    // Constructor provisional para heroes
     public Actor(int uid, String name){
+        this.name = name;
         this.type = ActorType.HERO;
         this.uid = uid;
         this.health = 100;
