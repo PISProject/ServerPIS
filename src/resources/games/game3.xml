@@ -4,19 +4,19 @@
     <basics name = "game3" id = "3" scenario = "3" numplayers = "2" time= "120000"/>
    <hordes number = "3">
         <horde number = "1" time = "10000">
-            <monster name = "Troll"/>
-            <monster name = "Troll"/>
-            <monster name = "Troll"/>
+            <monster name = "Dark knight"/>
+            <monster name = "Dark knight"/>
+            <monster name = "Mosquito"/>
 
         </horde>
         <horde number = "2" time = "14000">
-            <monster name = "Troll"/>
-            <monster name = "Troll"/>
+            <monster name = "Vampire"/>
+            <monster name = "Vampire"/>
 
         </horde>
         <horde number = "3" time = "16000">
-            <monster name = "Troll"/>
-            <monster name = "Troll"/>
+            <monster name = "Orc"/>
+            <monster name = "Orc"/>
         </horde>
     </hordes>
 </game>
