@@ -97,6 +97,7 @@ public class Monster extends Thread{
         a.speed = this.speed;
         a.attack_range = this.attack_range;
         a.uid = UID;
+        a.model = this.model;
 
         return a;
         
