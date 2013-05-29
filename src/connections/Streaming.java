@@ -64,6 +64,10 @@ import server.MFServer;
                     }
                 }
             }
+            
+//            
+//            TODO: Lo que enviamos cuando el juego acaba.
+//            
         }
 
     public void startStreaming() {

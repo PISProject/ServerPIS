@@ -100,14 +100,13 @@ public class GameEngine{
     }
     
     public void respawn(int uid){
+//        
+//        THIS IS A HARDCODED FUNCTION!!!
+//        
+        
         System.out.println("==> [GAME ENGINE] Client "+uid+" respawns.");
-        /* Notificamos al cliente que vuelve a vivir */
-        
-        // TODO
-        
-        /* Lo volvemos a colocar en el escenario*/
-        String name = scenario.actores.remove(uid).name;
-        scenario.actores.put(uid, new Actor(uid, name));
+//        Lo unico que hacemos es volver a darle vida
+        (scenario.actores.get(uid)).health = 100;
     }
 
     public void startGameThread() {
@@ -163,7 +162,6 @@ public class GameEngine{
             return;
         }
         dead_players.add(a.uid);
-        System.out.println("Scheduling a new RESPAWN task");
         
         
 //        scenario.actores.remove(uid);
