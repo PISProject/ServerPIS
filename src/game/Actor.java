@@ -48,6 +48,7 @@ public class Actor {
 
 //    Contamos los monstruos que mata
     public int killed_creatures;
+    public int deaths;
 
     
     public Actor(){

@@ -155,6 +155,7 @@ public class GameEngine{
         }
     }
     void onDeath(Actor a){
+        a.deaths++;
         System.out.println(a.uid+" is dead.");
         if (!a.isHero()){
             Monster m = monsters.get(a.uid);

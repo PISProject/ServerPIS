@@ -89,6 +89,7 @@ public class Scenario {
                     /* Aqui se trata la muerte del personaje*/
                     
                     //attacker.killed_creatures++;
+                    attack.caster.killed_creatures++;
                     onDie(a);
                 }
             }
