@@ -17,6 +17,9 @@ package game;
  * @author PabloMartinez
  */
 public class Actor {
+    
+    
+    public String name;
 
     
     
@@ -56,7 +59,7 @@ public class Actor {
     }
 //    
 //    // Constructor provisional para heroes
-    public Actor(int uid){
+    public Actor(int uid, String name){
         this.type = ActorType.HERO;
         this.uid = uid;
         this.health = 100;
@@ -105,7 +108,6 @@ public class Actor {
     
     int healthChange(int damage){
         this.health-=damage;
-        System.err.println(this.health);
 //        if(this.health>=this.healthMax){ // When the player it's healed
 //            this.health = this.healthMax;
 //        } 

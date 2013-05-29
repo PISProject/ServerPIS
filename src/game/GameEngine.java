@@ -100,12 +100,14 @@ public class GameEngine{
     }
     
     public void respawn(int uid){
+        System.out.println("==> [GAME ENGINE] Client "+uid+" respawns.");
         /* Notificamos al cliente que vuelve a vivir */
         
-        // ToDo
+        // TODO
         
         /* Lo volvemos a colocar en el escenario*/
-        scenario.addHeroe(uid);
+        String name = scenario.actores.remove(uid).name;
+        scenario.actores.put(uid, new Actor(uid, name));
     }
 
     public void startGameThread() {
@@ -146,39 +148,45 @@ public class GameEngine{
         for (String monstername: horde.list){
             if (MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+s);
             Monster m = new Monster();
-            Actor a = m.createMonster(monster_id++, scenario, Monsters.getMonsterModel(monstername));
+            monster_id++;
+            Actor a = m.createMonster(monster_id, scenario, Monsters.getMonsterModel(monstername));
             monsters.put(monster_id,m);
             scenario.addMonster(a);
             m.start();
         }
     }
-    void onMonsterDeath(int uid){
-        System.out.println("\n"+uid+"\n");
-        monsters.get(uid).monsterDeath();
+    void onDeath(Actor a){
+        System.out.println(a.uid+" is dead.");
+        if (!a.isHero()){
+            Monster m = monsters.get(a.uid);
+            if (m!=null) m.monsterDeath();
+            return;
+        }
+        dead_players.add(a.uid);
+        System.out.println("Scheduling a new RESPAWN task");
         
-        monsters.remove(uid);
-        scenario.actores.remove(uid);
         
-                
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            
+            @Override
+            public void run() {
+                respawn(dead_players.get(0));
+                dead_players.remove(0);
+            }
+        }, 20000);
     }
     
-    void onPlayerDeath(int uid) {
-        /* Notificamos al cliente que ha muerto*/
-        
-        // TODO
-        
-        /* Programamos su reaparicion */
-        dead_players.add(uid);
-//        clock.schedule(new TimerTask() {
-//            
-//            @Override
-//            public void run() {
-//                respawn(dead_players.get(0));
-//            }
-//        }, 5000);
-        scenario.actores.remove(uid);
-    }
-    
+//    void onPlayerDeath(int uid) {
+//        /* Notificamos al cliente que ha muerto*/
+//        
+//        // TODO
+//        
+//        /* Programamos su reaparicion */
+//       
+//        scenario.actores.remove(uid);
+//    }
+//    
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
         if(MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Ending game");
         /* TODO Enviar informacion al cliente */

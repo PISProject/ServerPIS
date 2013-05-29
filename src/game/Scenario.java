@@ -34,17 +34,17 @@ public class Scenario {
         this.eng = eng;
         for (Connection c: connections) {
          
-            actores.put(c.uid, new Actor(c.uid));
+            actores.put(c.uid, new Actor(c.uid, c.name));
             
             
         }
         
-    }
+    }   
     public String parseScenario(){
         String map = "";
         for (Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue(); 
-           map+=a.uid+","+a.model+","+a.health+","+a.posX+","+a.posY+"*";
+           if (a.health>0) map+=a.uid+","+a.name+","+a.model+","+a.health+","+a.posX+","+a.posY+"*";
         }
         map+= "/";
         if (!attackPool.isEmpty()){
@@ -52,9 +52,6 @@ public class Scenario {
             for(int i = 0; i <j; i++){
                 Attack pro = attackPool.poll();
                 map+=pro.type+","+pro.caster.uid+"*";
-                
-                /* Borrar*/
-                System.out.println(pro.type+","+pro.caster);
             }
            
         }
@@ -66,9 +63,6 @@ public class Scenario {
      * 
      */
     
-    public void addHeroe(int uid /*, HeroType type*/) {
-       actores.put(uid, new Actor());
-    }
 
     public int moveTo(int uid, int angle) throws NullPointerException{
         float x, y;
@@ -91,8 +85,7 @@ public class Scenario {
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
             if ( a.uid != attacker.uid &&(Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range)){
-                System.err.println(attack.caster.uid+" attacks: "+a.uid);
-                if(a.isAttacked(attack)==0){ //0 es ataque basico
+                if(a.health > 0 && a.isAttacked(attack)==0){ //0 es ataque basico
                     /* Aqui se trata la muerte del personaje*/
                     
                     //attacker.killed_creatures++;
@@ -107,7 +100,7 @@ public class Scenario {
         Actor a;
         for (Map.Entry entry : actores.entrySet()) {
             a = (Actor)entry.getValue();
-            if (a.uid!= uid &&(Math.abs(a.posX-x) < 2 && Math.abs(a.posY-y) < 2)){
+            if (a.health >0 && a.uid!= uid &&(Math.abs(a.posX-x) < 2 && Math.abs(a.posY-y) < 2)){
                 return true;
                 
             }
@@ -126,11 +119,11 @@ public class Scenario {
     }
 
     private void onDie(Actor a) {
-    if (a.isHero()){
-        eng.onPlayerDeath(a.uid);
+        if (a.isHero()){
+            eng.onDeath(a);
+            }
+        else {
+            eng.onDeath(a);
         }
-    else {
-        eng.onMonsterDeath(a.uid);
-    }
     }
 }

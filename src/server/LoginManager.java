@@ -25,6 +25,7 @@ public class LoginManager {
     }
     
     public int login(String name, String password){
+        if (name.equals("") || password.equals("")) return -1;
         int id = db.getUserId(name);
         if(id != -1){
             if(db.getPassword(id).equals(password)){

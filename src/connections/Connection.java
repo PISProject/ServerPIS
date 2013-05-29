@@ -57,7 +57,7 @@ public class Connection extends Thread{
         }catch(IOException i){
             disconnect();
             if(MFServer.DEBUG_CONNECTIONS){
-                 System.err.println("==> Cannot create streams in connection "+this.uid);
+                 System.out.println("==> [CONNECTION] Cannot create streams to "+name);
             }
         }
         
@@ -86,7 +86,7 @@ public class Connection extends Thread{
         } catch (IOException ex) {
             disconnect();
             if(MFServer.DEBUG_CONNECTIONS){
-                System.err.println("==> Couldn't reach client "+uid);
+                System.out.println("==> [CONNECTION] Couldn't reach client "+uid);
             }
         }
     }
@@ -96,7 +96,7 @@ public class Connection extends Thread{
         } catch (IOException ex) {
             disconnect();
            if(MFServer.DEBUG_CONNECTIONS){
-                System.err.println("==> Couldn't reach client "+uid);}
+                System.out.println("==> [CONNECTION]  Couldn't reach "+name);}
         }
     }
     ////////////////////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ public class Connection extends Thread{
                 
                 //Debugging
                 if(MFServer.DEBUG_CONNECTIONS){
-                    System.err.println("==> Client "+uid+" logged succesfully");
+                    System.out.println("==> [CONNECTION] '"+name+"' logged succesfully");
                 }
                 break;               
                 
@@ -158,18 +158,18 @@ public class Connection extends Thread{
 
     void quitQueue() {
         if(MFServer.DEBUG_CONNECTIONS){
-            System.err.print("==> Client "+uid+" is trying to left queue.");
+            System.out.print("==> [CONNECTION] '"+name+"' is trying to left queue.");
         }
         if (MFServer.SERVER.quitQueue(game_type_joining,this)){
             this.state = ConnectionState.OUT_GAME;
             if(MFServer.DEBUG_CONNECTIONS){
-                    System.err.println("[DONE]");
+                    System.out.println("[DONE]");
             }
             write("1");
             return;
         }
         if(MFServer.DEBUG_CONNECTIONS){
-                    System.err.println("[X]");
+                    System.out.println("[X]");
         }
         write("0");
     }
@@ -188,7 +188,7 @@ public class Connection extends Thread{
     // OUTGOING Messages
     public void notifyGameFound(String infoPlayers) {
         if(MFServer.DEBUG_CONNECTIONS){
-            System.err.println("==> Notifying connection "+uid+" game found.");
+            System.out.println("==> [CONNECTION] Notifying '"+name+"' game found.");
         }
         this.state = ConnectionState.LOADING;
         //write(protocol.GAME_FOUND);
@@ -242,16 +242,16 @@ public class Connection extends Thread{
     public void disconnect(){
         
         if(MFServer.DEBUG_CONNECTIONS){
-            System.err.print("==> Client '"+uid+"' disconnected, trying to close socket...");
+            System.out.print("==> [CONNECTION] '"+name+"' disconnected, trying to close socket...");
         }
         try {
             socket.close();
             if(MFServer.DEBUG_CONNECTIONS){
-                System.err.println("[DONE]");
+                System.out.println("[DONE]");
             }
         } catch (IOException ex) {
             if(MFServer.DEBUG_CONNECTIONS){
-                System.err.println("[X]");
+                System.out.println("[X]");
             }
         }
         switch (state){

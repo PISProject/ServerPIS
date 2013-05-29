@@ -27,7 +27,7 @@ import server.MFServer;
  * @author PabloMartinez
  */
 public class Monster extends Thread{
-    private static long EXHAUST_TIME = 1000;
+    private static long EXHAUST_TIME = 3000;
 
     
     public Monster(){
@@ -39,6 +39,7 @@ public class Monster extends Thread{
     private boolean created = false;
     // PARAMETROS FIJOS
     private int uid;
+    public String name;
     
     private int hp;
     private int attack_damage;
@@ -68,6 +69,7 @@ public class Monster extends Thread{
     
     public Actor createMonster(int UID, Scenario scenario, MonsterModel model){ //Este podria ser un metodo abstracto
         // Model stats
+        this.name = model.name;
         this.hp = model.hp;
         this.attack_damage = model.attack_damage;
         this.speed = model.speed;
@@ -88,6 +90,7 @@ public class Monster extends Thread{
 //      Creamos el actor correspondiente al monstruo
         
         Actor a = new Actor();
+        a.name = model.name;
         a.attackDamage = this.attack_damage;
         a.health = this.hp;
         a.speed = this.speed;
@@ -118,9 +121,6 @@ public class Monster extends Thread{
      */
     public boolean monsterDeath(){
         alive = false;
-        for (int i = 0; i < 1000; i++) {
-           
-        }
         return true;
     }
     
@@ -130,7 +130,6 @@ public class Monster extends Thread{
      */
     private boolean attack(){
         if (!exhausted){
-            System.err.println("MONSTER ATTACK");
             scenario.attack(new Attack(scenario.actores.get(uid), 1 /*Este es el tipo de ataque*/));
             addExhaust();
             return exhausted;
