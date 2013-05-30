@@ -68,8 +68,9 @@ import server.MFServer;
 //            
 //            TODO: Lo que enviamos cuando el juego acaba.
 //            
+            String s = game.end_game_string;
             for (Connection c : game.players){
-                c.pushMapToClient(game.end_game_string);
+                c.gameEnd(s);
             }
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <monster name="Mosquito">
-    <attributes speed = "0.1" health = "100" looktype = "4"/>
+    <attributes speed = "0.4" health = "100" looktype = "4"/>
     <behavior changedir = "0.1" stchangerate= "0.2"/>
     <skills attack ="10" defense = "10" range = "2"/>
 </monster>
