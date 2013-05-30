@@ -43,6 +43,9 @@ public class GameEngine{
     public Scenario s;
     Streaming streaming;
     int ready = 0;
+    private int total_monsters;
+    private boolean victory;
+    public String end_game_string;
     
     /* El reloj de la partida */
     private Timer clock;
@@ -52,10 +55,13 @@ public class GameEngine{
         dead_players = new ArrayList<>();
         time_limit = t_game.estimatedTime;
         hordeCount = 0;
+        total_monsters = 0;
         monsters = new ConcurrentHashMap<>();
         this.game = t_game;
         this.game_id = id;
         scenario = new Scenario(this, game);
+        scenario.radius = t_game.radius;
+        victory = false;
         
         //Inicializamos la lista de players
         players = new Connection[game.length];
@@ -113,6 +119,7 @@ public class GameEngine{
         //==> Programamos las hordas
         clock = new Timer();
         for (int i = 0; i < game.n_hordes; i++) {
+            total_monsters += game.hordes.get(i).list.size();
             clock.schedule(new TimerTask() {
 
                 @Override
@@ -145,7 +152,7 @@ public class GameEngine{
         Horde horde = game.hordes.get(hordeCount);
         hordeCount++;
         for (String monstername: horde.list){
-            if (MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+s);
+            if (MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Summoning new monster of type ->"+monstername);
             Monster m = new Monster();
             monster_id++;
             Actor a = m.createMonster(monster_id, scenario, Monsters.getMonsterModel(monstername));
@@ -158,15 +165,42 @@ public class GameEngine{
         a.deaths++;
         System.out.println(a.uid+" is dead.");
         if (!a.isHero()){
+            total_monsters -=1;
             Monster m = monsters.get(a.uid);
             if (m!=null) m.monsterDeath();
+            
+//            Si todos los monstruos han muerto acaba
+            if (total_monsters == 0){
+                clock.cancel();
+                clock = new Timer();
+                victory = true;
+                
+                // Programamos el final de partida para dentro de 5 segundos
+                clock.schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        endGame();
+                    }
+                }, 5000);
+            }
             return;
         }
         dead_players.add(a.uid);
         
-        
-//        scenario.actores.remove(uid);
-//        monsters.remove(uid);
+//        Si todos los players han muerto acaba
+        if (game.numplayers == dead_players.size()){
+            clock.cancel();
+            clock = new Timer();
+            victory = false;
+            
+            clock.schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        endGame();
+                    }
+                }, 5000);
+            return;
+        }
         
         Timer t = new Timer();
         t.schedule(new TimerTask() {
@@ -192,10 +226,13 @@ public class GameEngine{
     public void endGame(/* Aqui iran los parametros que indicaran como ha acabado la partida*/){
         if(MFServer.DEBUG_GAMES) System.out.println("==> [GAME] Ending game");
         /* TODO Enviar informacion al cliente */
-        this.state = GameState.FINISHED;
         clock.cancel();
-        destroyMonsters();
+        if (!victory) destroyMonsters();
         MFServer.SERVER.endGame(game_id);
+        
+        end_game_string = "1|"+((victory) ? "1/": "0/")+ scenario.getScores();
+                  
+        this.state = GameState.FINISHED;
     }
     
     private void destroyMonsters() {

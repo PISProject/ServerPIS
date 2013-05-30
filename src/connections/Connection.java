@@ -273,5 +273,10 @@ public class Connection extends Thread{
         }
         state = ConnectionState.DISCONNECTED;
     }
+    
+    public void gameEnd(String s){
+        write(s);
+        state = ConnectionState.OUT_GAME;
+    }
 
 }   

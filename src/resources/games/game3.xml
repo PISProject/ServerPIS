@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
+asd
 <!-- El tiempo tiene que estar en ms-->
 <game>
-    <basics name = "game3" id = "3" scenario = "3" numplayers = "2" time= "120000"/>
+    <basics name = "game3" id = "3" scenario = "3" numplayers = "3" radius = "81" time= "300000"/>
    <hordes number = "3">
         <horde number = "1" time = "10000">
             <monster name = "Dark knight"/>
             <monster name = "Dark knight"/>
             <monster name = "Mosquito"/>
+            <monster name = "Mosquito"/>
 
         </horde>
-        <horde number = "2" time = "14000">
-            <monster name = "Vampire"/>
-            <monster name = "Vampire"/>
+        <horde number = "2" time = "30000">
+            <monster name = "Dark Knight"/>
+            <monster name = "Dark Knight"/>
+            <monster name = "Malote"/>
+            <monster name = "Malote"/>
+            <monster name = "Troll"/>
 
         </horde>
-        <horde number = "3" time = "16000">
-            <monster name = "Orc"/>
-            <monster name = "Orc"/>
+        <horde number = "3" time = "60000">
+            <monster name = "Malote"/>
+            <monster name = "Troll"/>
+            <monster name = "Mosquito"/>
+            <monster name = "Mosquito"/>
+            <monster name = "Mosquito"/>
+            <monster name = "Dark Knight"/>
+            <monster name = "Dark Knight"/>
         </horde>
     </hordes>
 </game>

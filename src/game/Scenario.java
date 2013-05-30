@@ -26,6 +26,7 @@ public class Scenario {
     public ConcurrentHashMap<Integer, Actor> actores;
     public GameEngine eng;
     public ConcurrentLinkedQueue<Attack> attackPool;
+    public int radius;
     
     public Scenario(GameEngine eng, Connection [] connections){
         monsterCount = 0;
@@ -84,13 +85,17 @@ public class Scenario {
         Actor attacker = (attack.caster);
         for(Map.Entry actor : actores.entrySet()) {
             Actor a = (Actor)actor.getValue();
-            if ( a.uid != attacker.uid &&(Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range)){
-                if(a.health > 0 && a.isAttacked(attack)==0){ //0 es ataque basico
-                    /* Aqui se trata la muerte del personaje*/
-                    
-                    //attacker.killed_creatures++;
-                    attack.caster.killed_creatures++;
-                    onDie(a);
+            
+//            Con este if evitamos el fuego amigo
+            if (attack.caster.type != attacker.type){
+                if ( a.uid != attacker.uid &&(Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range)){
+                    if(a.health > 0 && a.isAttacked(attack)==0){ //0 es ataque basico
+                        /* Aqui se trata la muerte del personaje*/
+
+                        //attacker.killed_creatures++;
+                        attack.caster.killed_creatures++;
+                        onDie(a);
+                    }
                 }
             }
         }
@@ -99,6 +104,10 @@ public class Scenario {
 
     public boolean checkCollision(int uid, float x,float y){
         Actor a;
+//        Comprobamos que este dentro del escenario
+        if (Math.sqrt((x*x)+(y*y))>radius) return false;
+        
+//        Comprobamos que no este chocando con otro actor
         for (Map.Entry entry : actores.entrySet()) {
             a = (Actor)entry.getValue();
             if (a.health >0 && a.uid!= uid &&(Math.abs(a.posX-x) < 2 && Math.abs(a.posY-y) < 2)){
@@ -120,11 +129,17 @@ public class Scenario {
     }
 
     private void onDie(Actor a) {
-        if (a.isHero()){
-            eng.onDeath(a);
+        eng.onDeath(a);
+    }
+
+    public String getScores() {
+        String s="";
+        for (Map.Entry ent : actores.entrySet()){
+            Actor a = (Actor)ent.getValue();
+            if (a.isHero()){
+                s += a.name + "," + a.deaths + "," + a.killed_creatures + "*";
             }
-        else {
-            eng.onDeath(a);
         }
+        return s;
     }
 }

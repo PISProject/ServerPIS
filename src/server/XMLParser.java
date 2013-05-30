@@ -240,6 +240,7 @@ public class XMLParser {
                 e2 = (Element) eElement.getElementsByTagName("basics").item(0);
                 
                 g.name = e2.getAttribute("name");
+                g.radius = Integer.parseInt(e2.getAttribute("radius"));
                 g.game_type = Integer.parseInt(e2.getAttribute("id"));
                 g.numplayers = Integer.parseInt(e2.getAttribute("numplayers"));
                 g.scenario = Integer.parseInt(e2.getAttribute("scenario"));

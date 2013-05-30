@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- El tiempo tiene que estar en ms-->
 <game>
-    <basics name = "game1" id = "1" scenario = "1" numplayers = "2" time= "120000"/>
+    <basics name = "game1" id = "1" scenario = "1" numplayers = "2" radius = "100" time= "120000"/>
    <hordes number = "3">
         <horde number = "1" time = "10000">
             <monster name = "Dark knight"/>
@@ -9,12 +9,12 @@
             <monster name = "Mosquito"/>
 
         </horde>
-        <horde number = "2" time = "14000">
+        <horde number = "2" time = "30000">
             <monster name = "Vampire"/>
             <monster name = "Vampire"/>
 
         </horde>
-        <horde number = "3" time = "16000">
+        <horde number = "3" time = "60000">
             <monster name = "Orc"/>
             <monster name = "Orc"/>
         </horde>
