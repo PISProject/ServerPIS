@@ -105,7 +105,7 @@ public class Scenario {
     public boolean checkCollision(int uid, float x,float y){
         Actor a;
 //        Comprobamos que este dentro del escenario
-        if (Math.sqrt((x*x)+(y*y))>radius) return false;
+        if (Math.sqrt((x*x)+(y*y))>radius) return true;
         
 //        Comprobamos que no este chocando con otro actor
         for (Map.Entry entry : actores.entrySet()) {

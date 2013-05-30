@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <monsters>
-    <monster name = "Dark knight" path="darkknight.xml"/>
+    <monster name = "Dark Knight" path="darkknight.xml"/>
     <monster name = "Malote" path="malote.xml"/>
     <monster name = "Mosquito" path="mosquito.xml"/>
     <monster name = "Vampire" path="vampire.xml"/>

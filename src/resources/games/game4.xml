@@ -4,8 +4,8 @@
     <basics name = "game4" id = "4" scenario = "4" numplayers = "2" radius = "43" time= "120000"/>
    <hordes number = "3">
         <horde number = "1" time = "10000">
-            <monster name = "Dark knight"/>
-            <monster name = "Dark knight"/>
+            <monster name = "Dark Knight"/>
+            <monster name = "Dark Knight"/>
             <monster name = "Mosquito"/>
 
         </horde>
