@@ -120,11 +120,17 @@ public class Scenario {
     }
 
     private void onDie(Actor a) {
-        if (a.isHero()){
-            eng.onDeath(a);
+        eng.onDeath(a);
+    }
+
+    public String getScores() {
+        String s="";
+        for (Map.Entry ent : actores.entrySet()){
+            Actor a = (Actor)ent.getValue();
+            if (a.isHero()){
+                s += a.name + "," + a.deaths + "," + a.killed_creatures + "*";
             }
-        else {
-            eng.onDeath(a);
         }
+        return s;
     }
 }
