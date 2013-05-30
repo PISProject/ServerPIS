@@ -87,7 +87,7 @@ public class Scenario {
             Actor a = (Actor)actor.getValue();
             
 //            Con este if evitamos el fuego amigo
-            if (attack.caster.type != attacker.type){
+//            if (attack.caster.type != attacker.type){
                 if ( a.uid != attacker.uid &&(Math.abs(attack.center[0]-a.getPos()[0])< attack.range && Math.abs(attack.center[1]-a.getPos()[1])< attack.range)){
                     if(a.health > 0 && a.isAttacked(attack)==0){ //0 es ataque basico
                         /* Aqui se trata la muerte del personaje*/
@@ -96,7 +96,7 @@ public class Scenario {
                         attack.caster.killed_creatures++;
                         onDie(a);
                     }
-                }
+//                }
             }
         }
         
@@ -105,7 +105,9 @@ public class Scenario {
     public boolean checkCollision(int uid, float x,float y){
         Actor a;
 //        Comprobamos que este dentro del escenario
-        if (Math.sqrt((x*x)+(y*y))>radius) return true;
+        if (Math.sqrt((x*x)+(y*y))>radius) {
+            return true;
+        }
         
 //        Comprobamos que no este chocando con otro actor
         for (Map.Entry entry : actores.entrySet()) {
