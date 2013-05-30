@@ -203,7 +203,7 @@ public class Monster extends Thread{
         ConcurrentHashMap<Integer,Actor> a = scenario.actores;
         Actor me = a.get(uid);
         for(Map.Entry m : a.entrySet()){
-            if (!((int)m.getKey()== uid) && ((Actor)m.getValue()).isHero() && isInRange(me,(Actor) m.getValue(),dist)){
+            if (((Actor)m.getValue()).health >0 && !((int)m.getKey()== uid) && ((Actor)m.getValue()).isHero() && isInRange(me,(Actor) m.getValue(),dist)){
                 return (int)m.getKey();
             }
         }
@@ -227,6 +227,7 @@ public class Monster extends Thread{
         double randnum;
         if (created){
            do{
+               if (scenario.actores.get(target) != null && scenario.actores.get(target).health <=0) state = MonsterState.WALKING_AROUND;
                 randnum = Math.random();
                 // Gestion de cambio de estado
                 if (randnum < stchange_rate && state == MonsterState.WALKING_AROUND ){

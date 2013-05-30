@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-asd
+
 <!-- El tiempo tiene que estar en ms-->
 <game>
     <basics name = "game3" id = "3" scenario = "3" numplayers = "3" radius = "81" time= "300000"/>
