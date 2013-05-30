@@ -2,7 +2,7 @@
 
 <!-- El tiempo tiene que estar en ms-->
 <game>
-    <basics name = "game2" id = "2" scenario = "2" numplayers = "2" time= "360000"/>
+    <basics name = "game2" id = "2" scenario = "2" numplayers = "2" radius = "43" time= "360000"/>
     <hordes number = "3">
         <horde number = "1" time = "10000">
             <monster name = "Dark knight"/>

@@ -60,6 +60,7 @@ public class GameEngine{
         this.game = t_game;
         this.game_id = id;
         scenario = new Scenario(this, game);
+        scenario.radius = t_game.radius;
         victory = false;
         
         //Inicializamos la lista de players

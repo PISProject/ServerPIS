@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 public class Game {
     
+    public int radius;
     public int estimatedTime;
     public int scenario;
     public String [] monsters;
