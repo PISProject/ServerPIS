@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-asd
+
 <!-- El tiempo tiene que estar en ms-->
 <game>
     <basics name = "game3" id = "3" scenario = "3" numplayers = "3" radius = "81" time= "300000"/>
    <hordes number = "3">
         <horde number = "1" time = "10000">
-            <monster name = "Dark knight"/>
-            <monster name = "Dark knight"/>
+            <monster name = "Dark Knight"/>
+            <monster name = "Dark Knight"/>
             <monster name = "Mosquito"/>
             <monster name = "Mosquito"/>
 
