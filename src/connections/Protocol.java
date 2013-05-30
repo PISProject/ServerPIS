@@ -75,6 +75,7 @@ public class Protocol {
                     break;
                 case GET_SCENARIOS:
                     client.getScenarios();
+                    break;
             }
         }
         else if (client.state == Connection.ConnectionState.LOADING){

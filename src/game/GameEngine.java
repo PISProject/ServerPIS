@@ -59,8 +59,7 @@ public class GameEngine{
         monsters = new ConcurrentHashMap<>();
         this.game = t_game;
         this.game_id = id;
-        scenario = new Scenario(this, game);
-        scenario.radius = t_game.radius;
+        scenario = new Scenario(this, game, t_game.radius);
         victory = false;
         
         //Inicializamos la lista de players
@@ -140,7 +139,7 @@ public class GameEngine{
         
         state = GameState.RUNNING;
         if (MFServer.DEBUG_GAMES){
-                System.out.println("==> GAME "+this.game_id+": Starts streaming");
+                System.out.println("==> [GAME "+this.game_id+"] Starting streaming");
         }
         streaming.startStreaming();// Aqui empieza a correr el Streaming
         //clock = new Timer();
@@ -163,7 +162,7 @@ public class GameEngine{
     }
     void onDeath(Actor a){
         a.deaths++;
-        System.out.println(a.uid+" is dead.");
+        System.out.println("==> [GAME]"+a.uid+" is dead.");
         if (!a.isHero()){
             total_monsters -=1;
             Monster m = monsters.get(a.uid);
@@ -202,8 +201,7 @@ public class GameEngine{
             return;
         }
         
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
+        clock.schedule(new TimerTask() {
             
             @Override
             public void run() {

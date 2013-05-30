@@ -28,14 +28,15 @@ public class Scenario {
     public ConcurrentLinkedQueue<Attack> attackPool;
     public int radius;
     
-    public Scenario(GameEngine eng, Connection [] connections){
+    public Scenario(GameEngine eng, Connection [] connections, int radius){
         monsterCount = 0;
         actores = new ConcurrentHashMap<>();
         attackPool = new ConcurrentLinkedQueue<>();
         this.eng = eng;
+        this.radius = radius;
         for (Connection c: connections) {
          
-            actores.put(c.uid, new Actor(c.uid, c.name));
+            actores.put(c.uid, new Actor(c.uid, c.name, radius));
             
             
         }

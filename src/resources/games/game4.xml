@@ -15,8 +15,8 @@
 
         </horde>
         <horde number = "3" time = "16000">
-            <monster name = "Orc"/>
-            <monster name = "Orc"/>
+<!--            <monster name = "Orc"/>
+            <monster name = "Orc"/>-->
         </horde>
     </hordes>
 </game>

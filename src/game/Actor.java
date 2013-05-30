@@ -51,24 +51,24 @@ public class Actor {
     public int deaths;
 
     
-    public Actor(){
-        this.posX = (float)Math.random()*20;
-        this.posY= (float)Math.random()*20;
+    public Actor(int radius){
+        this.posX = (float)Math.random()*(radius/2);
+        this.posY= (float)Math.random()*(radius/2);
         this.spawnX = 0;
         this.spawnY = 0;
         this.type = ActorType.VILLAIN;
     }
 //    
 //    // Constructor provisional para heroes
-    public Actor(int uid, String name){
+    public Actor(int uid, String name, int radius){
         this.name = name;
         this.type = ActorType.HERO;
         this.uid = uid;
         this.health = 100;
         
         this.attackDamage = 10;
-        this.posX = (float)Math.random()*20;
-        this.posY= (float)Math.random()*20;
+        this.posX = (float)Math.random()*(radius/2);
+        this.posY= (float)Math.random()*(radius/2);
     }
     
 //    // Constructor provisional para enemigos

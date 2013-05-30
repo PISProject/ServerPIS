@@ -90,7 +90,7 @@ public class Monster extends Thread{
 
 //      Creamos el actor correspondiente al monstruo
         
-        Actor a = new Actor();
+        Actor a = new Actor(scenario.radius);
         a.name = model.name;
         a.attackDamage = this.attack_damage;
         a.health = this.hp;
